@@ -1,0 +1,4 @@
+host : 'localhost'
+user : 'your_user'
+password : 'your_password'
+db : 'database_name'
