@@ -12,14 +12,14 @@ app.secret_key = 'secrete_key'
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(100), unique=True)
+    empid = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
-    def __init__(self, name, username, password):
+    def __init__(self, name, empid, password):
         self.name = name
-        self.username = username
-        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    def check_password(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+        self.empid = empid
+        self.password = password#pt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # def check_password(self, password):
+    #     return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
 with app.app_context():
     db.create_all()
@@ -34,11 +34,12 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        empid = request.form['empid']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            session['username'] = user.username
+        userid = User.query.filter_by(empid=empid).first()
+        pwd = User.query.filter_by(password=password).first()
+        if userid and pwd:
+            session['empid'] = userid.empid
             return redirect('/dashboard')
         else:
             return render_template('login.html', error = 'Invalid User')
@@ -46,8 +47,8 @@ def login():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    if session['username']:
-        user = User.query.filter_by(username=session['username']).first()
+    if session['empid']:
+        user = User.query.filter_by(empid=session['empid']).first()
         return render_template('a.html', user=user)
     return redirect('/login')
 
