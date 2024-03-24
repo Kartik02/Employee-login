@@ -22,8 +22,8 @@ function App() {
   return(
     <BrowserRouter>
     <Routes>
-   <Route path='/adminlogin'element={<Login/>}></Route>
-   <Route path='/dashboard'element={<Dashboard/>}>
+    <Route path='/' element={<Login/>}></Route>
+    <Route path='/dashboard' element={<Dashboard/>}>
     <Route path='' element={<Home/>}></Route>
     <Route path='/dashboard/employee' element={<Employee/>}></Route>
      {/* <Route path='/dashboard/category' element={<Category/>}></Route>  */}
@@ -34,11 +34,11 @@ function App() {
     <Route path='/dashboard/leave' element={<Leave/>}></Route>
     <Route path='/dashboard/timesheet' element={<Timesheet/>}></Route>
     <Route path='/dashboard/add_category' element={<AddCategory/>}></Route>
-      <Route path='/dashboard/add_employee' element={<AddEmployee/>}></Route>  
-   </Route>
+    <Route path='/dashboard/add_employee' element={<AddEmployee/>}></Route>
+    </Route>
     </Routes>
     </BrowserRouter>
-  
+
   )
 }
 export default App

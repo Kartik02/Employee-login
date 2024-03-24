@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="073cc012-b6f3-4187-a966-d334edb56dcb" name="Changes" comment="" />
+    <list default="true" id="073cc012-b6f3-4187-a966-d334edb56dcb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Login.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,23 +23,29 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2e8TCVKNEMLaakjySyf2UfYzw4J" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "settings.editor.selected.configurable": "terminal"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/TEN AI LABS/EmpMgmtSystm/ReactFlask/Employee-login/EMPLOYEE-backend/templates&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\TEN AI LABS\EmpMgmtSystm\ReactFlask\Employee-login\EMPLOYEE-backend\templates" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
