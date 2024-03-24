@@ -17,10 +17,7 @@ class User(db.Model):
     def __init__(self, name, empid, password):
         self.name = name
         self.empid = empid
-        self.password = password#pt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    # def check_password(self, password):
-    #     return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
-
+        self.password = password
 with app.app_context():
     db.create_all()
 

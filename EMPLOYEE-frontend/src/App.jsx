@@ -14,8 +14,7 @@ import Leave from './Components/Leave'
 import Employeesec from './Components/Employeesec'
 import Timesheet from './Components/Timesheet'
 import AddCategory from './Components/AddCategory'
-  import AddEmployee from './Components/AddEmployee'
-
+import AddEmployee from './Components/AddEmployee'
 
 
 function App() {
