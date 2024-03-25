@@ -14,13 +14,9 @@ const Login = () => {
 
     const handleSubmit = (event)=>{
         event.preventDefault()
-//         axios.post('http://localhost:3000/auth/login',values)
-        axios.post('http://localhost:5173/auth/login', values, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        axios.post('http://localhost:5173/auth/login', values)
         .then(result => {
+            console.log('Response data:', result.data);
             if(result.data.loginStatus){
             console.log('Redirecting...')
             navigate('/dashboard')

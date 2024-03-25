@@ -7,7 +7,7 @@ from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/auth/*": {"origins": "http://localhost:5173"}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
 
@@ -32,19 +32,23 @@ admin.add_view(ModelView(User, db.session))
 
 
 @app.route('/auth/login', methods=['GET', 'POST'])
-def admin_login():
+def login():
     data = request.json
     empid = data.get('empid')
     password = data.get('password')
 
-    # id = User.query.filter_by(empid=empid).first()
-    # pwd = User.query.filter_by(password=password).first()
-    if empid and password:
+    user = User.query.filter_by(empid=empid).first()
+
+    if  user and user.password == password:
+        print('Login successful')
         session['logged_in'] = True
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
+# @app.route('/auth/logout', methods=['GET', 'POST']):
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(debug=True, host='localhost', port=5000)
