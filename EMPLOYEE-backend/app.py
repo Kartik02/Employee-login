@@ -7,7 +7,7 @@ from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-CORS(app, resources={r"/auth/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/auth/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
 
