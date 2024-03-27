@@ -6,13 +6,26 @@ const Leave = () => {
     employeeId: '',
     reason: '',
     numberOfDays: '',
-    date: ''
+    fromDate: '', 
+    toDate: '', 
   });
   const [submittedData, setSubmittedData] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Special handling for fromDate and toDate to ensure they are different
+    if (name === 'fromDate') {
+      setFormData(prevData => ({ ...prevData, [name]: value, toDate: value }));
+    } else if (name === 'toDate') {
+      if (value < formData.fromDate) {
+        alert("To date must be after from date");
+      } else {
+        setFormData(prevData => ({ ...prevData, [name]: value }));
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -21,7 +34,9 @@ const Leave = () => {
     setSubmittedData(formData);
   };
 
+
   return (
+    <div className='flex '>
    <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -68,21 +83,33 @@ const Leave = () => {
           />
         </div>
         <div>
-          <label htmlFor="date" className="block mb-1">Date:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="w-full border rounded-md px-3 py-2"
-          />
-        </div>
+            <label htmlFor="fromDate" className="block mb-1">From Date:</label>
+            <input
+              type="date"
+              id="fromDate"
+              name="fromDate"
+              value={formData.fromDate}
+              onChange={handleChange}
+              className="w-full border rounded-md px-3 py-2"
+            />
+          </div>
+          <div>
+            <label htmlFor="toDate" className="block mb-1">To Date:</label>
+            <input
+              type="date"
+              id="toDate"
+              name="toDate"
+              value={formData.toDate}
+              onChange={handleChange}
+              className="w-full border rounded-md px-3 py-2"
+            />
+          </div>
+
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">Submit</button>
       </form>
       {submittedData && (
         <div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">Submitted Details:</h2>
+          <h2 className="text-lg font-bold mb-2">Submitted Details:</h2>
           <ul>
             {Object.entries(submittedData).map(([key, value]) => (
               <li key={key}>
@@ -92,6 +119,7 @@ const Leave = () => {
           </ul>
         </div>
       )}
+    </div>
     </div>
   );
 }
