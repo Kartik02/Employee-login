@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import axios from 'axios';
 
 const Leave = () => {
   const [formData, setFormData] = useState({
@@ -11,28 +12,33 @@ const Leave = () => {
   });
   const [submittedData, setSubmittedData] = useState(null);
 
-  const handleChange = (e) => {
+const handleChange = (e) => {
     const { name, value } = e.target;
 
     // Special handling for fromDate and toDate to ensure they are different
     if (name === 'fromDate') {
-      setFormData(prevData => ({ ...prevData, [name]: value, toDate: value }));
-    } else if (name === 'toDate') {
-      if (value < formData.fromDate) {
-        alert("To date must be after from date");
-      } else {
         setFormData(prevData => ({ ...prevData, [name]: value }));
-      }
+    } else if (name === 'toDate') {
+        if (value < formData.fromDate) {
+            alert("To date must be after from date");
+        } else {
+            setFormData(prevData => ({ ...prevData, [name]: value }));
+        }
     } else {
-      setFormData({ ...formData, [name]: value });
+        setFormData({ ...formData, [name]: value });
     }
-  };
+};
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can send the form data to the server or process it as needed
-    setSubmittedData(formData);
-  };
+
+    axios.post('http://localhost:5000/leave/add', formData)
+        .then(result => {
+            console.log(result.data);
+            setSubmittedData(formData);
+        })
+        .catch(err => console.error(err));
+};
 
 
   return (

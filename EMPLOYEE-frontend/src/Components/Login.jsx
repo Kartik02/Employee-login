@@ -23,11 +23,10 @@ const Login = () => {
             }else{
                 setError(result.data.Error)
             }
-
         })
         .catch(err => console.log(err))
-
     }
+
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
     <div className="p-3 rounded w-65 border loginForm">
