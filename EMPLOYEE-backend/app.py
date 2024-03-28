@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
+import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
