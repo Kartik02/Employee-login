@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { PieChart } from '@mui/x-charts/PieChart';
 
 const Stopwatch = () => {
   const [time, setTime] = useState(0);
@@ -82,6 +83,21 @@ const Stopwatch = () => {
     }
   };
 
+  // Calculate total time spent on each project
+  const projectTimes = {};
+  notes.forEach((note) => {
+    const projectName = note.projectName;
+    const timeInSeconds = parseInt(note.time.split(':')[0]) * 60 + parseInt(note.time.split(':')[1]);
+    projectTimes[projectName] = (projectTimes[projectName] || 0) + timeInSeconds;
+  });
+
+  // Convert project times to series data for pie chart
+  const pieChartData = Object.entries(projectTimes).map(([projectName, timeInSeconds]) => ({
+    id: projectName,
+    value: timeInSeconds,
+    label: projectName,
+  }));
+
   return (
     <div className="container mx-auto mt-8 text-center">
       <div className="flex justify-center items-center mb-4">
@@ -130,6 +146,11 @@ const Stopwatch = () => {
         )}
       </div>
       {notes.length === 0 && <p>No project available.</p>}
+      
+      {/* Render the pie chart */}
+      <div className="mt-8 flex justify-center">
+        <PieChart series={[{ data: pieChartData }]} width={400} height={300} />
+      </div>
     </div>
   );
 };
