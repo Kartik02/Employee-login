@@ -1,5 +1,4 @@
 import React,{useState} from 'react'
-import './Style.css'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 
@@ -26,37 +25,73 @@ const Login = () => {
         })
         .catch(err => console.log(err))
     }
-
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
-    <div className="p-3 rounded w-65 border loginForm">
-    <div className="text-warning">
+    <div className="tw-h-screen tw-p-5 tw-flex tw-justify-center tw-items-center">
+      <div className="tw-rounded-lg tw-border tw-bg-card tw-text-card-foreground tw-shadow-sm tw-mx-auto tw-max-w-sm tw-w-full tw-sm:tw-w-[500px]">
+      <div className="text-warning">
         {error && error}
-    </div>
-        <h2>Login page</h2>
+      </div> 
+        <div className="tw-flex tw-flex-col tw-p-6 tw-space-y-1">
+          <div className="tw-flex tw-flex-col tw-items-center tw-space-y-2">
+            <img
+              src="https://media.licdn.com/dms/image/C4D0BAQHlLmFmZOvi6A/company-logo_200_200/0/1630577605411?e=1719446400&v=beta&t=X_nJlDP_SVI-c1BfNloU1FfAvYaitSQBfopxFwg0uQo"
+              alt="Logo"
+              width="80"
+              height="80"
+              className="rounded-lg"
+            />
+            <h3 className="tw-whitespace-nowrap tw-tracking-tight tw-text-2xl tw-font-bold">
+              Employee Login
+            </h3>
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <label htmlFor="empid"><strong>Employee ID:</strong></label>
-                <input type="text" name="empid" autoComplete='off' placeholder="Enter Employee ID"
-               onChange={(e) => setValues({...values,empid : e.target.value})} className="form-control rounded 0"/>
-            </div>
-            <div className="mb-3">
-                <label htmlFor="password"><strong>Password:</strong></label>
-                <input type="password" name="password" placeholder="Enter Password"
-                onChange={(e) => setValues({...values,password : e.target.value})} className="form-control rounded 0"/>
-            </div>
-            <button className="btn btn-success w-100 rounded 0">log in</button>
-            {/* <div className="mb-3">
-                <input type="checkbox" name="tick" id="tick"
-                <label htmlFor="password"><strong>Term & Condition</strong></label>
-                
-               
-            </div> */}
+        <div className="tw-p-6 tw-space-y-4">
+          <div className="tw-space-y-2">
+            <label
+              className="tw-text-sm tw-font-medium tw-leading-none tw-peer-disabled:tw-cursor-not-allowed tw-peer-disabled:tw-opacity-70"
+              htmlFor="employeeid"
+            >
+              Employee ID
+            </label>
+            <input
+              className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background file:tw-border-0 file:tw-bg-transparent file:tw-text-sm file:tw-font-medium placeholder:tw-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+              id="employeeid"
+              placeholder="Employee ID"
+              required=""
+              onChange={(e) => setValues({...values,empid : e.target.value})} className="form-control rounded 0"
+            />
+          </div>
+          <div className="tw-space-y-2">
+            <label
+              className="tw-text-sm tw-font-medium tw-leading-none tw-peer-disabled:tw-cursor-not-allowed tw-peer-disabled:tw-opacity-70"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background file:tw-border-0 file:tw-bg-transparent file:tw-text-sm file:tw-font-medium placeholder:tw-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+              id="password"
+              placeholder="Password"
+              required=""
+              type="password"
+              onChange={(e) => setValues({...values,password : e.target.value})} className="form-control rounded 0"
+            />
+          </div>
+          <a className="tw-underline" href="#">
+            Forgot Password?
+          </a>
+          <div className="tw-text-center">
+            <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+              Login
+            </button>
+            
+        </div>
+        </div>
         </form>
-    </div>
-      
-    </div>
-  )
-}
+        </div>
+      </div>
+  );
+};
 
-export default Login
+export default Login;
