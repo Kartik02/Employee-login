@@ -42,7 +42,7 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Dashboard</span>
                 </Link>
               </li>
-              <li className="w-100">
+              {/* <li className="w-100">
                 <Link
                   to="/dashboard/employee"
                   className="nav-link text-white px-0 align-middle"
@@ -53,7 +53,7 @@ const Dashboard = () => {
                     Manage Employee
                   </span>
                 </Link>
-              </li>
+              </li> */}
               {/* <li className="w-100">
                 <Link
                   to="/dashboard/projects"

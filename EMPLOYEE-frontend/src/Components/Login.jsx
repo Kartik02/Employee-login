@@ -25,6 +25,10 @@ const Login = () => {
         })
         .catch(err => console.log(err))
     }
+
+    const handleAdminClick = () => {
+      navigate('/adminlogin') // Redirect to the admin section
+  }
   return (
     <div className="tw-h-screen tw-p-5 tw-flex tw-justify-center tw-items-center">
       <div className="tw-rounded-lg tw-border tw-bg-card tw-text-card-foreground tw-shadow-sm tw-mx-auto tw-max-w-sm tw-w-full tw-sm:tw-w-[500px]">
@@ -85,7 +89,7 @@ const Login = () => {
             <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
               Login
             </button> &nbsp;&nbsp;&nbsp;&nbsp;
-            <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+            <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded" onClick={handleAdminClick}>
               Admin
             </button>
         </div>
