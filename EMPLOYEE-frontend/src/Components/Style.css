@@ -1,15 +1,12 @@
-.loginPage {
-
-    background: url('Images/employeems.jpeg');
-    background: linear-gradient(rgba(11,11,11,0.5),rgba(10,10,10,0.5)),url('Images/employeems.jpeg');
-    background-position:center;
-    background-repeat:no-repeat;
-    width:198vh;
-    background-size: cover;
-    
-}
-
-.loginForm{
-    background-color:rgba(2, 17, 46, 0.6);
-     color:white; 
-}
+.profile-settings {
+    width: 50%;
+    margin: auto;
+  }
+  
+  .profile-photo {
+    text-align: center;
+  }
+  
+  .personal-info {
+    margin-top: 2rem;
+  }

@@ -84,8 +84,10 @@ const Login = () => {
           <div className="tw-text-center">
             <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
               Login
+            </button> &nbsp;&nbsp;&nbsp;&nbsp;
+            <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+              Admin
             </button>
-            
         </div>
         </div>
         </form>
