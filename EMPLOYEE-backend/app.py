@@ -35,6 +35,7 @@ class Leave(db.Model):
     numberOfDays = db.Column(db.Integer, nullable=False)
     fromDate = db.Column(db.DateTime, nullable=False)
     toDate = db.Column(db.DateTime, nullable=False)
+
     def __init__(self, name, empid, reason, numberOfDays, fromDate, toDate):
         self.name = name
         self.empid = empid
@@ -42,6 +43,7 @@ class Leave(db.Model):
         self.numberOfDays = numberOfDays
         self.fromDate = fromDate
         self.toDate = toDate
+
 
 with app.app_context():
     db.create_all()
