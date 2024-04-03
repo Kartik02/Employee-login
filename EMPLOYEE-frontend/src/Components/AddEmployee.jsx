@@ -8,9 +8,7 @@ const AddEmployee = () => {
     employee_id: '',
     password: '',
     salary: '',
-    addres: '',
     category_id: '',
-    image: ''
   });
   const [category, setCategory] = useState([]);
 
@@ -105,13 +103,17 @@ const AddEmployee = () => {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
-            <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} required>
-              {category.map((c) => {
-                return <option key={c.id} value={c.id}>{c.name}</option>
-              })}
-            </select>
-          </div>
+  <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
+  <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} required>
+    <option value="">Select Category</option>
+    {category.map((c) => (
+      <option key={c.id} value={c.id}>{c.name}</option>
+    ))}
+      <option value="HR">HR-Section</option>
+      <option value="Tech">Tech-Section</option>
+    
+  </select>
+</div>
           <div className="col-12">
             <button type="submit" className="btn btn-success w-100">
               Add Employee
