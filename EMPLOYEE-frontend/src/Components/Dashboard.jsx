@@ -8,11 +8,10 @@ const Dashboard = () => {
   const navigate = useNavigate()
   axios.defaults.withCredentials=true
   const handleLogout = () => {
-    axios.get('http://localhost:3000/auth/logout')
+    axios.get('http://localhost:5000/auth/logout')
     .then(result=> {
       if(result.data.Status){
         navigate('adminlogin')
-
       }
     })
   }
@@ -42,7 +41,7 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Dashboard</span>
                 </Link>
               </li>
-              <li className="w-100">
+              {/* <li className="w-100">
                 <Link
                   to="/dashboard/employee"
                   className="nav-link text-white px-0 align-middle"
@@ -53,7 +52,7 @@ const Dashboard = () => {
                     Manage Employee
                   </span>
                 </Link>
-              </li>
+              </li> */}
               {/* <li className="w-100">
                 <Link
                   to="/dashboard/projects"

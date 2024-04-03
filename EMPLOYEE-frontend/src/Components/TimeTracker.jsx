@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { PieChart, Pie, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as BarTooltip } from 'recharts';
+//import { PieChart, Pie, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as BarTooltip } from 'recharts';
 
 const Stopwatch = () => {
   const [projectName, setProjectName] = useState("");
