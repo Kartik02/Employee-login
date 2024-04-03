@@ -16,12 +16,19 @@ CORS(app, resources={
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
 
+class AdminData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     empid = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
-
     def __init__(self, name, empid, password):
         self.name = name
         self.empid = empid
@@ -35,7 +42,6 @@ class Leave(db.Model):
     numberOfDays = db.Column(db.Integer, nullable=False)
     fromDate = db.Column(db.DateTime, nullable=False)
     toDate = db.Column(db.DateTime, nullable=False)
-
     def __init__(self, name, empid, reason, numberOfDays, fromDate, toDate):
         self.name = name
         self.empid = empid
@@ -44,13 +50,26 @@ class Leave(db.Model):
         self.fromDate = fromDate
         self.toDate = toDate
 
-
 with app.app_context():
     db.create_all()
 
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
+admin.add_view(ModelView(AdminData, db.session))
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Leave, db.session))
+
+@app.route('/auth/adminlogin', methods=['GET', 'POST'])
+def adminlogin():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    adminData = AdminData.query.filter_by(email=email).first()
+    if  adminData and adminData.password == password:
+        print('Login successful')
+        session['logged_in'] = True
+        return jsonify({'loginStatus': True}), 200
+    else:
+        return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
 @app.route('/auth/login', methods=['GET', 'POST'])
 def login():
@@ -64,6 +83,7 @@ def login():
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+
 
 @app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():

@@ -14,14 +14,13 @@ const AdminLogin = () => {
 
     const handleSubmit = (event)=>{
         event.preventDefault()
-        axios.post('http://localhost:3000/auth/adminlogin',values)
+        axios.post('http://localhost:5000/auth/adminlogin',values)
         .then(result => {
             if(result.data.loginStatus){
-            navigate('/dashboard')
+            navigate('/admindashboard')
             }else{
                 setError(result.data.Error)
             }
-
         })
         .catch(err => console.log(err))
 

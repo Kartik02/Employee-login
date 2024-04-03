@@ -1,9 +1,19 @@
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
+import axios from "axios";
 
 const AdminDashboard = () => {
+    const navigate = useNavigate()
+      axios.defaults.withCredentials=true
+      const handleLogout = () => {
+        axios.get('http://localhost:5000/auth/logout')
+        .then(result=> {
+          if(result.data.Status){
+            navigate('adminlogin')
+          }
+        })
+      }
     return (
         <>
             <div className="container-fluid hover">
@@ -12,7 +22,7 @@ const AdminDashboard = () => {
                         <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
 
                             <Link
-                                to="/dashboard"
+                                to="/admindashboard"
                                 className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none"
                             >
                                 <span className="fs-5 fw-bolder d-none d-sm-inline">
