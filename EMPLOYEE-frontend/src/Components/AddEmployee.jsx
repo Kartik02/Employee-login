@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -13,7 +14,7 @@ const AddEmployee = () => {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/auth/category')
+    axios.get('http://localhost:5000/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -26,7 +27,7 @@ const AddEmployee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/auth/add_employee', employee)
+    axios.post('http://localhost:5000/auth/add_employee', employee)
       .then(result => console.log(result.data))
       .catch(err => console.log(err));
   };
