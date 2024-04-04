@@ -11,7 +11,8 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
     r"/auth/*": {"origins": "http://localhost:5173"},
-    r"/leave/add": {"origins": "http://localhost:5173"}
+    r"/leave/add": {"origins": "http://localhost:5173"},
+    r"/api/projects": {"origins": "http://localhost:5173"}
 }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
@@ -57,6 +58,20 @@ class Leave(db.Model):
         self.fromDate = fromDate
         self.toDate = toDate
 
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    projectName = db.Column(db.String(100), nullable=False)
+    tag = db.Column(db.String(100))
+    timeElapsed = db.Column(db.Integer, nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'projectName': self.projectName,
+            'tag': self.tag,
+            'timeElapsed': self.timeElapsed
+        }
+
 with app.app_context():
     db.create_all()
 
@@ -64,6 +79,7 @@ admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(AdminData, db.session))
 admin.add_view(ModelView(EmpData, db.session))
 admin.add_view(ModelView(Leave, db.session))
+admin.add_view(ModelView(Project, db.session))
 
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
@@ -126,6 +142,22 @@ def add_leave():
 
     return jsonify({'message': 'Leave added successfully'}), 200
 
+@app.route('/api/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
+def handle_projects():
+    if request.method == 'GET':
+        projects = Project.query.all()
+        projects_data = [project.to_dict() for project in projects]
+        return jsonify(projects_data), 200
+    elif request.method == 'POST':
+        data = request.json
+        if not data.get('projectName').strip():
+            return jsonify({'error': 'Project name is required!'}), 400
+
+        new_project = Project(projectName=data.get('projectName'), tag=data.get('tag'), timeElapsed=data.get('timeElapsed'))
+        db.session.add(new_project)
+        db.session.commit()
+
+        return jsonify({'message': 'Project added successfully!'}), 201
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
