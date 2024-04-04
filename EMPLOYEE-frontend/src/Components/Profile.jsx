@@ -49,6 +49,7 @@ function Profile() {
                             className="form-control"
                             id="name"
                             defaultValue="Kartik Poojari"
+                            readOnly
                           />
                         </div>
                         <div className="col-md-8">
