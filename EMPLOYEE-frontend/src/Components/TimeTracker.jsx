@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { PieChart, Pie, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as BarTooltip } from 'recharts';
+// import PieChartComponent from "./PieChartComponent";
+// import BarGraphComponent from "./BarGraphComponent";
+import Reports from "./Reports";
 
 const Stopwatch = () => {
   const [projectName, setProjectName] = useState("");
@@ -68,14 +70,12 @@ const Stopwatch = () => {
       alert("Project name is required!");
       return;
     }
-    setProjects((prevProjects) => [
-      ...prevProjects,
-      {
-        projectName,
-        tag,
-        timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
-      },
-    ]);
+    const newProject = {
+      projectName,
+      tag,
+      timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
+    };
+    setProjects((prevProjects) => [...prevProjects, newProject]);
     handleReset();
   };
 
@@ -94,6 +94,7 @@ const Stopwatch = () => {
   const barChartData = projects.map(project => ({ name: project.projectName, timeElapsed: project.timeElapsed }));
 
   return (
+    <>
     <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
       <div className="tw-mb-4">
         <div className="tw-flex tw-mb-4">
@@ -171,30 +172,10 @@ const Stopwatch = () => {
           </button>
         )}
       </div>
-      <div>
-        <h2>Pie Chart</h2>
-        <PieChart width={400} height={400}>
-          <Pie data={pieChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label />
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </div>
-      <div>
-        <h2>Bar Chart</h2>
-        <BarChart
-          width={500}
-          height={300}
-          data={barChartData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Bar dataKey="timeElapsed" fill="#8884d8" />
-          <BarTooltip />
-        </BarChart>
-      </div>
+      <Reports pieChartData={pieChartData} barChartData={barChartData}/>
+
     </div>
+</>
   );
 };
 

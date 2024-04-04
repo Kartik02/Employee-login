@@ -17,6 +17,7 @@ import AddCategory from './Components/AddCategory'
 import AddEmployee from './Components/AddEmployee'
 import AdminDashboard from './Components/AdminDashboard'
 import AdminLogin from './Components/AdminLogin'
+import Reports from './Components/Reports'
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
       <Route path='/dashboard/leave' element={<Leave/>}></Route>
       <Route path='/dashboard/timesheet' element={<Timesheet/>}></Route>
       <Route path='/dashboard/add_category' element={<AddCategory/>}></Route>
+      <Route path='/dashboard/reports' element={<Reports/>}></Route>
     </Route>
     </Routes>
     </BrowserRouter>
