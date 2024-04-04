@@ -8,9 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminDashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddEmployee.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddEmployee.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

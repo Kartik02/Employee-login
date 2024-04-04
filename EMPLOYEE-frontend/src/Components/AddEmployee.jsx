@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -8,14 +9,12 @@ const AddEmployee = () => {
     employee_id: '',
     password: '',
     salary: '',
-    addres: '',
     category_id: '',
-    image: ''
   });
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/auth/category')
+    axios.get('http://localhost:5000/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -28,7 +27,7 @@ const AddEmployee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/auth/add_employee', employee)
+    axios.post('http://localhost:5000/auth/add_employee', employee)
       .then(result => console.log(result.data))
       .catch(err => console.log(err));
   };
@@ -105,13 +104,17 @@ const AddEmployee = () => {
             />
           </div>
           <div className="col-12">
-            <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
-            <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} required>
-              {category.map((c) => {
-                return <option key={c.id} value={c.id}>{c.name}</option>
-              })}
-            </select>
-          </div>
+  <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
+  <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} required>
+    <option value="">Select Category</option>
+    {category.map((c) => (
+      <option key={c.id} value={c.id}>{c.name}</option>
+    ))}
+      <option value="HR">HR-Section</option>
+      <option value="Tech">Tech-Section</option>
+    
+  </select>
+</div>
           <div className="col-12">
             <button type="submit" className="btn btn-success w-100">
               Add Employee
