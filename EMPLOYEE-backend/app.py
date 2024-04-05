@@ -1,11 +1,9 @@
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
-from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
-import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -119,10 +117,27 @@ def login():
     if  user and user.password == password:
         print('Login successful')
         session['logged_in'] = True
+        session['empid'] = empid
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
+@app.route('/auth/employee', methods=['GET', 'POST'])
+def get_employee_data():
+    if 'logged_in' not in session or not session['logged_in']:
+        return jsonify({'error': 'Not logged in'}), 401
+
+    # Get the logged-in employee's data from the database
+    empid = session['empid']
+    user = EmpData.query.filter_by(empid=empid).first()
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
+
+    return jsonify({
+        'name': user.name,
+        'email': user.email,
+        'password': user.password
+    }), 200
 
 @app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():
