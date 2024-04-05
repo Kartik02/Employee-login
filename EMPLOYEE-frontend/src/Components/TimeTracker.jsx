@@ -1,10 +1,5 @@
 // Stopwatch.js
 import React, { useState, useRef, useEffect } from "react";
-<<<<<<< HEAD
-=======
-// import PieChartComponent from "./PieChartComponent";
-// import BarGraphComponent from "./BarGraphComponent";
->>>>>>> 07f2507e2057925d04f960dafe13df0d71731a08
 import Reports from "./Reports";
 
 const Stopwatch = () => {
@@ -80,7 +75,6 @@ const Stopwatch = () => {
       tag,
       timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
     };
-<<<<<<< HEAD
 
     fetch('http://localhost:5000/api/projects', {
       method: 'POST',
@@ -105,10 +99,6 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
         alert('Failed to add project');
       });
-=======
-    setProjects((prevProjects) => [...prevProjects, newProject]);
-    handleReset();
->>>>>>> 07f2507e2057925d04f960dafe13df0d71731a08
   };
 
 
@@ -123,7 +113,6 @@ const Stopwatch = () => {
 
   return (
     <>
-<<<<<<< HEAD
       <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
         <div className="tw-mb-4">
           <div className="tw-flex tw-mb-4">
@@ -185,26 +174,6 @@ const Stopwatch = () => {
         )}
         <div>
           {isRunning && (
-=======
-    <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
-      <div className="tw-mb-4">
-        <div className="tw-flex tw-mb-4">
-          <input
-            type="text"
-            placeholder="Project Name"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2"
-          />
-          <input
-            type="text"
-            placeholder="Tag"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-            className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2"
-          />
-          {!isRunning ? (
->>>>>>> 07f2507e2057925d04f960dafe13df0d71731a08
             <button
               onClick={handleSubmit}
               className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
@@ -225,45 +194,7 @@ const Stopwatch = () => {
         <Reports projects={projects} />
 
       </div>
-<<<<<<< HEAD
     </>
-=======
-      {projects.length > 0 && (
-        <div className="tw-mb-4">
-          <h2 className="tw-font-bold">Project History:</h2>
-          <ul>
-            {projects.map((project, index) => (
-              <li key={index}>
-                Project Name: {project.projectName}, Tag: {project.tag}, Time
-                Elapsed: {project.timeElapsed} seconds
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <div>
-        {isRunning && (
-          <button
-            onClick={handleSubmit}
-            className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-          >
-            Submit
-          </button>
-        )}
-        {!isRunning && pausedTime > 0 && (
-          <button
-            onClick={handleResume}
-            className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-          >
-            Resume
-          </button>
-        )}
-      </div>
-      <Reports pieChartData={pieChartData} barChartData={barChartData}/>
-
-    </div>
-</>
->>>>>>> 07f2507e2057925d04f960dafe13df0d71731a08
   );
 };
 
