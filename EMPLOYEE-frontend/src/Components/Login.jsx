@@ -63,7 +63,7 @@ const Login = () => {
               id="employeeid"
               placeholder="Employee ID"
               required=""
-              onChange={(e) => setValues({...values,empid : e.target.value})} className="form-control rounded 0"
+              onChange={(e) => setValues({...values,empid : e.target.value})} class="form-control rounded 0"
             />
           </div>
           <div className="tw-space-y-2">
@@ -79,7 +79,7 @@ const Login = () => {
               placeholder="Password"
               required=""
               type="password"
-              onChange={(e) => setValues({...values,password : e.target.value})} className="form-control rounded 0"
+              onChange={(e) => setValues({...values,password : e.target.value})} class="form-control rounded 0"
             />
           </div>
           <a className="tw-underline" href="#">
