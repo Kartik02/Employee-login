@@ -189,9 +189,9 @@ const Stopwatch = () => {
               Resume
             </button>
           )}
-        </div>
+        </div>   
 
-        <Reports projects={projects} />
+        {/* <Reports projects={projects} /> */}
 
       </div>
     </>
