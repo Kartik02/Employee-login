@@ -127,7 +127,7 @@ const Dashboard = () => {
               </li>
               <li className="w-100" onClick = {handleLogout}>
                 <Link
-                  to="/dashboard"
+                  to="/"
                   className="nav-link text-white px-0 align-middle"
                 >
                   <i className="fs-4 bi-power ms-2"></i>
