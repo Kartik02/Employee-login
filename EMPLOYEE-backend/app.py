@@ -139,6 +139,21 @@ def get_employee_data():
         'password': user.password
     }), 200
 
+@app.route('/auth/employees', methods=['GET', 'POST'])
+def get_employees():
+    employees = EmpData.query.all()
+    employee_list = []
+    for employee in employees:
+        employee_dict = {
+            'name': employee.name,
+            'email': employee.email,
+            'employee_id': employee.empid,
+            'salary': employee.salary,
+            'category': employee.category
+        }
+        employee_list.append(employee_dict)
+    return jsonify({'Status': True, 'Result': employee_list}), 200
+
 @app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():
     data = request.json
