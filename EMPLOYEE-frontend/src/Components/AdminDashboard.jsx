@@ -41,7 +41,14 @@ const AdminDashboard = () => {
                                         <span className="ms-2 d-none d-sm-inline">Manage Employee</span>
                                     </Link>
                                 </li>
-                                
+                                <li className='w-100'>
+                                    <Link to="/admindashboard/employeelist"
+                                        className="nav-link text-white px-0 align-middle hover:text-primary"
+                                    >
+                                        <i className="fs-4 bi-people ms-2"></i>
+                                        <span className="ms-2 d-none d-sm-inline">Employee Details</span>
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </div>

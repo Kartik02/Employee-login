@@ -18,6 +18,7 @@ import AddEmployee from './Components/AddEmployee'
 import AdminDashboard from './Components/AdminDashboard'
 import AdminLogin from './Components/AdminLogin'
 import Reports from './Components/Reports'
+import EmployeeList from './Components/EmployeeList'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
       <Route path='' element={<Home/>}></Route>
       <Route path='/adminlogin' element={<AdminLogin/>}></Route>
       <Route path='/admindashboard/employee' element={<Employee/>}></Route>
+      <Route path='/admindashboard/employeelist' element={<EmployeeList/>}></Route>
       <Route path='/admindashboard/add_employee' element={<AddEmployee/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}>
       <Route path='' element={<Home/>}></Route>
