@@ -22,7 +22,9 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       console.error("Error occurred:", error);
-      setErrorMessage("*An error occurred while processing your request!!!");
+      setErrorMessage(
+        "*An error occurred while processing your request, Please try again later with registered Email ID...!!!"
+      );
     }
   };
 
@@ -58,13 +60,12 @@ const ForgotPassword = () => {
             <div className=" tw-text-red-700 tw-font-semibold ">
               {errorMessage}
             </div>
-            <div className="tw-text-center tw-space-y-10">
-              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
+            <div className="tw-flex tw-justify-center tw-space-x-4  tw-py-4">
+              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-2 tw-rounded">
                 Reset Password
-              </button>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;
+              </button>
               <button
-                className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
+                className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-3 tw-rounded"
                 onClick={handleLoginClick}
               >
                 Back to Login
