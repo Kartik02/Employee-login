@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import tenlogo from "./../assets/tencompany.jpg";
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -37,7 +38,7 @@ const Login = () => {
         <div className="tw-flex tw-flex-col tw-p-6 tw-space-y-1">
           <div className="tw-flex tw-flex-col tw-items-center tw-space-y-2">
             <img
-              src="https://media.licdn.com/dms/image/C4D0BAQHlLmFmZOvi6A/company-logo_200_200/0/1630577605411?e=1719446400&v=beta&t=X_nJlDP_SVI-c1BfNloU1FfAvYaitSQBfopxFwg0uQo"
+              src={tenlogo}
               alt="Logo"
               width="100"
               height="100"
