@@ -94,11 +94,16 @@ const Stopwatch = () => {
         console.log(data.message);
         setProjects([...projects, newProject]);
         handleReset();
+        // Navigate to ProjectDetailsPage with projectName and timeElapsed
+        // Assuming you have some kind of routing mechanism like react-router
+        // Replace the navigation logic according to your routing library
+        navigateToProjectDetailsPage(projectName, Math.floor(timeElapsed / 1000));
       })
       .catch(error => {
         console.error('Error adding project:', error);
         alert('Failed to add project');
       });
+      
   };
 
 
@@ -190,8 +195,6 @@ const Stopwatch = () => {
             </button>
           )}
         </div>   
-
-        {/* <Reports projects={projects} /> */}
 
       </div>
     </>
