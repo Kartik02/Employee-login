@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
+from flask_mail import Mail, Message
+import random
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -15,6 +17,14 @@ CORS(app, resources={
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
+
+mail = Mail(app)
+app.config['MAIL_SERVER'] = 'smtp.yourmailserver.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'meatydelight438@gmail.com'
+app.config['MAIL_PASSWORD'] = 'food123clone&webapp'
 
 class AdminData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -188,6 +198,44 @@ def handle_projects():
         db.session.commit()
 
         return jsonify({'message': 'Project added successfully!'}), 201
+
+@app.route('/auth/forgotpassword', methods=['GET', 'POST'])
+def forgot_password():
+    data = request.json
+    email = data.get('email')
+    user = EmpData.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    otp = random.randint(100000, 999999)  # Generate OTP
+    session['otp'] = otp
+    session['email'] = email
+
+    # Here you would normally send the OTP to the user's email or phone number
+    # Send OTP via email
+    msg = Message('Password Reset OTP', sender='meatydelight438@gmail.com', recipients=[email])
+    msg.body = f'Your OTP for password reset is: {otp}'
+    mail.send(msg)
+
+    # For simplicity, we'll just return the OTP in the response
+    return jsonify({'message': 'OTP sent successfully', 'otp': otp}), 200
+
+@app.route('/auth/resetpassword', methods=['GET', 'POST'])
+def reset_password():
+    data = request.json
+    email = session.get('email')
+    otp = session.get('otp')
+    if not email or not otp or data.get('otp') != str(otp):
+        return jsonify({'error': 'Invalid or expired OTP'}), 401
+
+    user = EmpData.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    user.password = data.get('password')
+    db.session.commit()
+
+    return jsonify({'message': 'Password reset successful'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)

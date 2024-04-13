@@ -20,6 +20,7 @@ import AdminDashboard from "./Components/AdminDashboard";
 import AdminLogin from "./Components/AdminLogin";
 import Reports from "./Components/Reports";
 import EmployeeList from "./Components/EmployeeList";
+import ProjectManagement from "./Components/ProjectManagement";
 
 function App() {
   return (
@@ -54,6 +55,10 @@ function App() {
           <Route
             path="/dashboard/calender"
             element={<CalendarComponent />}
+          ></Route>
+          <Route
+            path="/dashboard/projectmanagement"
+            element={<ProjectManagement/>}
           ></Route>
           <Route path="/dashboard/leave" element={<Leave />}></Route>
           <Route path="/dashboard/timesheet" element={<Timesheet />}></Route>

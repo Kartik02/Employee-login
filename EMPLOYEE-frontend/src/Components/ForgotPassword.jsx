@@ -4,30 +4,38 @@ import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Send a request to your backend to handle forgot password functionality
-      const response = await axios.post("http://localhost:5000/auth/login", {
+      const response = await axios.post("http://localhost:5000/auth/forgotpassword", {
         email,
       });
-      if (response.data.success) {
-        setSuccessMessage(response.data.message);
-      } else {
-        setErrorMessage(response.data.error);
-      }
+      alert(response.data.message);
     } catch (error) {
       console.error("Error occurred:", error);
-      setErrorMessage("*An error occurred while processing your request!!!");
+      setErrorMessage("An error occurred while processing your request. Please try again later.");
     }
   };
 
-  const handleLoginClick = () => {
-    navigate("/");
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/auth/resetpassword", {
+        email,
+        otp,
+        password: newPassword,
+      });
+      alert(response.data.message);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error occurred:", error);
+      setErrorMessage("An error occurred while processing your request. Please try again later.");
+    }
   };
 
   return (
@@ -40,11 +48,11 @@ const ForgotPassword = () => {
             </h3>
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleOtpSubmit}>
           <div className="tw-p-6 tw-space-y-4">
             <div className="tw-space-y-2  ">
               <label htmlFor="email" className="tw-text-sm tw-font-medium">
-                Please enter your email address reset your account.
+                Please enter your email address to reset your account.
               </label>
               <input
                 type="email"
@@ -55,24 +63,48 @@ const ForgotPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className=" tw-text-red-700 tw-font-semibold ">
-              {errorMessage}
-            </div>
-            <div className="tw-text-center tw-space-y-10">
-              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
-                Reset Password
-              </button>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <button
-                className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
-                onClick={handleLoginClick}
-              >
-                Back to Login
+            <div className="tw-text-red-700 tw-font-semibold">{errorMessage}</div>
+            <div className="tw-flex tw-justify-center tw-space-x-4  tw-py-4">
+              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-2 tw-rounded">
+                Send OTP
               </button>
             </div>
-            <label htmlFor="email" className="tw-font-semibold">
-              If you're facing any issues, please contact the service provider.
-            </label>
+          </div>
+        </form>
+        <form onSubmit={handleResetPassword}>
+          <div className="tw-p-6 tw-space-y-4">
+            <div className="tw-space-y-2  ">
+              <label htmlFor="otp" className="tw-text-sm tw-font-medium">
+                Enter OTP
+              </label>
+              <input
+                type="text"
+                id="otp"
+                className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background tw-placeholder-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+                placeholder="OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+            </div>
+            <div className="tw-space-y-2  ">
+              <label htmlFor="newPassword" className="tw-text-sm tw-font-medium">
+                Enter New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background tw-placeholder-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div className="tw-text-red-700 tw-font-semibold">{errorMessage}</div>
+            <div className="tw-flex tw-justify-center tw-space-x-4  tw-py-4">
+              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-2 tw-rounded">
+                Reset Password
+              </button>
+            </div>
           </div>
         </form>
       </div>

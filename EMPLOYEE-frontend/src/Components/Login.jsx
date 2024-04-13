@@ -88,9 +88,12 @@ const Login = () => {
                 class="form-control rounded 0"
               />
             </div>
-            <a className="tw-space-y-4 tw-underline" href="/forgotpassword">
-              Forgot Password?
-            </a>
+
+            <div>
+              <a className="tw-underline" href="/forgotpassword">
+                Forgot Password?
+              </a>
+            </div>
             <div className="tw-text-center">
               <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
                 Login
