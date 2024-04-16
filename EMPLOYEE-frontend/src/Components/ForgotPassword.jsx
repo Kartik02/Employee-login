@@ -22,21 +22,23 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleResetPassword = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:5000/auth/resetpassword", {
-        email,
-        otp,
-        password: newPassword,
-      });
-      alert(response.data.message);
-      navigate("/login");
-    } catch (error) {
-      console.error("Error occurred:", error);
-      setErrorMessage("An error occurred while processing your request. Please try again later.");
-    }
-  };
+const handleResetPassword = async (event) => {
+  event.preventDefault();
+  try {
+    const response = await axios.post("http://localhost:5000/auth/resetpassword", {
+      email,
+      otp,
+      password: newPassword,
+    });
+    alert(response.data.message);
+    navigate("/");
+  } catch (error) {
+    console.error("Error occurred:", error);
+    setErrorMessage("An error occurred while processing your request. Please try again later.");
+  }
+};
+
+
 
   return (
     <div className="tw-h-screen tw-p-5 tw-flex tw-justify-center tw-items-center login">
