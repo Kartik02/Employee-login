@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="073cc012-b6f3-4187-a966-d334edb56dcb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/public/Images/Login.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/ForgotPassword.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/assets/tencompany.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/instance/databse.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Style.css" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminStyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/ForgotPassword.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,15 +33,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging main",
-    "last_opened_file_path": "D:/TEN AI LABS/EmpMgmtSystm/ReactFlask/Employee-login/EMPLOYEE-backend/templates",
-    "settings.editor.selected.configurable": "terminal"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/TEN AI LABS/EmpMgmtSystm/ReactFlask/Employee-login/EMPLOYEE-backend/templates&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\TEN AI LABS\EmpMgmtSystm\ReactFlask\Employee-login\EMPLOYEE-backend\templates" />
