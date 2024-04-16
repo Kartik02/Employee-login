@@ -137,25 +137,27 @@ const Stopwatch = () => {
   return (
     <>
       <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
-        <div className="tw-mb-4 tw-border tw-rounded tw-p-2 tw-flex tw-w-full">
+        <div className="tw-mb-4 tw-border-2 tw-border-black tw-rounded tw-p-2 tw-flex tw-w-full">
           <input
             type="text"
             placeholder="What are you working on?"
             value={task}
             onChange={(e) => setTask(e.target.value)}
-            className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
           />
           <input
             type="text"
             placeholder="Project Name"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
-            className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }} // Adjust border radius for right input
           />
           <div className="tw-relative tw-flex-1">
             {/* Tag symbol */}
             <span
-              className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-cursor-pointer"
+              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick} // Handle click to show dropdown
             >
               {tag || "Select Tag"}
@@ -176,6 +178,7 @@ const Stopwatch = () => {
               onClick={handleStart}
               disabled={!task.trim() || !projectName.trim()} // Disable button if task or projectName is empty or contains only whitespace
               className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${(!task.trim() || !projectName.trim()) && "tw-opacity-50 tw-cursor-not-allowed"}`}
+              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} // Adjust border radius for start button
             >
               Start
             </button>
