@@ -100,6 +100,15 @@ const Dashboard = () => {
               </li> 
               <li className="w-100">
                 <Link
+                  to="/dashboard/projectmanagement"
+                  className="nav-link text-white px-0 align-middle"
+                >
+                  <i class=" fs-4 bi bi-clock ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Project</span>
+                </Link>
+              </li> 
+              <li className="w-100">
+                <Link
                   to="/dashboard/employeesec"
                   className="nav-link text-white px-0 align-middle"
                 >

@@ -1,15 +1,15 @@
-// Stopwatch.js
 import React, { useState, useRef, useEffect } from "react";
 import Reports from "./Reports";
 
 const Stopwatch = () => {
+  const [task, setTask] = useState(""); // State for the task description
   const [projectName, setProjectName] = useState("");
   const [tag, setTag] = useState("");
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [pausedTime, setPausedTime] = useState(0);
   const [projects, setProjects] = useState([]);
-
+  const [showDropdown, setShowDropdown] = useState(false); // State to control the visibility of the dropdown
 
   const intervalRef = useRef();
 
@@ -42,6 +42,10 @@ const Stopwatch = () => {
   };
 
   const handleStart = () => {
+    if (!task.trim()) {
+      alert("Task description is required!");
+      return;
+    }
     if (!projectName.trim()) {
       alert("Project name is required!");
       return;
@@ -60,17 +64,23 @@ const Stopwatch = () => {
 
   const handleReset = () => {
     resetTimer();
+    setTask("");
     setProjectName("");
     setTag("");
     setIsRunning(false);
   };
 
   const handleSubmit = () => {
+    if (!task.trim()) {
+      alert("Task description is required!");
+      return;
+    }
     if (!projectName.trim()) {
       alert("Project name is required!");
       return;
     }
     const newProject = {
+      task,
       projectName,
       tag,
       timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
@@ -94,13 +104,26 @@ const Stopwatch = () => {
         console.log(data.message);
         setProjects([...projects, newProject]);
         handleReset();
+        // Navigate to ProjectDetailsPage with projectName and timeElapsed
+        // Assuming you have some kind of routing mechanism like react-router
+        // Replace the navigation logic according to your routing library
+        navigateToProjectDetailsPage(projectName, Math.floor(timeElapsed / 1000));
       })
       .catch(error => {
         console.error('Error adding project:', error);
         alert('Failed to add project');
       });
+      
   };
 
+  const handleTagClick = () => {
+    setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
+  };
+
+  const handleTagSelect = (selectedTag) => {
+    setTag(selectedTag);
+    setShowDropdown(false); // Hide the dropdown after selecting a tag
+  };
 
 
   const formatTime = (milliseconds) => {
@@ -114,50 +137,70 @@ const Stopwatch = () => {
   return (
     <>
       <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
-        <div className="tw-mb-4">
-          <div className="tw-flex tw-mb-4">
-            <input
-              type="text"
-              placeholder="Project Name"
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-              className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2"
-            />
-            <input
-              type="text"
-              placeholder="Tag"
-              value={tag}
-              onChange={(e) => setTag(e.target.value)}
-              className="tw-border tw-border-gray-300 tw-px-2 tw-py-1 tw-mr-2"
-            />
-            {!isRunning ? (
-              <button
-                onClick={handleStart}
-                disabled={!projectName.trim()} // Disable button if projectName is empty or contains only whitespace
-                className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${!projectName.trim() && "tw-opacity-50 tw-cursor-not-allowed"}`}
-              >
-                Start
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={handlePause}
-                  className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded tw-mr-2"
-                >
-                  Pause
-                </button>
-                <button
-                  onClick={handleReset}
-                  className="tw-bg-gray-500 tw-hover:bg-gray-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-                >
-                  Reset
-                </button>
-              </>
+        <div className="tw-mb-4 tw-border-2 tw-border-black tw-rounded tw-p-2 tw-flex tw-w-full">
+          <input
+            type="text"
+            placeholder="What are you working on?"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
+          />
+          <input
+            type="text"
+            placeholder="Project Name"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }} // Adjust border radius for right input
+          />
+          <div className="tw-relative tw-flex-1">
+            {/* Tag symbol */}
+            <span
+              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
+              onClick={handleTagClick} // Handle click to show dropdown
+            >
+              {tag || "Select Tag"}
+            </span>
+            {/* Dropdown */}
+            {showDropdown && (
+              <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md">
+                <ul>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Frontend")}>Frontend</li>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Backend")}>Backend</li>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Database")}>Database</li>
+                </ul>
+              </div>
             )}
           </div>
-          <div>
-            <h2 className="tw-font-bold">Time Taken: {formatTime(timeElapsed)}</h2>
-          </div>
+          {!isRunning ? (
+            <button
+              onClick={handleStart}
+              disabled={!task.trim() || !projectName.trim()} // Disable button if task or projectName is empty or contains only whitespace
+              className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${(!task.trim() || !projectName.trim()) && "tw-opacity-50 tw-cursor-not-allowed"}`}
+              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} // Adjust border radius for start button
+            >
+              Start
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={handlePause}
+                className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded tw-mr-2"
+              >
+                Pause
+              </button>
+              <button
+                onClick={handleReset}
+                className="tw-bg-gray-500 tw-hover:bg-gray-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+              >
+                Reset
+              </button>
+            </>
+          )}
+        </div>
+        <div>
+          <h2 className="tw-font-bold">Time Taken: {formatTime(timeElapsed)}</h2>
         </div>
         {projects.length > 0 && (
           <div className="tw-mb-4">
@@ -190,8 +233,6 @@ const Stopwatch = () => {
             </button>
           )}
         </div>   
-
-        {/* <Reports projects={projects} /> */}
 
       </div>
     </>
