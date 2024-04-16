@@ -158,7 +158,9 @@ const Dashboard = () => {
             <i class="bi bi-envelope-plus-fill"></i>
             <i class="bi bi-bell-fill"></i>
             <i class="bi bi-question-circle"></i>
+            <Link to="/dashboard/profile">
             <i class="bi bi-person-circle"></i>
+            </Link>
           </div>
           <Outlet/>
         </div>
