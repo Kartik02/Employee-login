@@ -21,6 +21,7 @@ import AdminLogin from "./Components/AdminLogin";
 import Reports from "./Components/Reports";
 import EmployeeList from "./Components/EmployeeList";
 import ProjectManagement from "./Components/ProjectManagement";
+import AddProject from "./Components/AddProject";
 
 function App() {
   return (
@@ -39,6 +40,10 @@ function App() {
         <Route
           path="/admindashboard/add_employee"
           element={<AddEmployee />}
+        ></Route>
+        <Route
+        path="/admindashboard/addproject"
+        element={<AddProject/>}
         ></Route>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="" element={<Home />}></Route>

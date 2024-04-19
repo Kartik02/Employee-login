@@ -1,10 +1,34 @@
 import React, { useState, useRef, useEffect } from "react";
 import Reports from "./Reports";
 
+const ProjectDropdown = ({ projectName, setProjectName, projects }) => {
+  const handleProjectSelect = (selectedProject) => {
+    setProjectName(selectedProject);
+  };
+
+  return (
+    <div className="tw-relative tw-flex-1">
+      {/* Project dropdown */}
+      <select
+        value={projectName}
+        onChange={(e) => setProjectName(e.target.value)}
+        className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+      >
+        <option value="">Select Project</option>
+        {projects.map((project, index) => (
+          <option key={index} value={project.projectName}>
+            {project.projectName}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
 const Stopwatch = () => {
   const [task, setTask] = useState(""); // State for the task description
   const [projectName, setProjectName] = useState("");
-  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]); // State for storing selected tags
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [pausedTime, setPausedTime] = useState(0);
@@ -66,7 +90,7 @@ const Stopwatch = () => {
     resetTimer();
     setTask("");
     setProjectName("");
-    setTag("");
+    setTags([]);
     setIsRunning(false);
   };
 
@@ -82,7 +106,7 @@ const Stopwatch = () => {
     const newProject = {
       task,
       projectName,
-      tag,
+      tags, // Include selected tags in the project object
       timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
     };
 
@@ -121,8 +145,12 @@ const Stopwatch = () => {
   };
 
   const handleTagSelect = (selectedTag) => {
-    setTag(selectedTag);
-    setShowDropdown(false); // Hide the dropdown after selecting a tag
+    // Toggle the tag in the selected tags array
+    if (tags.includes(selectedTag)) {
+      setTags(tags.filter(tag => tag !== selectedTag));
+    } else {
+      setTags([...tags, selectedTag]);
+    }
   };
 
 
@@ -146,29 +174,46 @@ const Stopwatch = () => {
             className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
             style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
           />
-          <input
-            type="text"
-            placeholder="Project Name"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-            style={{ borderBottomLeftRadius: 0, borderTopLeftRadius: 0 }} // Adjust border radius for right input
-          />
+          <ProjectDropdown projectName={projectName} setProjectName={setProjectName} projects={projects} />
           <div className="tw-relative tw-flex-1">
             {/* Tag symbol */}
-            <span
+            <div
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick} // Handle click to show dropdown
             >
-              {tag || "Select Tag"}
-            </span>
+              {tags.length > 0 ? tags.join(", ") : "Select Tag"}
+            </div>
             {/* Dropdown */}
             {showDropdown && (
               <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md">
                 <ul>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Frontend")}>Frontend</li>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Backend")}>Backend</li>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200" onClick={() => handleTagSelect("Database")}>Database</li>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
+                    <input
+                      type="checkbox"
+                      value="Frontend"
+                      checked={tags.includes("Frontend")}
+                      onChange={() => handleTagSelect("Frontend")}
+                    />
+                    Frontend
+                  </li>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
+                    <input
+                      type="checkbox"
+                      value="Backend"
+                      checked={tags.includes("Backend")}
+                      onChange={() => handleTagSelect("Backend")}
+                    />
+                    Backend
+                  </li>
+                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
+                    <input
+                      type="checkbox"
+                      value="Database"
+                      checked={tags.includes("Database")}
+                      onChange={() => handleTagSelect("Database")}
+                    />
+                    Database
+                  </li>
                 </ul>
               </div>
             )}
@@ -208,7 +253,7 @@ const Stopwatch = () => {
             <ul>
               {projects.map((project, index) => (
                 <li key={index}>
-                  Project Name: {project.projectName}, Tag: {project.tag}, Time
+                  Project Name: {project.projectName}, Tags: {project.tags.join(", ")}, Time
                   Elapsed: {project.timeElapsed} seconds
                 </li>
               ))}

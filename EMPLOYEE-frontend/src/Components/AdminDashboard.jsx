@@ -53,6 +53,17 @@ const AdminDashboard = () => {
                     </span>
                   </Link>
                 </li>
+                <li className="w-100">
+                  <Link
+                    to="/admindashboard/addproject"
+                    className="nav-link text-white px-0 align-middle hover:text-primary"
+                  >
+                    <i className="fs-4 bi-people ms-2"></i>
+                    <span className="ms-2 d-none d-sm-inline">
+                      Add Project
+                    </span>
+                  </Link>
+                </li>
                 
                 <li className="w-100" onClick={handleLogout}>
                   <Link
