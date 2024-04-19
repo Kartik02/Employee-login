@@ -27,24 +27,28 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="" element={<Home />}></Route>
         <Route path="/" element={<Login />}></Route>
         <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
-        <Route path="/admindashboard" element={<AdminDashboard />}></Route>
-        <Route path="" element={<Home />}></Route>
+        <Route path="/admindashboard" element={<AdminDashboard />}>
+          <Route
+            path="/admindashboard/employee" 
+            element={<Employee />}
+          ></Route>
+          <Route
+            path="/admindashboard/employeelist"
+            element={<EmployeeList />}
+          ></Route>
+          <Route
+            path="/admindashboard/add_employee"
+            element={<AddEmployee />}
+          ></Route>
+          <Route
+            path="/admindashboard/addproject"
+            element={<AddProject />}
+          ></Route>
+        </Route>
         <Route path="/adminlogin" element={<AdminLogin />}></Route>
-        <Route path="/admindashboard/employee" element={<Employee />}></Route>
-        <Route
-          path="/admindashboard/employeelist"
-          element={<EmployeeList />}
-        ></Route>
-        <Route
-          path="/admindashboard/add_employee"
-          element={<AddEmployee />}
-        ></Route>
-        <Route
-        path="/admindashboard/addproject"
-        element={<AddProject/>}
-        ></Route>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="" element={<Home />}></Route>
           {/* <Route path='/dashboard/category' element={<Category/>}></Route>  */}
@@ -63,7 +67,7 @@ function App() {
           ></Route>
           <Route
             path="/dashboard/projectmanagement"
-            element={<ProjectManagement/>}
+            element={<ProjectManagement />}
           ></Route>
           <Route path="/dashboard/leave" element={<Leave />}></Route>
           <Route path="/dashboard/timesheet" element={<Timesheet />}></Route>

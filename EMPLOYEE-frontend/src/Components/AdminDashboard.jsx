@@ -77,9 +77,9 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
+        <Outlet />
         </div>
       </div>
-      <Outlet />
     </>
   );
 };

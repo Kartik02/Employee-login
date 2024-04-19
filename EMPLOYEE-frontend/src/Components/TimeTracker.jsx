@@ -137,7 +137,7 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
         alert('Failed to add project');
       });
-      
+
   };
 
   const handleTagClick = () => {
@@ -175,13 +175,14 @@ const Stopwatch = () => {
             style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
           />
           <ProjectDropdown projectName={projectName} setProjectName={setProjectName} projects={projects} />
-          <div className="tw-relative tw-flex-1">
+          <div className="tw-absolute tw-right-80 ">
             {/* Tag symbol */}
             <div
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick} // Handle click to show dropdown
+              style={{ marginRight: '8px' }} // Reduce space between tag and project
             >
-              {tags.length > 0 ? tags.join(", ") : "Select Tag"}
+              {tags.length > 0 ? tags.join(", ") :<i class="bi bi-tag"></i>}
             </div>
             {/* Dropdown */}
             {showDropdown && (
@@ -218,6 +219,7 @@ const Stopwatch = () => {
               </div>
             )}
           </div>
+
           {!isRunning ? (
             <button
               onClick={handleStart}
@@ -277,7 +279,7 @@ const Stopwatch = () => {
               Resume
             </button>
           )}
-        </div>   
+        </div>
 
       </div>
     </>

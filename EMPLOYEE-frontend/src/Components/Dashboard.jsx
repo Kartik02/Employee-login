@@ -67,7 +67,7 @@ const Dashboard = () => {
                   to="/dashboard/timesheet"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i class=" fs-4 bi bi-clock ms-2"></i>
+                  <i class="fs-4 bi bi-calendar3 ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> Timesheet</span>
                 </Link>
               </li> 
