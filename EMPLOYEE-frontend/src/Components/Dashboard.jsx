@@ -85,7 +85,7 @@ const Dashboard = () => {
                   to="/dashboard/calender"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i class=" fs-4 bi bi-clock ms-2"></i>
+                  <i class=" fs-4 bi bi-calendar ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Calendar</span>
                 </Link>
               </li> 
@@ -94,7 +94,7 @@ const Dashboard = () => {
                   to="/dashboard/reports"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i class=" fs-4 bi bi-clock ms-2"></i>
+                  <i class=" fs-4 bi bi-bar-chart-fill ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Report</span>
                 </Link>
               </li> 
@@ -103,7 +103,7 @@ const Dashboard = () => {
                   to="/dashboard/projectmanagement"
                   className="nav-link text-white px-0 align-middle"
                 >
-                  <i class=" fs-4 bi bi-clock ms-2"></i>
+                  <i class="fs-4 bi bi-file-earmark ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Project</span>
                 </Link>
               </li> 
