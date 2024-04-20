@@ -22,6 +22,7 @@ import Reports from "./Components/Reports";
 import EmployeeList from "./Components/EmployeeList";
 import ProjectManagement from "./Components/ProjectManagement";
 import AddProject from "./Components/AddProject";
+import Tag from "./Components/Tag";
 
 function App() {
   return (
@@ -45,6 +46,10 @@ function App() {
           <Route
             path="/admindashboard/addproject"
             element={<AddProject />}
+          ></Route>
+          <Route
+            path="/admindashboard/tag"
+            element={<Tag/>}
           ></Route>
         </Route>
         <Route path="/adminlogin" element={<AdminLogin />}></Route>

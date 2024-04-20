@@ -64,7 +64,17 @@ const AdminDashboard = () => {
                     </span>
                   </Link>
                 </li>
-                
+                <li className="w-100">
+                  <Link
+                    to="/admindashboard/tag"
+                    className="nav-link text-white px-0 align-middle hover:text-primary"
+                  >
+                    <i class="fs-4 bi bi-tag ms-2"></i>
+                    <span className="ms-2 d-none d-sm-inline">
+                      Tag
+                    </span>
+                  </Link>
+                </li>
                 <li className="w-100" onClick={handleLogout}>
                   <Link
                     to="/adminlogin"
