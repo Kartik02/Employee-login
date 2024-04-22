@@ -13,7 +13,7 @@ app.secret_key = 'your_secret_key'
 CORS(app, resources={
     r"/auth/*": {"origins": "http://localhost:5173"},
     r"/leave/add": {"origins": "http://localhost:5173"},
-    r"/api/projects": {"origins": "http://localhost:5173"}
+    r"/api/*": {"origins": "http://localhost:5173"}
 }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
@@ -67,6 +67,12 @@ class Leave(db.Model):
         self.fromDate = fromDate
         self.toDate = toDate
 
+class ProjectList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    def __init__(self, name):
+        self.name = name
+
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     projectName = db.Column(db.String(100), nullable=False)
@@ -88,6 +94,7 @@ admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(AdminData, db.session))
 admin.add_view(ModelView(EmpData, db.session))
 admin.add_view(ModelView(Leave, db.session))
+admin.add_view(ModelView(ProjectList, db.session))
 admin.add_view(ModelView(Project, db.session))
 
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
@@ -182,6 +189,25 @@ def add_leave():
     db.session.commit()
 
     return jsonify({'message': 'Leave added successfully'}), 200
+
+
+@app.route('/api/add_projects', methods=['GET', 'POST'])
+def add_project():
+    data = request.json
+    project_name = data.get('name')
+
+    # Check if the project already exists
+    existing_project = ProjectList.query.filter_by(name=project_name).first()
+    if existing_project:
+        return jsonify({'error': 'Project already exists'}), 400
+
+    # If the project doesn't exist, add it to the database
+    new_project = ProjectList(name=project_name)
+    db.session.add(new_project)
+    db.session.commit()
+
+    return jsonify({'message': 'Project added successfully'}), 201
+
 
 @app.route('/api/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():
