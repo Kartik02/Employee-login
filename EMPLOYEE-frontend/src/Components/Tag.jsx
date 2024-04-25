@@ -33,6 +33,7 @@ function Tag() {
 
   return (
     <div className="container">
+    
       <p style={{fontSize:'40px'}}>Tags</p>
       <div className='row main-box' style={{ display: 'block', marginTop: '20px' }}>
         <form onSubmit={handleSubmit}>
@@ -75,7 +76,8 @@ function Tag() {
           ))}
         </tbody>
       </table>
-    </div>
+      </div>
+    
   );
 }
 

@@ -4,6 +4,7 @@ const ProjectList = () => {
     const [projects , setProjects] = useState([]);
 
   return (
+    
     <div className="mt-3">
       <h2 className="text-center mb-3">Project List</h2>
       <table className="table table-bordered">
@@ -27,6 +28,7 @@ const ProjectList = () => {
         </tbody>
       </table>
     </div>
+    
   )
 }
 

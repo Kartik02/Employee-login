@@ -44,6 +44,8 @@ const ProjectManagement = () => {
 
   return (
     <>
+    <div className='container'>
+    <div className='row justify-content-center'>
       <div className="tw-flex tw-items-center tw-justify-between tw-p-4 tw-bg-gray-200">
         {/* Search input */}
         <input
@@ -65,6 +67,8 @@ const ProjectManagement = () => {
           {renderProjects()}
         </tbody>
       </table>
+      </div>
+    </div>
     </>
   );
 };
