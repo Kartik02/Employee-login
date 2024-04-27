@@ -12,7 +12,6 @@ function Profile() {
       })
       .catch((error) => {
         console.error("Error fetching employee data:", error);
-        // Handle error appropriately in your application (e.g., show a user-friendly message)
       });
   }, []);
 
@@ -29,8 +28,7 @@ function Profile() {
     const maxFileSize = 1 * 1024 * 1024; // 1 MB
     if (file) {
       if (file.size > maxFileSize) {
-        console.warn("File size exceeds 1 MB");
-        // Notify the user about the file size limit (consider using an alert or a toast message)
+        alert("The file size exceeds the 1 MB limit. Please choose a smaller file.");
         return;
       }
 
@@ -48,16 +46,11 @@ function Profile() {
         <div className="col-md-8">
           <div className="card mt-5">
             <div className="card-body">
-              <h1 className="card-title tw-font-bold tw-text-2xl">
-                Profile Settings
-              </h1>
+              <h1 className="card-title tw-font-bold tw-text-2xl">Profile Settings</h1>
               <div className="row">
                 <div className="col-md-4">
                   <div className="mb-3">
-                    <label
-                      htmlFor="profile-photo"
-                      className="form-label tw-font-semibold"
-                    >
+                    <label htmlFor="profile-photo" className="form-label tw-font-semibold">
                       Profile Photo
                     </label>
                     <small className="text-muted d-block mb-2">
@@ -65,19 +58,13 @@ function Profile() {
                     </small>
                     <div className="d-flex align-items-center mb-3">
                       <img
-                        src={
-                          empData?.profileImage ||
-                          "https://via.placeholder.com/64"
-                        }
+                        src={empData?.profileImage || "https://via.placeholder.com/64"}
                         alt="Profile"
                         className="rounded-circle"
                         width="64"
                         height="64"
                       />
-                      <button
-                        className="btn btn-primary ms-3"
-                        onClick={handleButtonClick}
-                      >
+                      <button className="btn btn-primary ms-3" onClick={handleButtonClick}>
                         UPLOAD IMAGE
                       </button>
                       <input
@@ -92,12 +79,9 @@ function Profile() {
                 </div>
                 <div className="col-md-8">
                   <div className="border-top pt-4">
-                    <h2 className="card-title tw-font-semibold">
-                      Personal Info
-                    </h2>
+                    <h2 className="card-title tw-font-semibold">Personal Info</h2>
                     <p className="text-muted mb-4">
-                      Your log-in credentials and the name that is displayed in
-                      reports.
+                      Your log-in credentials and the name that is displayed in reports.
                     </p>
                     <form>
                       <div className="row g-3">
@@ -128,7 +112,7 @@ function Profile() {
                               type="email"
                               className="form-control"
                               id="email"
-                              value={empData?.email || ""}
+                              defaultValue={empData ? empData.email : ""}
                             />
                             <button className="btn btn-primary" type="button">
                               Change
@@ -147,7 +131,7 @@ function Profile() {
                               type="password"
                               className="form-control"
                               id="password"
-                              value={empData?.password || ""}
+                              defaultValue={empData ? empData.password : ""}
                             />
                             <button className="btn btn-primary" type="button">
                               Change
