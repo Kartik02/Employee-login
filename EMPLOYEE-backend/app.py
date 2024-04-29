@@ -8,6 +8,7 @@ from flask_mail import Mail, Message
 import random
 from sqlalchemy import LargeBinary
 from flask_migrate import Migrate
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'

@@ -55,25 +55,37 @@ function Profile() {
       });
   };
 
-  const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
 
-      axios
-        .post("http://localhost:5000/auth/upload_profile", formData, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          setProfileImage(file); // Set the file directly as the profile image
-        })
-        .catch((error) => {
-          console.error("Error uploading profile image:", error);
-        });
-   };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    axios.post("http://localhost:5000/auth/upload_profile", formData, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+       // Display success message
+        alert("Profile image uploaded successfully");
+        window.location.reload();
+      })
+      .then((response) => {
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setProfileImageBase64(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      })
+      .catch((error) => {
+        console.error("Error uploading profile image:", error);
+      });
+  };
+
 
 
   return (
@@ -98,13 +110,13 @@ function Profile() {
                       Formats: png, jpg, gif. Max size: 1 MB.
                     </small>
                     <div className="d-flex align-items-center mb-3">
-                     <img
+                      <img
                         src={profileImageBase64 ? `data:image/png;base64,${profileImageBase64}` : "https://via.placeholder.com/64"}
                         alt="Profile"
                         className="rounded-circle"
                         width="64"
                         height="64"
-                    />
+                      />
                       <input
                         type="file"
                         id="profile-photo"
@@ -114,7 +126,7 @@ function Profile() {
                       />
                       <label
                         htmlFor="profile-photo"
-                        className="btn btn-primary ms-3"
+                        className="btn btn-primary mt-2"
                       >
                         UPLOAD IMAGE
                       </label>
