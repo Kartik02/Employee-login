@@ -5,7 +5,7 @@ function Profile() {
   const [empData, setEmpData] = useState(null);
   const [editedEmail, setEditedEmail] = useState("");
   const [editedPassword, setEditedPassword] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImageBase64, setProfileImageBase64] = useState("");
   const [emailChanged, setEmailChanged] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
 
@@ -15,7 +15,8 @@ function Profile() {
       .then((response) => {
         setEmpData(response.data);
         setEditedEmail(response.data.email);
-        setProfileImage(response.data.profileImage);
+        setProfileImageBase64(response.data.profileImage);
+        console.log("Profile Image:", response.data.profileImage);
       })
       .catch((error) => {
         console.error("Error fetching employee data:", error);
@@ -55,42 +56,25 @@ function Profile() {
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    const maxFileSize = 1 * 1024 * 1024; // 1 MB
-    if (!file) {
-      alert("No file selected.");
-      return;
-    }
-
-    if (file) {
-      if (file.size > maxFileSize) {
-        alert("The file size exceeds the 1 MB limit. Please choose a smaller file.");
-        return;
-     }
-
-    if (!['image/png', 'image/jpeg', 'image/gif'].includes(file.type)) {
-      alert("File format not allowed. Please choose a PNG, JPEG, or GIF file.");
-      return;
-    }
-
+      const file = event.target.files[0];
       const formData = new FormData();
       formData.append("file", file);
 
       axios
-        .post("http://localhost:5000/upload_profile_image", formData, {
+        .post("http://localhost:5000/auth/upload_profile", formData, {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((response) => {
-          setProfileImage(response.data.profileImage);
+          setProfileImage(file); // Set the file directly as the profile image
         })
         .catch((error) => {
           console.error("Error uploading profile image:", error);
         });
-    }
-  };
+   };
+
 
   return (
     <div className="container">
@@ -114,13 +98,13 @@ function Profile() {
                       Formats: png, jpg, gif. Max size: 1 MB.
                     </small>
                     <div className="d-flex align-items-center mb-3">
-                      <img
-                        src={profileImage || "https://via.placeholder.com/64"}
+                     <img
+                        src={profileImageBase64 ? `data:image/png;base64,${profileImageBase64}` : "https://via.placeholder.com/64"}
                         alt="Profile"
                         className="rounded-circle"
                         width="64"
                         height="64"
-                      />
+                    />
                       <input
                         type="file"
                         id="profile-photo"

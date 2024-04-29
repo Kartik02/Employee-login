@@ -6,12 +6,8 @@ from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
 from flask_mail import Mail, Message
 import random
-from werkzeug.utils import secure_filename
-import os
 from sqlalchemy import LargeBinary
 from flask_migrate import Migrate
-
-
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -59,6 +55,10 @@ class EmpData(db.Model):
         self.salary = salary
         self.category = category
         self.profile_image = profile_image
+    def get_profile_image_base64(self):
+        if self.profile_image:
+            return base64.b64encode(self.profile_image).decode('utf-8')
+        return None
 
 class Leave(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -163,8 +163,10 @@ def get_employee_data():
     return jsonify({
         'name': user.name,
         'email': user.email,
-        'password': user.password
+        'password': user.password,
+        'profileImage': user.get_profile_image_base64()
     }), 200
+
 
 @app.route('/auth/employees', methods=['GET', 'POST'])
 def get_employees():
@@ -214,7 +216,39 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-@app.route('/upload_profile_image', methods=['GET', 'POST'])
+# @app.route('/upload_profile_image', methods=['GET', 'POST'])
+# def upload_profile_image():
+#     if 'file' not in request.files:
+#         return jsonify({'error': 'No file part'}), 400
+#
+#     file = request.files['file']
+#
+#     if file.filename == '':
+#         return jsonify({'error': 'No selected file'}), 400
+#
+#     if file and allowed_file(file.filename):
+#         filename = secure_filename(file.filename)
+#
+#         # Create the 'uploads' directory if it doesn't exist
+#         if not os.path.exists('uploads'):
+#             os.makedirs('uploads')
+#
+#         file_path = os.path.join('uploads', filename)
+#         file.save(file_path)
+#
+#         # Convert the file data to bytes
+#         with open(file_path, 'rb') as f:
+#             file_data = f.read()
+#
+#         # Save the file path to the database
+#         user = EmpData.query.filter_by(empid=session['empid']).first()
+#         user.profile_image = file_data
+#         db.session.commit()
+#
+#         return jsonify({'profileImage': filename}), 200
+#
+#     return jsonify({'error': 'File format not allowed'}), 400
+@app.route('/auth/upload_profile', methods=['POST'])
 def upload_profile_image():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -225,17 +259,17 @@ def upload_profile_image():
         return jsonify({'error': 'No selected file'}), 400
 
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
-        # Save the file path to the database
+        # Convert the file data to bytes
+        file_data = file.read()
+
+        # Save the file data to the database
         user = EmpData.query.filter_by(empid=session['empid']).first()
-        user.profile_image = filename
+        user.profile_image = file_data
         db.session.commit()
-        return jsonify({'profileImage': filename}), 200
+
+        return jsonify({'message': 'Profile image uploaded successfully'}), 200
 
     return jsonify({'error': 'File format not allowed'}), 400
-
-
 
 @app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():
