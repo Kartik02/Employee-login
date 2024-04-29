@@ -97,6 +97,28 @@ class Project(db.Model):
             'timeElapsed': self.timeElapsed
         }
 
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    start = db.Column(db.DateTime, nullable=False)
+    end = db.Column(db.DateTime, nullable=False)
+    all_day = db.Column(db.Boolean, default=False)
+
+    def __init__(self, title, start, end, all_day=False):
+        self.title = title
+        self.start = start
+        self.end = end
+        self.all_day = all_day
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'start': self.start.isoformat(),
+            'end': self.end.isoformat(),
+            'allDay': self.all_day
+        }
+
 with app.app_context():
     db.create_all()
 
@@ -106,6 +128,8 @@ admin.add_view(ModelView(EmpData, db.session))
 admin.add_view(ModelView(Leave, db.session))
 admin.add_view(ModelView(ProjectList, db.session))
 admin.add_view(ModelView(Project, db.session))
+admin.add_view(ModelView(Event, db.session))
+
 
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
@@ -217,38 +241,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-# @app.route('/upload_profile_image', methods=['GET', 'POST'])
-# def upload_profile_image():
-#     if 'file' not in request.files:
-#         return jsonify({'error': 'No file part'}), 400
-#
-#     file = request.files['file']
-#
-#     if file.filename == '':
-#         return jsonify({'error': 'No selected file'}), 400
-#
-#     if file and allowed_file(file.filename):
-#         filename = secure_filename(file.filename)
-#
-#         # Create the 'uploads' directory if it doesn't exist
-#         if not os.path.exists('uploads'):
-#             os.makedirs('uploads')
-#
-#         file_path = os.path.join('uploads', filename)
-#         file.save(file_path)
-#
-#         # Convert the file data to bytes
-#         with open(file_path, 'rb') as f:
-#             file_data = f.read()
-#
-#         # Save the file path to the database
-#         user = EmpData.query.filter_by(empid=session['empid']).first()
-#         user.profile_image = file_data
-#         db.session.commit()
-#
-#         return jsonify({'profileImage': filename}), 200
-#
-#     return jsonify({'error': 'File format not allowed'}), 400
+
 @app.route('/auth/upload_profile', methods=['POST'])
 def upload_profile_image():
     if 'file' not in request.files:
@@ -308,6 +301,25 @@ def add_project():
 
     return jsonify({'message': 'Project added successfully'}), 201
 
+@app.route('/api/add_event', methods=['POST'])
+def add_event():
+    data = request.json
+    title = data.get('title')
+    start = data.get('start')
+    end = data.get('end')
+    all_day = data.get('allDay')
+
+    # Convert the date strings to datetime objects
+    # start_datetime = datetime.fromisoformat(start)
+    # end_datetime = datetime.fromisoformat(end)
+
+    # Save the event to the database
+    # new_event = Event(title=title, start=start_datetime, end=end_datetime, all_day=all_day)
+    new_event = Event(title=title, start=start, end=end, all_day=all_day)
+    db.session.add(new_event)
+    db.session.commit()
+
+    return jsonify({'message': 'Event added successfully'}), 200
 
 @app.route('/api/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():

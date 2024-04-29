@@ -11,29 +11,69 @@ const CalenderComponent = () =>
   const [currentEvents, setCurrentEvents] = useState([]);
 
   const handleDateClick = (selected) => {
-    const title = prompt("Please enter a new title for your event");
-    const calendarApi = selected.view.calendar;
-    calendarApi.unselect();
+      const title = prompt("Please enter a new title for your event");
+      const calendarApi = selected.view.calendar;
+      calendarApi.unselect();
 
-    if (title) {
-      calendarApi.addEvent({
-        id: `${selected.dateStr}-${title}`,
-        title,
-        start: selected.startStr,
-        end: selected.endStr,
-        allDay: selected.allDay,
-      });
-    }
+      if (title) {
+        const eventData = {
+          title: title,
+          start: selected.startStr,
+          end: selected.endStr,
+          allDay: selected.allDay,
+        };
+
+        fetch('/api/add_event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(eventData),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.message); // Print the message from the backend
+          calendarApi.addEvent({
+            id: `${selected.dateStr}-${title}`,
+            title,
+            start: selected.startStr,
+            end: selected.endStr,
+            allDay: selected.allDay,
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
   };
 
+
   const handleEventClick = (selected) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${selected.event.title}'`
-      )
-    ) {
-      selected.event.remove();
-    }
+      if (
+        window.confirm(
+          `Are you sure you want to delete the event '${selected.event.title}'`
+        )
+      ) {
+        const eventData = {
+          id: selected.event.id,
+        };
+
+        fetch('/api/delete_event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(eventData),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.message); // Print the message from the backend
+          selected.event.remove(); // Remove the event from the calendar
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
   };
 
   return (
