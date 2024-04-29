@@ -226,6 +226,14 @@ def handle_projects():
 
         return jsonify({'message': 'Project added successfully!'}), 201
 
+@app.route('/api/project_list', methods=['GET'])
+def get_project_list():
+    # Query the database to fetch all project names
+    projects = ProjectList.query.all()
+    # Extract project names and return as JSON response
+    project_names = [project.name for project in projects]
+    return jsonify(project_names)
+
 @app.route('/auth/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     data = request.json
