@@ -63,6 +63,15 @@ const AdminDashboard = () => {
                   <span className="d-none d-sm-inline">Tag</span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/admindashboard/CreateMeeting"
+                  className="nav-link text-white px-0 align-middle"
+                >
+                  <i className="fs-4 bi bi-tag me-2"></i>
+                  <span className="d-none d-sm-inline">Create Meeting</span>
+                </Link>
+              </li>
               <li onClick={handleLogout}>
                 <Link
                   to="/adminlogin"
