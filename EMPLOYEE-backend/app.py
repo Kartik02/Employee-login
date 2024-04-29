@@ -6,7 +6,9 @@ from flask_admin.contrib.sqla import ModelView
 from datetime import datetime
 from flask_mail import Mail, Message
 import random
-
+from sqlalchemy import LargeBinary
+from flask_migrate import Migrate
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -24,8 +26,10 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
-app.config['MAIL_PASSWORD'] = 'tedyohlefvpoknmx'
+app.config['MAIL_PASSWORD'] = 'app_password'
 mail = Mail(app)
+
+migrate = Migrate(app, db)
 
 class AdminData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,13 +47,19 @@ class EmpData(db.Model):
     password = db.Column(db.String(100), nullable=False)
     salary = db.Column(db.Integer)
     category = db.Column(db.String(100), nullable=False)
-    def __init__(self, name, email, empid, password, salary, category):
+    profile_image = db.Column(LargeBinary, nullable=True)
+    def __init__(self, name, email, empid, password, salary, category, profile_image):
         self.name = name
         self.email = email
         self.empid = empid
         self.password = password
         self.salary = salary
         self.category = category
+        self.profile_image = profile_image
+    def get_profile_image_base64(self):
+        if self.profile_image:
+            return base64.b64encode(self.profile_image).decode('utf-8')
+        return None
 
 class Leave(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -154,8 +164,10 @@ def get_employee_data():
     return jsonify({
         'name': user.name,
         'email': user.email,
-        'password': user.password
+        'password': user.password,
+        'profileImage': user.get_profile_image_base64()
     }), 200
+
 
 @app.route('/auth/employees', methods=['GET', 'POST'])
 def get_employees():
@@ -171,6 +183,94 @@ def get_employees():
         }
         employee_list.append(employee_dict)
     return jsonify({'Status': True, 'Result': employee_list}), 200
+
+@app.route('/auth/update_employee', methods=['POST'])
+def update_employee():
+    data = request.json
+    empid = session.get('empid')
+    if not empid:
+        return jsonify({'error': 'Employee not logged in'}), 401
+
+    user = EmpData.query.filter_by(empid=empid).first()
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
+
+    # Update email if provided
+    new_email = data.get('email')
+    if new_email:
+        user.email = new_email
+        print('Email Updated Successfully')
+
+    # Update password if provided
+    new_password = data.get('password')
+    if new_password:
+        user.password = new_password
+        print('Password Updated Successfully')
+
+    db.session.commit()
+    return jsonify({'message': 'Employee updated successfully'}), 200
+
+# Define the upload folder and allowed extensions
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+# Function to check if the file extension is allowed
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# @app.route('/upload_profile_image', methods=['GET', 'POST'])
+# def upload_profile_image():
+#     if 'file' not in request.files:
+#         return jsonify({'error': 'No file part'}), 400
+#
+#     file = request.files['file']
+#
+#     if file.filename == '':
+#         return jsonify({'error': 'No selected file'}), 400
+#
+#     if file and allowed_file(file.filename):
+#         filename = secure_filename(file.filename)
+#
+#         # Create the 'uploads' directory if it doesn't exist
+#         if not os.path.exists('uploads'):
+#             os.makedirs('uploads')
+#
+#         file_path = os.path.join('uploads', filename)
+#         file.save(file_path)
+#
+#         # Convert the file data to bytes
+#         with open(file_path, 'rb') as f:
+#             file_data = f.read()
+#
+#         # Save the file path to the database
+#         user = EmpData.query.filter_by(empid=session['empid']).first()
+#         user.profile_image = file_data
+#         db.session.commit()
+#
+#         return jsonify({'profileImage': filename}), 200
+#
+#     return jsonify({'error': 'File format not allowed'}), 400
+@app.route('/auth/upload_profile', methods=['POST'])
+def upload_profile_image():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file and allowed_file(file.filename):
+        # Convert the file data to bytes
+        file_data = file.read()
+
+        # Save the file data to the database
+        user = EmpData.query.filter_by(empid=session['empid']).first()
+        user.profile_image = file_data
+        db.session.commit()
+
+        return jsonify({'message': 'Profile image uploaded successfully'}), 200
+
+    return jsonify({'error': 'File format not allowed'}), 400
 
 @app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():
