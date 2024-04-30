@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -132,7 +132,9 @@ admin.add_view(ModelView(ProjectList, db.session))
 admin.add_view(ModelView(Project, db.session))
 admin.add_view(ModelView(Event, db.session))
 
-
+@app.route('/')
+def home():
+    return redirect(url_for('admin.index'))
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
     data = request.json
