@@ -97,6 +97,7 @@ class Project(db.Model):
             'timeElapsed': self.timeElapsed
         }
 
+# Define the Event model
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -118,6 +119,7 @@ class Event(db.Model):
             'end': self.end.isoformat(),
             'allDay': self.all_day
         }
+
 
 with app.app_context():
     db.create_all()
@@ -301,25 +303,42 @@ def add_project():
 
     return jsonify({'message': 'Project added successfully'}), 201
 
+# Route to add an event
 @app.route('/api/add_event', methods=['POST'])
 def add_event():
     data = request.json
     title = data.get('title')
-    start = data.get('start')
-    end = data.get('end')
+    start = datetime.fromisoformat(data.get('start'))
+    end = datetime.fromisoformat(data.get('end'))
     all_day = data.get('allDay')
 
-    # Convert the date strings to datetime objects
-    # start_datetime = datetime.fromisoformat(start)
-    # end_datetime = datetime.fromisoformat(end)
-
-    # Save the event to the database
-    # new_event = Event(title=title, start=start_datetime, end=end_datetime, all_day=all_day)
+    # Create a new Event instance and add it to the database
     new_event = Event(title=title, start=start, end=end, all_day=all_day)
     db.session.add(new_event)
     db.session.commit()
 
     return jsonify({'message': 'Event added successfully'}), 200
+
+# Route to fetch all events
+@app.route('/api/get_events', methods=['GET'])
+def get_events():
+    events = Event.query.all()
+    events_data = [event.to_dict() for event in events]
+    return jsonify(events_data), 200
+
+@app.route('/api/delete_event', methods=['POST'])
+def delete_event():
+    data = request.json
+    event_id = data.get('id')
+
+    # Find the event by id and delete it from the database
+    event = Event.query.filter_by(id=event_id).first()
+    if event:
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({'message': 'Event deleted successfully'}), 200
+    else:
+        return jsonify({'error': 'Event not found'}), 404
 
 @app.route('/api/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():
