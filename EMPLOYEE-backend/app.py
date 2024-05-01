@@ -61,7 +61,7 @@ class EmpData(db.Model):
     #         return base64.b64encode(self.profile_image).decode('utf-8')
     #     return None
 
-class Leave(db.Model):
+class Leaves(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     empid = db.Column(db.String(100), nullable=False)
@@ -127,7 +127,7 @@ with app.app_context():
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(AdminData, db.session))
 admin.add_view(ModelView(EmpData, db.session))
-admin.add_view(ModelView(Leave, db.session))
+admin.add_view(ModelView(Leaves, db.session))
 admin.add_view(ModelView(ProjectList, db.session))
 admin.add_view(ModelView(Project, db.session))
 admin.add_view(ModelView(Event, db.session))
@@ -281,11 +281,33 @@ def add_leave():
     toDate = datetime.strptime(data.get('toDate'), '%Y-%m-%d')
 
     # Create a new Leave instance and add it to the database
-    new_leave = Leave(name=name, empid=empid, reason=reason, numberOfDays=numberOfDays, fromDate=fromDate, toDate=toDate)
+    new_leave = Leaves(name=name, empid=empid, reason=reason, numberOfDays=numberOfDays, fromDate=fromDate, toDate=toDate)
     db.session.add(new_leave)
     db.session.commit()
 
     return jsonify({'message': 'Leave added successfully'}), 200
+
+# @app.route('/leave/add', methods=['GET', 'POST'])
+# def add_leave():
+#     data = request.json
+#     name = data.get('name')
+#     empid = data.get('employeeId')
+#     reason = data.get('reason')
+#     numberOfDays = data.get('numberOfDays')
+#
+#     fromDate = datetime.strptime(data.get('fromDate'), '%Y-%m-%d')
+#     toDate = datetime.strptime(data.get('toDate'), '%Y-%m-%d')
+#
+#     # Generate a unique empid for each new leave record
+#     # You can use a combination of empid and a unique identifier (e.g., timestamp)
+#     unique_empid = f"{empid}_{datetime.now().strftime('%Y/%m/%d_%H:%M:%S')}"
+#
+#     # Create a new Leave instance with the unique empid and add it to the database
+#     new_leave = Leaves(name=name, empid=unique_empid, reason=reason, numberOfDays=numberOfDays, fromDate=fromDate, toDate=toDate)
+#     db.session.add(new_leave)
+#     db.session.commit()
+#
+#     return jsonify({'message': 'Leave added successfully'}), 200
 
 
 @app.route('/api/add_projects', methods=['GET', 'POST'])
