@@ -48,18 +48,18 @@ class EmpData(db.Model):
     salary = db.Column(db.Integer)
     category = db.Column(db.String(100), nullable=False)
     profile_image = db.Column(LargeBinary, nullable=True)
-    def __init__(self, name, email, empid, password, salary, category, profile_image):
+    def __init__(self, name, email, empid, password, salary, category):
         self.name = name
         self.email = email
         self.empid = empid
         self.password = password
         self.salary = salary
         self.category = category
-        self.profile_image = profile_image
-    def get_profile_image_base64(self):
-        if self.profile_image:
-            return base64.b64encode(self.profile_image).decode('utf-8')
-        return None
+        # self.profile_image = profile_image
+    # def get_profile_image_base64(self):
+    #     if self.profile_image:
+    #         return base64.b64encode(self.profile_image).decode('utf-8')
+    #     return None
 
 class Leave(db.Model):
     id = db.Column(db.Integer, primary_key=True)
