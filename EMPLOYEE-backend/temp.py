@@ -13,9 +13,9 @@ import base64
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
-    # r"/api/*": {"origins": "https://employeelogin.vercel.app/"},
-    # r"/leave/add": {"origins": "https://employeelogin.vercel.app/"},
-    r"/api/*": {"origins": "http://localhost:5173/"}
+    r"/auth/*": {"origins": "https://employeelogin.vercel.app/"},
+    r"/leave/add": {"origins": "https://employeelogin.vercel.app/"},
+    r"/api/*": {"origins": "https://employeelogin.vercel.app/"}
 }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
@@ -135,7 +135,7 @@ admin.add_view(ModelView(Event, db.session))
 @app.route('/')
 def home():
     return redirect(url_for('admin.index'))
-@app.route('/api/adminlogin', methods=['GET', 'POST'])
+@app.route('/auth/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
     data = request.json
     email = data.get('email')
@@ -148,7 +148,7 @@ def adminlogin():
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
-@app.route('/api/add_employee', methods=['GET', 'POST'])
+@app.route('/auth/add_employee', methods=['GET', 'POST'])
 def addEmp():
     data = request.json
     name = data.get('name')
@@ -164,7 +164,7 @@ def addEmp():
 
     return jsonify({'message': 'Employee added successfully'}), 200
 
-@app.route('/api/login', methods=['GET', 'POST'])
+@app.route('/auth/login', methods=['GET', 'POST'])
 def login():
     data = request.json
     empid = data.get('empid')
@@ -178,7 +178,7 @@ def login():
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
-@app.route('/api/employee', methods=['GET', 'POST'])
+@app.route('/auth/employee', methods=['GET', 'POST'])
 def get_employee_data():
     if 'logged_in' not in session or not session['logged_in']:
         return jsonify({'error': 'Not logged in'}), 401
@@ -197,7 +197,7 @@ def get_employee_data():
     }), 200
 
 
-@app.route('/api/employees', methods=['GET', 'POST'])
+@app.route('/auth/employees', methods=['GET', 'POST'])
 def get_employees():
     employees = EmpData.query.all()
     employee_list = []
@@ -212,7 +212,7 @@ def get_employees():
         employee_list.append(employee_dict)
     return jsonify({'Status': True, 'Result': employee_list}), 200
 
-@app.route('/api/update_employee', methods=['POST'])
+@app.route('/auth/update_employee', methods=['POST'])
 def update_employee():
     data = request.json
     empid = session.get('empid')
@@ -246,7 +246,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/api/upload_profile', methods=['POST'])
+@app.route('/auth/upload_profile', methods=['POST'])
 def upload_profile_image():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -269,7 +269,7 @@ def upload_profile_image():
 
     return jsonify({'error': 'File format not allowed'}), 400
 
-@app.route('api/leave/add', methods=['GET', 'POST'])
+@app.route('/leave/add', methods=['GET', 'POST'])
 def add_leave():
     data = request.json
     name = data.get('name')
@@ -389,7 +389,7 @@ def get_project_list():
     project_names = [project.name for project in projects]
     return jsonify(project_names)
 
-@app.route('/api/forgotpassword', methods=['GET', 'POST'])
+@app.route('/auth/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     data = request.json
     email = data.get('email')
@@ -411,7 +411,7 @@ def forgot_password():
     return jsonify({'message': 'OTP sent successfully', 'otp': otp}), 200
 
 
-@app.route('/api/resetpassword', methods=['GET', 'POST'])
+@app.route('/auth/resetpassword', methods=['GET', 'POST'])
 def reset_password():
     data = request.json
     email = data.get('email')

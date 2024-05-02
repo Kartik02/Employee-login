@@ -6,14 +6,14 @@ import axios from "axios";
 
 const Dashboard = () => {
   const navigate = useNavigate()
-  axios.defaults.withCredentials=true
+  axios.defaults.withCredentials = true
   const handleLogout = () => {
-    axios.get('http://localhost:5000/auth/logout')
-    .then(result=> {
-      if(result.data.Status){
-        navigate('adminlogin')
-      }
-    })
+    axios.get('http://localhost:5000/api/logout')
+      .then(result => {
+        if (result.data.Status) {
+          navigate('adminlogin')
+        }
+      })
   }
   return (
     <div className="container-fluid hover">
@@ -70,7 +70,7 @@ const Dashboard = () => {
                   <i class="fs-4 bi bi-calendar3 ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> Timesheet</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/timetracker"
@@ -79,7 +79,7 @@ const Dashboard = () => {
                   <i class=" fs-4 bi bi-clock ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> TimeTracker</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/calender"
@@ -88,7 +88,7 @@ const Dashboard = () => {
                   <i class=" fs-4 bi bi-calendar ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Calendar</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/reports"
@@ -97,7 +97,7 @@ const Dashboard = () => {
                   <i class=" fs-4 bi bi-bar-chart-fill ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Report</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/projectmanagement"
@@ -106,7 +106,7 @@ const Dashboard = () => {
                   <i class="fs-4 bi bi-file-earmark ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Project</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/employeesec"
@@ -115,7 +115,7 @@ const Dashboard = () => {
                   <i class=" fs-4 bi bi-journal-text ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> Employee sec</span>
                 </Link>
-              </li> 
+              </li>
               <li className="w-100">
                 <Link
                   to="/dashboard/profile"
@@ -134,7 +134,7 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Leave</span>
                 </Link>
               </li>
-              <li className="w-100" onClick = {handleLogout}>
+              <li className="w-100" onClick={handleLogout}>
                 <Link
                   to="/"
                   className="nav-link text-white px-0 align-middle"
@@ -143,26 +143,26 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Logout</span>
                 </Link>
               </li>
-              
+
             </ul>
           </div>
         </div>
         <div className="col p-0 m-0">
           <div className="p-2 d-flex justify-content-md-end gap-4 fs-4 shadow">
-              <button className="btn btn-secondary dropdown-toggle"type="button" 
-              id="dropdownMenubutton" toggle="dropdown">workspace 
-              
-             
-             </button>
-             
+            <button className="btn btn-secondary dropdown-toggle" type="button"
+              id="dropdownMenubutton" toggle="dropdown">workspace
+
+
+            </button>
+
             <i class="bi bi-envelope-plus-fill"></i>
             <i class="bi bi-bell-fill"></i>
             <i class="bi bi-question-circle"></i>
             <Link to="/dashboard/profile">
-            <i class="bi bi-person-circle"></i>
+              <i class="bi bi-person-circle"></i>
             </Link>
           </div>
-          <Outlet/>
+          <Outlet />
         </div>
       </div>
     </div>

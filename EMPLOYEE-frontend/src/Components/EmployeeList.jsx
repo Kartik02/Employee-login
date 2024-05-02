@@ -5,7 +5,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/auth/employees')
+    axios.get('http://localhost:5000/api/employees')
       .then(result => {
         if (result.data.Status) {
           setEmployees(result.data.Result);

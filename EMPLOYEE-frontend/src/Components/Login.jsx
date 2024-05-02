@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:5000/auth/login", values)
+      .post("http://localhost:5000/api/login", values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {

@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/forgotpassword", {
+      const response = await axios.post("http://localhost:5000/api/forgotpassword", {
         email,
       });
       alert(response.data.message);
@@ -22,21 +22,21 @@ const ForgotPassword = () => {
     }
   };
 
-const handleResetPassword = async (event) => {
-  event.preventDefault();
-  try {
-    const response = await axios.post("http://localhost:5000/auth/resetpassword", {
-      email,
-      otp,
-      password: newPassword,
-    });
-    alert(response.data.message);
-    navigate("/");
-  } catch (error) {
-    console.error("Error occurred:", error);
-    setErrorMessage("An error occurred while processing your request. Please try again later.");
-  }
-};
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:5000/api/resetpassword", {
+        email,
+        otp,
+        password: newPassword,
+      });
+      alert(response.data.message);
+      navigate("/");
+    } catch (error) {
+      console.error("Error occurred:", error);
+      setErrorMessage("An error occurred while processing your request. Please try again later.");
+    }
+  };
 
 
 
