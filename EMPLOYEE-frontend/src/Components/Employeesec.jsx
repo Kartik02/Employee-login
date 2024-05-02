@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const Employeesec = () => {
     const [category, setCategory] = useState([])
     useEffect(() => {
-        axios.get('http://localhost:3000/auth/category')
+        axios.get('https://employee-login-alpha.vercel.app/admin/')
             .then(result => {
                 if (result.data.Status) {
                     setCategory(result.data.Result)

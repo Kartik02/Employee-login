@@ -62,7 +62,7 @@ function Profile() {
     const formData = new FormData();
     formData.append("file", file);
 
-    axios.post("http://localhost:5000/auth/upload_profile", formData, {
+    axios.post("https://employee-login-alpha.vercel.app/admin/", formData, {
       withCredentials: true,
       headers: {
         "Content-Type": "multipart/form-data",

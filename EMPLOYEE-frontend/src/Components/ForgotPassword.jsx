@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/forgotpassword", {
+      const response = await axios.post("https://employee-login-alpha.vercel.app/admin/", {
         email,
       });
       alert(response.data.message);

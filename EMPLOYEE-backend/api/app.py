@@ -13,9 +13,9 @@ import base64
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
-    r"/auth/*": {"origins": "http://localhost:5173"},
-    r"/leave/add": {"origins": "http://localhost:5173"},
-    r"/api/*": {"origins": "http://localhost:5173"}
+    r"/auth/*": {"origins": "https://employeelogin.vercel.app/"},
+    r"/leave/add": {"origins": "https://employeelogin.vercel.app/"},
+    r"/api/*": {"origins": "https://employeelogin.vercel.app/"}
 }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'

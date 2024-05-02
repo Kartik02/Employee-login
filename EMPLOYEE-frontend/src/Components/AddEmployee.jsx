@@ -15,7 +15,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/auth/category')
+    axios.get('https://employee-login-alpha.vercel.app/admin/')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);

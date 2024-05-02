@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:5000/auth/login", values)
+      .post("https://employee-login-alpha.vercel.app/admin/", values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {

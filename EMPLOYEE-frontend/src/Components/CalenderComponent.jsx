@@ -14,7 +14,7 @@ const CalenderComponent = () => {
   }, []);
 
   const fetchEvents = () => {
-    axios.get('http://localhost:5000/api/get_events')
+    axios.get('https://employee-login-alpha.vercel.app/admin/')
       .then(response => {
         setEvents(response.data);
       })
