@@ -55,7 +55,7 @@ class EmpData(db.Model):
         self.password = password
         self.salary = salary
         self.category = category
-        # self.profile_image = profile_image
+    #     self.profile_image = profile_image
     # def get_profile_image_base64(self):
     #     if self.profile_image:
     #         return base64.b64encode(self.profile_image).decode('utf-8')
