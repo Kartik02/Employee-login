@@ -8,7 +8,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
   axios.defaults.withCredentials = true
   const handleLogout = () => {
-    axios.get('https://employee-login-alpha.vercel.app/admin/')
+    axios.get('https://employee-login-backend.vercel.app/admin/')
       .then(result => {
         if (result.data.Status) {
           navigate('adminlogin')

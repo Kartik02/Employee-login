@@ -14,7 +14,7 @@ const CalenderComponent = () => {
   }, []);
 
   const fetchEvents = () => {
-    axios.get('https://employee-login-alpha.vercel.app/admin/')
+    axios.get('https://employee-login-backend.vercel.app/admin/')
       .then(response => {
         setEvents(response.data);
       })
@@ -40,7 +40,7 @@ const CalenderComponent = () => {
       if (selected.event?.id) {
         const confirmDelete = confirm("Are you sure you want to delete this event?");
         if (confirmDelete) {
-          axios.post('http://localhost:5000/api/delete_event', { id: selected.event.id })
+          axios.post('https://employee-login-backend.vercel.app/admin/api/delete_event', { id: selected.event.id })
             .then(response => {
               console.log(response.data);
               calendarApi.getEventById(selected.event.id).remove();
@@ -50,7 +50,7 @@ const CalenderComponent = () => {
             });
         }
       } else {
-        axios.post('http://localhost:5000/api/add_event', newEvent)
+        axios.post('https://employee-login-backend.vercel.app/admin/api/add_event', newEvent)
           .then(response => {
             console.log(response.data);
             calendarApi.addEvent(newEvent);

@@ -110,7 +110,7 @@ const Stopwatch = () => {
       timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
     };
 
-    fetch('http://localhost:5000/api/projects', {
+    fetch('https://employee-login-backend.vercel.app/admin/api/projects', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

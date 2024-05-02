@@ -15,7 +15,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://employee-login-alpha.vercel.app/admin/')
+    axios.get('https://employee-login-backend.vercel.app/admin/')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -32,7 +32,7 @@ const AddEmployee = () => {
       setSuccessMessage('Select category');
       return;
     }
-    axios.post('http://localhost:5000/auth/add_employee', employee)
+    axios.post('https://employee-login-backend.vercel.app/admin/auth/add_employee', employee)
       .then(result => {
         console.log(result.data);
         setSuccessMessage('Employee added successfully');
