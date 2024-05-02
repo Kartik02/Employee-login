@@ -15,17 +15,17 @@ const AddEmployee = () => {
   const [category, setCategory] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
 
-  useEffect(() => {
-    axios.get('https://empbackend.vercel.app/auth/category')
-      .then(result => {
-        if (result.data.Status) {
-          setCategory(result.data.Result);
-        } else {
-          alert(result.data.Error);
-        }
-      })
-      .catch(err => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios.get('https://empbackend.vercel.app/auth/category')
+  //     .then(result => {
+  //       if (result.data.Status) {
+  //         setCategory(result.data.Result);
+  //       } else {
+  //         alert(result.data.Error);
+  //       }
+  //     })
+  //     .catch(err => console.log(err));
+  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
