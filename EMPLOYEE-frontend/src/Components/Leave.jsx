@@ -32,7 +32,7 @@ const Leave = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5000/api/leave/add', formData)
+    axios.post('http://localhost:5000/leave/add', formData)
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);

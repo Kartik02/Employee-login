@@ -19,6 +19,7 @@ const CalenderComponent = () => {
         setEvents(response.data);
       })
       .catch(error => {
+
         console.error(error);
       });
   };
@@ -29,35 +30,35 @@ const CalenderComponent = () => {
     calendarApi.unselect();
 
     if (title) {
-        const newEvent = {
-            title,
-            start: selected.startStr,
-            end: selected.endStr,
-            allDay: selected.allDay,
-        };
+      const newEvent = {
+        title,
+        start: selected.startStr,
+        end: selected.endStr,
+        allDay: selected.allDay,
+      };
 
-        if (selected.event?.id) {
-            const confirmDelete = confirm("Are you sure you want to delete this event?");
-            if (confirmDelete) {
-                axios.post('http://localhost:5000/api/delete_event', { id: selected.event.id })
-                    .then(response => {
-                        console.log(response.data);
-                        calendarApi.getEventById(selected.event.id).remove();
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
-        } else {
-            axios.post('http://localhost:5000/api/add_event', newEvent)
-                .then(response => {
-                    console.log(response.data);
-                    calendarApi.addEvent(newEvent);
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+      if (selected.event?.id) {
+        const confirmDelete = confirm("Are you sure you want to delete this event?");
+        if (confirmDelete) {
+          axios.post('http://localhost:5000/api/delete_event', { id: selected.event.id })
+            .then(response => {
+              console.log(response.data);
+              calendarApi.getEventById(selected.event.id).remove();
+            })
+            .catch(error => {
+              console.error(error);
+            });
         }
+      } else {
+        axios.post('http://localhost:5000/api/add_event', newEvent)
+          .then(response => {
+            console.log(response.data);
+            calendarApi.addEvent(newEvent);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
     }
   };
 

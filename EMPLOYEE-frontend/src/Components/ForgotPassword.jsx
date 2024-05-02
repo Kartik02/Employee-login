@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/forgotpassword", {
+      const response = await axios.post("http://localhost:5000/auth/forgotpassword", {
         email,
       });
       alert(response.data.message);
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
   const handleResetPassword = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/resetpassword", {
+      const response = await axios.post("http://localhost:5000/auth/resetpassword", {
         email,
         otp,
         password: newPassword,

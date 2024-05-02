@@ -15,7 +15,7 @@ const AdminLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:5000/api/adminlogin", values)
+      .post("http://localhost:5000/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
           navigate("/admindashboard");

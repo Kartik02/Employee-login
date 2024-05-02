@@ -8,7 +8,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
   axios.defaults.withCredentials = true
   const handleLogout = () => {
-    axios.get('http://localhost:5000/api/logout')
+    axios.get('http://localhost:5000/auth/logout')
       .then(result => {
         if (result.data.Status) {
           navigate('adminlogin')
