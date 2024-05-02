@@ -14,14 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
     r"/auth/*": {"origins": "https://employeelogin.vercel.app"}
-  
 }, supports_credentials=True)
-# CORS(app, resources={
-#     r"/auth/*": {"origins": "http://localhost:5173"},
-#     r"/leave/add": {"origins": "http://localhost:5173"},
-#     r"/auth/*": {"origins": "http://localhost:5173"}
-
-# }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
@@ -162,9 +155,9 @@ def addEmp():
     password = data.get('password')
     salary = data.get('salary')
     category = data.get('category_id')
-    profile_image = request.files['image'].read()
+    image = request.files['image'].read()
 
-    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category, profile_image=profile_image)
+    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category, image=image)
     db.session.add(new_emp)
     db.session.commit()
 
