@@ -14,7 +14,7 @@ const CalenderComponent = () => {
   }, []);
 
   const fetchEvents = () => {
-    axios.get('https://empbackend.vercel.app/api/get_events')
+    axios.get('https://empbackend.vercel.app/auth/get_events')
       .then(response => {
         setEvents(response.data);
       })
@@ -26,8 +26,8 @@ const CalenderComponent = () => {
 
   const handleDateClick = (selected) => {
     const title = prompt("Please enter a new title for your event");
-    const calendarApi = selected.view.calendar;
-    calendarApi.unselect();
+    const calendarauth = selected.view.calendar;
+    calendarauth.unselect();
 
     if (title) {
       const newEvent = {
@@ -40,20 +40,20 @@ const CalenderComponent = () => {
       if (selected.event?.id) {
         const confirmDelete = confirm("Are you sure you want to delete this event?");
         if (confirmDelete) {
-          axios.post('https://empbackend.vercel.app/api/delete_event', { id: selected.event.id })
+          axios.post('https://empbackend.vercel.app/auth/delete_event', { id: selected.event.id })
             .then(response => {
               console.log(response.data);
-              calendarApi.getEventById(selected.event.id).remove();
+              calendarauth.getEventById(selected.event.id).remove();
             })
             .catch(error => {
               console.error(error);
             });
         }
       } else {
-        axios.post('https://empbackend.vercel.app/api/add_event', newEvent)
+        axios.post('https://empbackend.vercel.app/auth/add_event', newEvent)
           .then(response => {
             console.log(response.data);
-            calendarApi.addEvent(newEvent);
+            calendarauth.addEvent(newEvent);
           })
           .catch(error => {
             console.error(error);

@@ -13,14 +13,13 @@ import base64
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
-    r"/auth/*": {"origins": "https://employeelogin.vercel.app"},
-    r"/leave/add": {"origins": "https://employeelogin.vercel.app"},
-    r"/api/*": {"origins": "https://employeelogin.vercel.app"}
+    r"/auth/*": {"origins": "https://employeelogin.vercel.app"}
+  
 }, supports_credentials=True)
 # CORS(app, resources={
 #     r"/auth/*": {"origins": "http://localhost:5173"},
 #     r"/leave/add": {"origins": "http://localhost:5173"},
-#     r"/api/*": {"origins": "http://localhost:5173"}
+#     r"/auth/*": {"origins": "http://localhost:5173"}
 
 # }, supports_credentials=True)
 
@@ -276,7 +275,7 @@ def upload_profile_image():
 
     return jsonify({'error': 'File format not allowed'}), 400
 
-@app.route('/leave/add', methods=['GET', 'POST'])
+@app.route('auth/leave', methods=['GET', 'POST'])
 def add_leave():
     data = request.json
     name = data.get('name')
@@ -293,7 +292,7 @@ def add_leave():
     db.session.commit()
 
     return jsonify({'message': 'Leave added successfully'}), 200
-@app.route('/api/add_projects', methods=['GET', 'POST'])
+@app.route('/auth/add_projects', methods=['GET', 'POST'])
 def add_project():
     data = request.json
     project_name = data.get('name')
@@ -311,7 +310,7 @@ def add_project():
     return jsonify({'message': 'Project added successfully'}), 201
 
 # Route to add an event
-@app.route('/api/add_event', methods=['POST'])
+@app.route('/auth/add_event', methods=['POST'])
 def add_event():
     data = request.json
     title = data.get('title')
@@ -327,13 +326,13 @@ def add_event():
     return jsonify({'message': 'Event added successfully'}), 200
 
 # Route to fetch all events
-@app.route('/api/get_events', methods=['GET'])
+@app.route('/auth/get_events', methods=['GET'])
 def get_events():
     events = Event.query.all()
     events_data = [event.to_dict() for event in events]
     return jsonify(events_data), 200
 
-@app.route('/api/delete_event', methods=['POST'])
+@app.route('/auth/delete_event', methods=['POST'])
 def delete_event():
     data = request.json
     event_id = data.get('id')
@@ -347,7 +346,7 @@ def delete_event():
     else:
         return jsonify({'error': 'Event not found'}), 404
 
-@app.route('/api/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
+@app.route('/auth/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():
     if request.method == 'GET':
         projects = Project.query.all()
@@ -364,7 +363,7 @@ def handle_projects():
 
         return jsonify({'message': 'Project added successfully!'}), 201
 
-@app.route('/api/project_list', methods=['GET'])
+@app.route('/auth/project_list', methods=['GET'])
 def get_project_list():
     # Query the database to fetch all project names
     projects = ProjectList.query.all()
