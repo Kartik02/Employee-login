@@ -110,7 +110,7 @@ const Stopwatch = () => {
       timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
     };
 
-    fetch('http://localhost:5000/api/projects', {
+    fetch('https://empbackend.vercel.app/api/projects', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -182,7 +182,7 @@ const Stopwatch = () => {
               onClick={handleTagClick} // Handle click to show dropdown
               style={{ marginRight: '8px' }} // Reduce space between tag and project
             >
-              {tags.length > 0 ? tags.join(", ") :<i class="bi bi-tag"></i>}
+              {tags.length > 0 ? tags.join(", ") : <i class="bi bi-tag"></i>}
             </div>
             {/* Dropdown */}
             {showDropdown && (

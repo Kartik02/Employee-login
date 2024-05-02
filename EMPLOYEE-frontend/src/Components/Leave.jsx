@@ -32,7 +32,7 @@ const Leave = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('https://employee-login-alpha.vercel.app/admin/', formData)
+    axios.post('https://empbackend.vercel.app/leave/add', formData)
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);

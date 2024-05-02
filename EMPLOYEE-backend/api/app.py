@@ -13,10 +13,16 @@ import base64
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={
-    r"/auth/*": {"origins": "https://employeelogin.vercel.app/"},
-    r"/leave/add": {"origins": "https://employeelogin.vercel.app/"},
-    r"/api/*": {"origins": "https://employeelogin.vercel.app/"}
+    r"/auth/*": {"origins": "https://employeelogin.vercel.app"},
+    r"/leave/add": {"origins": "https://employeelogin.vercel.app"},
+    r"/api/*": {"origins": "https://employeelogin.vercel.app"}
 }, supports_credentials=True)
+# CORS(app, resources={
+#     r"/auth/*": {"origins": "http://localhost:5173"},
+#     r"/leave/add": {"origins": "http://localhost:5173"},
+#     r"/api/*": {"origins": "http://localhost:5173"}
+
+# }, supports_credentials=True)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
@@ -48,18 +54,18 @@ class EmpData(db.Model):
     salary = db.Column(db.Integer)
     category = db.Column(db.String(100), nullable=False)
     profile_image = db.Column(LargeBinary, nullable=True)
-    def __init__(self, name, email, empid, password, salary, category):
+    def __init__(self, name, email, empid, password, salary, category, profile_image):
         self.name = name
         self.email = email
         self.empid = empid
         self.password = password
         self.salary = salary
         self.category = category
-    #     self.profile_image = profile_image
-    # def get_profile_image_base64(self):
-    #     if self.profile_image:
-    #         return base64.b64encode(self.profile_image).decode('utf-8')
-    #     return None
+        self.profile_image = profile_image
+    def get_profile_image_base64(self):
+        if self.profile_image:
+            return base64.b64encode(self.profile_image).decode('utf-8')
+        return None
 
 class Leaves(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -148,17 +154,18 @@ def adminlogin():
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
-@app.route('/auth/add_employee', methods=['GET', 'POST'])
+@app.route('/auth/add_employee', methods=['POST'])
 def addEmp():
-    data = request.json
+    data = request.form
     name = data.get('name')
     email = data.get('email')
     empid = data.get('employee_id')
     password = data.get('password')
     salary = data.get('salary')
     category = data.get('category_id')
+    profile_image = request.files['image'].read()
 
-    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category)
+    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category, profile_image=profile_image)
     db.session.add(new_emp)
     db.session.commit()
 
@@ -286,30 +293,6 @@ def add_leave():
     db.session.commit()
 
     return jsonify({'message': 'Leave added successfully'}), 200
-
-# @app.route('/leave/add', methods=['GET', 'POST'])
-# def add_leave():
-#     data = request.json
-#     name = data.get('name')
-#     empid = data.get('employeeId')
-#     reason = data.get('reason')
-#     numberOfDays = data.get('numberOfDays')
-#
-#     fromDate = datetime.strptime(data.get('fromDate'), '%Y-%m-%d')
-#     toDate = datetime.strptime(data.get('toDate'), '%Y-%m-%d')
-#
-#     # Generate a unique empid for each new leave record
-#     # You can use a combination of empid and a unique identifier (e.g., timestamp)
-#     unique_empid = f"{empid}_{datetime.now().strftime('%Y/%m/%d_%H:%M:%S')}"
-#
-#     # Create a new Leave instance with the unique empid and add it to the database
-#     new_leave = Leaves(name=name, empid=unique_empid, reason=reason, numberOfDays=numberOfDays, fromDate=fromDate, toDate=toDate)
-#     db.session.add(new_leave)
-#     db.session.commit()
-#
-#     return jsonify({'message': 'Leave added successfully'}), 200
-
-
 @app.route('/api/add_projects', methods=['GET', 'POST'])
 def add_project():
     data = request.json

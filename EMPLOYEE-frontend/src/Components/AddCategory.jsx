@@ -9,7 +9,7 @@ const AddCategory = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://employee-login-alpha.vercel.app/admin/", { category })
+      .post("https://empbackend.vercel.app/auth/add_category", { category })
       .then((result) => {
         if (result.data.Status) {
           navigate("/dashboard/employeesec");

@@ -10,12 +10,13 @@ const AddEmployee = () => {
     password: '',
     salary: '',
     category_id: '',
+    image: null
   });
   const [category, setCategory] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://employee-login-alpha.vercel.app/admin/')
+    axios.get('https://empbackend.vercel.app/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -32,7 +33,21 @@ const AddEmployee = () => {
       setSuccessMessage('Select category');
       return;
     }
-    axios.post('http://localhost:5000/auth/add_employee', employee)
+
+    const formData = new FormData();
+    formData.append('name', employee.name);
+    formData.append('email', employee.email);
+    formData.append('employee_id', employee.employee_id);
+    formData.append('password', employee.password);
+    formData.append('salary', employee.salary);
+    formData.append('category_id', employee.category_id);
+    formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
+
+    axios.post('https://empbackend.vercel.app/auth/add_employee', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
       .then(result => {
         console.log(result.data);
         setSuccessMessage('Employee added successfully');
@@ -43,6 +58,7 @@ const AddEmployee = () => {
           password: '',
           salary: '',
           category_id: '',
+          image: null
         });
       })
       .catch(err => console.log(err));
@@ -125,7 +141,7 @@ const AddEmployee = () => {
               Salary
             </label>
             <input
-              type="password"
+              type="text"
               className="form-control rounded-0"
               id="inputSalary"
               placeholder="Enter Salary"
@@ -146,6 +162,18 @@ const AddEmployee = () => {
             </select>
           </div>
           <div className="col-12">
+            <label htmlFor="inputImage" className="form-label">
+              Image
+            </label>
+            <input
+              type="file"
+              className="form-control rounded-0"
+              id="inputImage"
+              accept="image/*"
+              onChange={(e) => setEmployee({ ...employee, image: e.target.files[0] })}
+            />
+          </div>
+          <div className="col-12">
             <button type="submit" className="btn btn-success w-100">
               Add Employee
             </button>
@@ -157,4 +185,3 @@ const AddEmployee = () => {
 };
 
 export default AddEmployee;
-

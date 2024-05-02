@@ -6,7 +6,7 @@ const Reports = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('https://employee-login-alpha.vercel.app/admin/')
+    fetch('https://empbackend.vercel.app/api/projects')
       .then(response => {
         if (response.ok) {
           return response.json();
