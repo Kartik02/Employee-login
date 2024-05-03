@@ -15,17 +15,17 @@ const AddEmployee = () => {
   const [category, setCategory] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // useEffect(() => {
-  //   axios.get('https://empbackend.vercel.app/auth/category')
-  //     .then(result => {
-  //       if (result.data.Status) {
-  //         setCategory(result.data.Result);
-  //       } else {
-  //         alert(result.data.Error);
-  //       }
-  //     })
-  //     .catch(err => console.log(err));
-  // }, []);
+  useEffect(() => {
+    axios.get('http://localhost:5000/auth/category')
+      .then(result => {
+        if (result.data.Status) {
+          setCategory(result.data.Result);
+        } else {
+          alert(result.data.Error);
+        }
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ const AddEmployee = () => {
     formData.append('category_id', employee.category_id);
     formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-    axios.post('https://empbackend.vercel.app/auth/add_employee', formData, {
+    axios.post('http://localhost:5000/auth/add_employee', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
