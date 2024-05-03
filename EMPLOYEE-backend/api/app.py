@@ -12,10 +12,12 @@ import base64
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-CORS(app, resources={
-    r"/auth/*": {"origins": "https://employeelogin.vercel.app"}
-}, supports_credentials=True)
-
+CORS(app, resources={r"/auth/*": {
+    "origins": ["http://localhost:5173"],
+    "methods": ["POST", "OPTIONS", "GET"],
+    "allow_headers": ["Content-Type", "Authorization"],
+    "supports_credentials": True
+}})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
 db = SQLAlchemy(app)
 
@@ -268,7 +270,7 @@ def upload_profile_image():
 
     return jsonify({'error': 'File format not allowed'}), 400
 
-@app.route('auth/leave', methods=['GET', 'POST'])
+@app.route('/auth/leave', methods=['GET', 'POST'])
 def add_leave():
     data = request.json
     name = data.get('name')
