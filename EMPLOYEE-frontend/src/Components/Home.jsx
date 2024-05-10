@@ -4,7 +4,7 @@ import Reports from './Reports'
 import { getStyle } from '@coreui/utils'
 import { CChartLine } from '@coreui/react-chartjs'
 import CalenderComponent from './CalenderComponent'
-import TeamActivities from './TeamActivities'
+//import TeamActivities from './TeamActivities'
 import JoinMeeting from './JoinMeeting';
 import classNames from 'classnames'
 import {
@@ -19,9 +19,10 @@ import {
   CRow,
   CWidgetStatsA,
 
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilCloudDownload} from '@coreui/icons'
+} 
+from '@coreui/react'
+// import CIcon from '@coreui/icons-react'
+// import { cilCloudDownload} from '@coreui/icons'
 import MainChart from './MainChart'
 
 const Home = () => {
@@ -205,7 +206,7 @@ const Home = () => {
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
-                <CIcon icon={cilCloudDownload} />
+                {/* <CIcon icon={cilCloudDownload} /> */}
               </CButton>
               <CButtonGroup className="float-end me-3">
                 {['Day', 'Month', 'Year'].map((value) => (
