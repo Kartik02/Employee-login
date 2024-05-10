@@ -51,7 +51,7 @@ const CalenderComponent = () => {
         allDay: newEvent.allDay,
       };
 
-      axios.post('https://empbackend.vercel.app/auth/add_event', newEventObj)
+      axios.post('http://localhost:5000/auth/add_event', newEventObj)
         .then(response => {
           setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
           handleModalClose();
@@ -77,7 +77,7 @@ const CalenderComponent = () => {
       });
 
       // Send the updated event data to the backend
-      axios.post(`https://empbackend.vercel.app/auth/update_event/${newEvent.id}`, newEvent)
+      axios.post(`http://localhost:5000/auth/update_event/${newEvent.id}`, newEvent)
         .then(() => {
           setCurrentEvents(updatedEvents);
           handleModalClose();
@@ -93,7 +93,7 @@ const CalenderComponent = () => {
     const updatedEvents = currentEvents.filter(event => event.id !== newEvent.id);
 
     // Send a request to delete the event from the backend
-    axios.post(`https://empbackend.vercel.app/auth/delete_event/${newEvent.id}`)
+    axios.post(`http://localhost:5000/auth/delete_event/${newEvent.id}`)
       .then(() => {
         setCurrentEvents(updatedEvents);
         handleModalClose();
