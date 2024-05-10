@@ -10,7 +10,6 @@ const AddEmployee = () => {
     password: '',
     salary: '',
     category_id: '',
-    image: null
   });
   const [category, setCategory] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
@@ -33,21 +32,7 @@ const AddEmployee = () => {
       setSuccessMessage('Select category');
       return;
     }
-
-    const formData = new FormData();
-    formData.append('name', employee.name);
-    formData.append('email', employee.email);
-    formData.append('employee_id', employee.employee_id);
-    formData.append('password', employee.password);
-    formData.append('salary', employee.salary);
-    formData.append('category_id', employee.category_id);
-    formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
-
-    axios.post('http://localhost:5000/auth/add_employee', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+    axios.post('http://localhost:5000/auth/add_employee', employee)
       .then(result => {
         console.log(result.data);
         setSuccessMessage('Employee added successfully');
@@ -58,7 +43,6 @@ const AddEmployee = () => {
           password: '',
           salary: '',
           category_id: '',
-          image: null
         });
       })
       .catch(err => console.log(err));
@@ -69,116 +53,110 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center mt-3">
-      <div className="p-3 rounded w-50 border">
-        <h2 className="text-center">Add Employee</h2>
-        {successMessage && (
-          <div className="alert alert-success d-flex align-items-center justify-content-between">
-            <span>{successMessage}</span>
-            <button className="btn-close" onClick={handleRemoveMessage}></button>
+    <div className="container">
+      <div className="row justify-content-center mt-3">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title text-center">Add Employee</h2>
+              {successMessage && (
+                <div className="alert alert-success d-flex align-items-center justify-content-between">
+                  <span>{successMessage}</span>
+                  <button className="btn-close" onClick={handleRemoveMessage}></button>
+                </div>
+              )}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="inputName" className="form-label">
+                    Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Name"
+                    value={employee.name}
+                    onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="inputEmail4" className="form-label">
+                    Email <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="inputEmail4"
+                    placeholder="Enter Email"
+                    autoComplete="off"
+                    value={employee.email}
+                    onChange={(e) => setEmployee({ ...employee, email: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="inputEmail4" className="form-label">
+                    Employee ID <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="inputEmployeeId"
+                    placeholder="Enter Employee ID"
+                    autoComplete="off"
+                    value={employee.employee_id}
+                    onChange={(e) => setEmployee({ ...employee, employee_id: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="inputPassword4" className="form-label">
+                    Password <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="inputPassword4"
+                    placeholder="Enter password"
+                    value={employee.password}
+                    onChange={(e) => setEmployee({ ...employee, password: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="inputSalary" className="form-label">
+                    Salary
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="inputSalary"
+                    placeholder="Enter Salary"
+                    autoComplete="off"
+                    value={employee.salary}
+                    onChange={(e) => setEmployee({ ...employee, salary: e.target.value })}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
+                  <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} value={employee.category_id} required>
+                    <option value="">Select Category</option>
+                    {category.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                    <option value="HR">HR-Section</option>
+                    <option value="Tech">Tech-Section</option>
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <button type="submit" className="btn btn-success w-100">
+                    Add Employee
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        )}
-        <form className="row g-1" onSubmit={handleSubmit}>
-          <div className="col-12">
-            <label htmlFor="inputName" className="form-label">
-              Name <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              placeholder="Enter Name"
-              value={employee.name}
-              onChange={(e) => setEmployee({ ...employee, name: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputEmail4" className="form-label">
-              Email <span className="text-danger">*</span>
-            </label>
-            <input
-              type="email"
-              className="form-control rounded-0"
-              id="inputEmail4"
-              placeholder="Enter Email"
-              autoComplete="off"
-              value={employee.email}
-              onChange={(e) => setEmployee({ ...employee, email: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputEmail4" className="form-label">
-              Employee ID <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              id="inputEmployeeId"
-              placeholder="Enter Employee ID"
-              autoComplete="off"
-              value={employee.employee_id}
-              onChange={(e) => setEmployee({ ...employee, employee_id: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputPassword4" className="form-label">
-              Password <span className="text-danger">*</span>
-            </label>
-            <input
-              type="password"
-              className="form-control rounded-0"
-              id="inputPassword4"
-              placeholder="Enter password"
-              value={employee.password}
-              onChange={(e) => setEmployee({ ...employee, password: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputSalary" className="form-label">
-              Salary
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              id="inputSalary"
-              placeholder="Enter Salary"
-              autoComplete="off"
-              value={employee.salary}
-              onChange={(e) => setEmployee({ ...employee, salary: e.target.value })}
-            />
-          </div>
-          <div className="col-12">
-            <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
-            <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} value={employee.category_id} required>
-              <option value="">Select Category</option>
-              {category.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-              <option value="HR">HR-Section</option>
-              <option value="Tech">Tech-Section</option>
-            </select>
-          </div>
-          <div className="col-12">
-            <label htmlFor="inputImage" className="form-label">
-              Image
-            </label>
-            <input
-              type="file"
-              className="form-control rounded-0"
-              id="inputImage"
-              accept="image/*"
-              onChange={(e) => setEmployee({ ...employee, image: e.target.files[0] })}
-            />
-          </div>
-          <div className="col-12">
-            <button type="submit" className="btn btn-success w-100">
-              Add Employee
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );

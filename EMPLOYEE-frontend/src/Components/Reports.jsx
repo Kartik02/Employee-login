@@ -6,7 +6,7 @@ const Reports = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/projects')
+    fetch('http://localhost:5000/auth/projects')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -60,18 +60,18 @@ const Reports = () => {
   const barChartData = projectsWithColors.map(project => ({ name: project.projectName, timeElapsed: project.timeElapsed, color: project.color }));
 
   return (
-  <>
-    <div className='lg:tw-flex tw-w-full tw-gap-1'>
-    
-      
-      <div className='lg:w-50 w-100'>
-        <BarGraphComponent data={barChartData} />
+    <>
+      <div className='lg:tw-flex tw-w-full tw-gap-1'>
+
+
+        <div className='lg:w-50 w-100'>
+          <BarGraphComponent data={barChartData} />
+        </div>
+        <div className='lg:w-50 w-100'>
+          <DonutChartComponent data={donutChartData} />
+        </div>
       </div>
-      <div className='lg:w-50 w-100'>
-        <DonutChartComponent data={donutChartData} />
-      </div>
-    </div>
-  </>
+    </>
   );
 
 };

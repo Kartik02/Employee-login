@@ -32,7 +32,7 @@ const Leave = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('https://empbackend.vercel.app/auth/leave', formData)
+    axios.post('http://localhost:5000/auth/leave', formData)
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);

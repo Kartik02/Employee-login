@@ -13,12 +13,12 @@ import base64
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 CORS(app, resources={r"/auth/*": {
-    "origins": ["http://localhost:5173"],
+    "origins": ["http://localhost:5173","https://employeelogin.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
 }})
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databse.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -97,8 +97,7 @@ class Project(db.Model):
             'timeElapsed': self.timeElapsed
         }
 
-# Define the Event model
-class Event(db.Model):
+class Events(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     start = db.Column(db.DateTime, nullable=False)
@@ -120,7 +119,23 @@ class Event(db.Model):
             'allDay': self.all_day
         }
 
+    def update_event(self, title, start, end):
+        self.title = title
+        self.start = start
+        self.end = end
+        db.session.commit()
 
+    def delete_event(self):
+        db.session.delete(self)
+        db.session.commit()
+        
+class TagList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, tag):
+        self.tag = tag
+        
 with app.app_context():
     db.create_all()
 
@@ -130,7 +145,8 @@ admin.add_view(ModelView(EmpData, db.session))
 admin.add_view(ModelView(Leaves, db.session))
 admin.add_view(ModelView(ProjectList, db.session))
 admin.add_view(ModelView(Project, db.session))
-admin.add_view(ModelView(Event, db.session))
+admin.add_view(ModelView(Events, db.session))
+admin.add_view(ModelView(TagList, db.session))
 
 @app.route('/')
 def home():
@@ -157,9 +173,9 @@ def addEmp():
     password = data.get('password')
     salary = data.get('salary')
     category = data.get('category_id')
-    image = request.files['image'].read()
+    profile_image = request.files['image'].read()
 
-    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category, image=image)
+    new_emp = EmpData(name=name, email=email, empid=empid, password=password, salary=salary, category=category, profile_image=profile_image)
     db.session.add(new_emp)
     db.session.commit()
 
@@ -196,7 +212,6 @@ def get_employee_data():
         'password': user.password,
         'profileImage': user.get_profile_image_base64()
     }), 200
-
 
 @app.route('/auth/employees', methods=['GET', 'POST'])
 def get_employees():
@@ -287,6 +302,7 @@ def add_leave():
     db.session.commit()
 
     return jsonify({'message': 'Leave added successfully'}), 200
+
 @app.route('/auth/add_projects', methods=['GET', 'POST'])
 def add_project():
     data = request.json
@@ -307,39 +323,54 @@ def add_project():
 # Route to add an event
 @app.route('/auth/add_event', methods=['POST'])
 def add_event():
+    try:
+        data = request.json
+        title = data.get('title')
+        start = datetime.fromisoformat(data.get('start'))
+        end = datetime.fromisoformat(data.get('end'))
+        all_day = data.get('allDay')
+        print(title, start, end, all_day)
+        new_event = Events(title=title, start=start, end=end, all_day=all_day)
+        db.session.add(new_event)
+        db.session.commit()
+
+        return jsonify({'message': 'Event added successfully', 'id': new_event.id}), 200
+    except Exception as e:
+        print(f"Error adding event: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/auth/update_event/<int:event_id>', methods=['POST'])
+def update_event(event_id):
     data = request.json
     title = data.get('title')
     start = datetime.fromisoformat(data.get('start'))
     end = datetime.fromisoformat(data.get('end'))
-    all_day = data.get('allDay')
 
-    # Create a new Event instance and add it to the database
-    new_event = Event(title=title, start=start, end=end, all_day=all_day)
-    db.session.add(new_event)
-    db.session.commit()
+    event = Events.query.get(event_id)
+    if event:
+        event.title = title
+        event.start = start
+        event.end = end
+        db.session.commit()
+        return jsonify({'message': 'Event updated successfully'}), 200
+    else:
+        return jsonify({'error': 'Event not found'}), 404
 
-    return jsonify({'message': 'Event added successfully'}), 200
+@app.route('/auth/delete_event/<int:event_id>', methods=['POST'])
+def delete_event(event_id):
+    event = Events.query.get(event_id)
+    if event:
+        event.delete_event()
+        return jsonify({'message': 'Event deleted successfully'}), 200
+    else:
+        return jsonify({'error': 'Event not found'}), 404
 
 # Route to fetch all events
 @app.route('/auth/get_events', methods=['GET'])
 def get_events():
-    events = Event.query.all()
+    events = Events.query.all()
     events_data = [event.to_dict() for event in events]
     return jsonify(events_data), 200
-
-@app.route('/auth/delete_event', methods=['POST'])
-def delete_event():
-    data = request.json
-    event_id = data.get('id')
-
-    # Find the event by id and delete it from the database
-    event = Event.query.filter_by(id=event_id).first()
-    if event:
-        db.session.delete(event)
-        db.session.commit()
-        return jsonify({'message': 'Event deleted successfully'}), 200
-    else:
-        return jsonify({'error': 'Event not found'}), 404
 
 @app.route('/auth/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():
@@ -366,6 +397,28 @@ def get_project_list():
     project_names = [project.name for project in projects]
     return jsonify(project_names)
 
+@app.route('/auth/tag_list', methods=['GET'])
+def get_tag_list():
+    tags = TagList.query.all()
+    tags_list = [{'id': tag.id, 'tag': tag.tag} for tag in tags]
+    return jsonify({'tags': tags_list})
+
+@app.route('/auth/add_tag', methods=['POST'])
+def add_tag():
+    data = request.json
+    tag_name = data.get('tag')
+
+    # Check if the tag already exists
+    existing_tag = TagList.query.filter_by(tag=tag_name).first()
+    if existing_tag:
+        return jsonify({'error': 'Tag already exists'}), 400
+
+    # If the tag doesn't exist, add it to the database
+    new_tag = TagList(tag=tag_name)
+    db.session.add(new_tag)
+    db.session.commit()
+
+    return jsonify({'message': 'Tag added successfully'}), 201
 @app.route('/auth/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
     data = request.json

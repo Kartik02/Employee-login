@@ -1,29 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import Reports from "./Reports";
-
-const ProjectDropdown = ({ projectName, setProjectName, projects }) => {
-  const handleProjectSelect = (selectedProject) => {
-    setProjectName(selectedProject);
-  };
-
-  return (
-    <div className="tw-relative tw-flex-1">
-      {/* Project dropdown */}
-      <select
-        value={projectName}
-        onChange={(e) => setProjectName(e.target.value)}
-        className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-      >
-        <option value="">Select Project</option>
-        {projects.map((project, index) => (
-          <option key={index} value={project.projectName}>
-            {project.projectName}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
+import React, { useState, useEffect, useRef } from "react";
+import axios from 'axios';
 
 const Stopwatch = () => {
   const [task, setTask] = useState(""); // State for the task description
@@ -34,64 +10,80 @@ const Stopwatch = () => {
   const [pausedTime, setPausedTime] = useState(0);
   const [projects, setProjects] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // State to control the visibility of the dropdown
-
-  const intervalRef = useRef();
+  const intervalRef = useRef(); // Ref to store the interval reference
 
   useEffect(() => {
-    if (isRunning) {
-      startTimer();
+    fetchProjects();
+    fetchTags();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/auth/project_list');
+      setProjects(response.data); // Update with the response data directly
+    } catch (error) {
+      console.error('Error fetching projects:', error);
     }
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-    // eslint-disable-next-line
-  }, [isRunning]);
+  };
+
+  const fetchTags = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/auth/tag_list');
+      setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false }))); // Initialize tags with unchecked state
+    } catch (error) {
+      console.error('Error fetching tags:', error);
+    }
+  };
 
   const startTimer = () => {
-    const startTime = Date.now() - pausedTime;
+    const startTime = Date.now() - (pausedTime ? pausedTime : 0);
     intervalRef.current = setInterval(() => {
       setTimeElapsed(Date.now() - startTime);
     }, 1000);
   };
 
-  const stopTimer = () => {
-    clearInterval(intervalRef.current);
-    setPausedTime(timeElapsed);
-  };
-
-  const resetTimer = () => {
-    clearInterval(intervalRef.current);
-    setTimeElapsed(0);
-    setPausedTime(0);
-  };
-
   const handleStart = () => {
-    if (!task.trim()) {
-      alert("Task description is required!");
-      return;
-    }
     if (!projectName.trim()) {
       alert("Project name is required!");
       return;
     }
     setIsRunning(true);
+    startTimer(); // Start the timer
   };
 
   const handlePause = () => {
     setIsRunning(false);
-    stopTimer();
+    clearInterval(intervalRef.current); // Clear the interval
+    setPausedTime(timeElapsed);
   };
 
   const handleResume = () => {
     setIsRunning(true);
+    startTimer(); // Resume the timer
   };
 
   const handleReset = () => {
-    resetTimer();
+    clearInterval(intervalRef.current); // Clear the interval
+    setTimeElapsed(0);
+    setPausedTime(0);
+    setIsRunning(false);
     setTask("");
     setProjectName("");
-    setTags([]);
-    setIsRunning(false);
+    // Reset tags to their initial state (unchecked)
+    setTags(tags.map(tag => ({ ...tag, checked: false })));
+  };
+
+
+  const handleTagClick = () => {
+    setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
+  };
+
+  const handleTagSelect = (tagName) => {
+    // Toggle the checked state of the clicked tag
+    const updatedTags = tags.map(tag =>
+      tag.name === tagName ? { ...tag, checked: !tag.checked } : tag
+    );
+    setTags(updatedTags);
   };
 
   const handleSubmit = () => {
@@ -103,56 +95,26 @@ const Stopwatch = () => {
       alert("Project name is required!");
       return;
     }
-    const newProject = {
-      task,
-      projectName,
-      tags, // Include selected tags in the project object
-      timeElapsed: Math.floor(timeElapsed / 1000), // Convert milliseconds to seconds
-    };
+    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
 
-    fetch('https://empbackend.vercel.app/api/projects', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newProject)
-    })
+    // Do something with the task, projectName, and selectedTags
+    //console.log("Task:", task);
+    //console.log("Project Name:", projectName);
+    //console.log("Selected Tags:", selectedTags);
+    axios.post('https://empbackend.vercel.app/auth/projects', newProject)
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Failed to add project');
-        }
-      })
-      .then(data => {
-        console.log(data.message);
+        console.log(response.data);
         setProjects([...projects, newProject]);
+        resetTimer();
         handleReset();
-        // Navigate to ProjectDetailsPage with projectName and timeElapsed
-        // Assuming you have some kind of routing mechanism like react-router
-        // Replace the navigation logic according to your routing library
-        navigateToProjectDetailsPage(projectName, Math.floor(timeElapsed / 1000));
       })
       .catch(error => {
         console.error('Error adding project:', error);
         alert('Failed to add project');
       });
-
+    // Clear form fields and stop the timer
+    handleReset();
   };
-
-  const handleTagClick = () => {
-    setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
-  };
-
-  const handleTagSelect = (selectedTag) => {
-    // Toggle the tag in the selected tags array
-    if (tags.includes(selectedTag)) {
-      setTags(tags.filter(tag => tag !== selectedTag));
-    } else {
-      setTags([...tags, selectedTag]);
-    }
-  };
-
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -174,47 +136,44 @@ const Stopwatch = () => {
             className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
             style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
           />
-          <ProjectDropdown projectName={projectName} setProjectName={setProjectName} projects={projects} />
-          <div className="tw-absolute tw-right-80 ">
+          <div className="tw-relative tw-flex-1">
+            {/* Project dropdown */}
+            <select
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+            >
+              <option value="">Select Project</option>
+              {projects.map((project, index) => (
+                <option key={index} value={project}>
+                  {project}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="absolute tw-right ">
             {/* Tag symbol */}
             <div
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick} // Handle click to show dropdown
               style={{ marginRight: '8px' }} // Reduce space between tag and project
             >
-              {tags.length > 0 ? tags.join(", ") : <i class="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
             </div>
             {/* Dropdown */}
             {showDropdown && (
               <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md">
                 <ul>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
-                    <input
-                      type="checkbox"
-                      value="Frontend"
-                      checked={tags.includes("Frontend")}
-                      onChange={() => handleTagSelect("Frontend")}
-                    />
-                    Frontend
-                  </li>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
-                    <input
-                      type="checkbox"
-                      value="Backend"
-                      checked={tags.includes("Backend")}
-                      onChange={() => handleTagSelect("Backend")}
-                    />
-                    Backend
-                  </li>
-                  <li className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
-                    <input
-                      type="checkbox"
-                      value="Database"
-                      checked={tags.includes("Database")}
-                      onChange={() => handleTagSelect("Database")}
-                    />
-                    Database
-                  </li>
+                  {tags.map((tag, index) => (
+                    <li key={index} className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
+                      <input
+                        type="checkbox"
+                        checked={tag.checked}
+                        onChange={() => handleTagSelect(tag.name)}
+                      />
+                      {tag.name}
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
@@ -223,8 +182,8 @@ const Stopwatch = () => {
           {!isRunning ? (
             <button
               onClick={handleStart}
-              disabled={!task.trim() || !projectName.trim()} // Disable button if task or projectName is empty or contains only whitespace
-              className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${(!task.trim() || !projectName.trim()) && "tw-opacity-50 tw-cursor-not-allowed"}`}
+              disabled={!projectName.trim()} // Disable button if projectName is empty or contains only whitespace
+              className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${!projectName.trim() && "tw-opacity-50 tw-cursor-not-allowed"}`}
               style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} // Adjust border radius for start button
             >
               Start
@@ -249,38 +208,22 @@ const Stopwatch = () => {
         <div>
           <h2 className="tw-font-bold">Time Taken: {formatTime(timeElapsed)}</h2>
         </div>
-        {projects.length > 0 && (
-          <div className="tw-mb-4">
-            <h2 className="tw-font-bold">Project History:</h2>
-            <ul>
-              {projects.map((project, index) => (
-                <li key={index}>
-                  Project Name: {project.projectName}, Tags: {project.tags.join(", ")}, Time
-                  Elapsed: {project.timeElapsed} seconds
-                </li>
-              ))}
-            </ul>
-          </div>
+        {isRunning && (
+          <button
+            onClick={handleSubmit}
+            className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+          >
+            Submit
+          </button>
         )}
-        <div>
-          {isRunning && (
-            <button
-              onClick={handleSubmit}
-              className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-            >
-              Submit
-            </button>
-          )}
-          {!isRunning && pausedTime > 0 && (
-            <button
-              onClick={handleResume}
-              className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-            >
-              Resume
-            </button>
-          )}
-        </div>
-
+        {!isRunning && pausedTime > 0 && (
+          <button
+            onClick={handleResume}
+            className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+          >
+            Resume
+          </button>
+        )}
       </div>
     </>
   );
