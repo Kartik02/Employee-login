@@ -11,7 +11,9 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get("https://empbackend.vercel.app/auth/employee", { withCredentials: true })
+      .get("https://empbackend.vercel.app/auth/employee", {
+        withCredentials: true,
+      })
       .then((response) => {
         setEmpData(response.data);
         setEditedEmail(response.data.email);
@@ -55,26 +57,24 @@ function Profile() {
       });
   };
 
-
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
 
-    axios.post("https://empbackend.vercel.app/auth/upload_profile", formData, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    axios
+      .post("https://empbackend.vercel.app/auth/upload_profile", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         // Display success message
         alert("Profile image uploaded successfully");
         window.location.reload();
       })
       .then((response) => {
-
         const reader = new FileReader();
         reader.onload = (e) => {
           setProfileImageBase64(e.target.result);
@@ -85,8 +85,6 @@ function Profile() {
         console.error("Error uploading profile image:", error);
       });
   };
-
-
 
   return (
     <div className="container">
@@ -111,7 +109,11 @@ function Profile() {
                     </small>
                     <div className="d-flex align-items-center mb-3">
                       <img
-                        src={profileImageBase64 ? `data:image/png;base64,${profileImageBase64}` : "https://via.placeholder.com/64"}
+                        src={
+                          profileImageBase64
+                            ? `data:image/png;base64,${profileImageBase64}`
+                            : "https://via.placeholder.com/64"
+                        }
                         alt="Profile"
                         className="rounded-circle"
                         width="64"
@@ -127,6 +129,7 @@ function Profile() {
                       <label
                         htmlFor="profile-photo"
                         className="btn btn-primary mt-2"
+                        style={{ fontSize: "12px", marginLeft: "12px" }}
                       >
                         UPLOAD IMAGE
                       </label>
@@ -181,7 +184,11 @@ function Profile() {
                               Change
                             </button>
                           </div>
-                          {emailChanged && <div className="text-success">Email updated successfully!</div>}
+                          {emailChanged && (
+                            <div className="text-success">
+                              Email updated successfully!
+                            </div>
+                          )}
                         </div>
                         <div className="col-md-12">
                           <label
@@ -195,7 +202,9 @@ function Profile() {
                               type="password"
                               className="form-control"
                               value={editedPassword}
-                              onChange={(e) => setEditedPassword(e.target.value)}
+                              onChange={(e) =>
+                                setEditedPassword(e.target.value)
+                              }
                             />
                             <button
                               className="btn btn-primary"
@@ -205,7 +214,11 @@ function Profile() {
                               Change
                             </button>
                           </div>
-                          {passwordChanged && <div className="text-success">Password updated successfully!</div>}
+                          {passwordChanged && (
+                            <div className="text-success">
+                              Password updated successfully!
+                            </div>
+                          )}
                         </div>
                       </div>
                     </form>

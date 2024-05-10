@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import PieChartComponent from './PieChartComponent';
+import DonutChartComponent from './DonutChartComponent';
 import BarGraphComponent from './BarGraphComponent';
 
 const Reports = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('https://empbackend.vercel.app/auth/projects')
+    fetch('http://localhost:5000/api/projects')
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -56,18 +56,22 @@ const Reports = () => {
   const projectsWithColors = assignColorsToProjects(); // Or assignPredefinedColorsToProjects();
 
   // Extract necessary data for pie chart and bar graph
-  const pieChartData = projectsWithColors.map(project => ({ name: project.projectName, value: project.timeElapsed, color: project.color }));
+  const donutChartData = projectsWithColors.map(project => ({ name: project.projectName, value: project.timeElapsed, color: project.color }));
   const barChartData = projectsWithColors.map(project => ({ name: project.projectName, timeElapsed: project.timeElapsed, color: project.color }));
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div>
-        <PieChartComponent data={pieChartData} />
-      </div>
-      <div>
+  <>
+    <div className='lg:tw-flex tw-w-full tw-gap-1'>
+    
+      
+      <div className='lg:w-50 w-100'>
         <BarGraphComponent data={barChartData} />
       </div>
+      <div className='lg:w-50 w-100'>
+        <DonutChartComponent data={donutChartData} />
+      </div>
     </div>
+  </>
   );
 
 };
