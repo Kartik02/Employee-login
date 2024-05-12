@@ -69,9 +69,10 @@ const AddEmployee = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center mt-3">
-      <div className="p-3 rounded w-50 border">
+    <div className="d-flex justify-content-center align-items-center mt-3 ">
+      <div className="p-3 rounded w-100 border">
         <h2 className="text-center">Add Employee</h2>
+        <br/>
         {successMessage && (
           <div className="alert alert-success d-flex align-items-center justify-content-between">
             <span>{successMessage}</span>
@@ -79,7 +80,7 @@ const AddEmployee = () => {
           </div>
         )}
         <form className="row g-1" onSubmit={handleSubmit}>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputName" className="form-label">
               Name <span className="text-danger">*</span>
             </label>
@@ -92,7 +93,7 @@ const AddEmployee = () => {
               required
             />
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputEmail4" className="form-label">
               Email <span className="text-danger">*</span>
             </label>
@@ -107,7 +108,7 @@ const AddEmployee = () => {
               required
             />
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputEmail4" className="form-label">
               Employee ID <span className="text-danger">*</span>
             </label>
@@ -122,7 +123,7 @@ const AddEmployee = () => {
               required
             />
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputPassword4" className="form-label">
               Password <span className="text-danger">*</span>
             </label>
@@ -136,7 +137,7 @@ const AddEmployee = () => {
               required
             />
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputSalary" className="form-label">
               Salary
             </label>
@@ -150,7 +151,7 @@ const AddEmployee = () => {
               onChange={(e) => setEmployee({ ...employee, salary: e.target.value })}
             />
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="category" className="form-label">Category <span className="text-danger">*</span></label>
             <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} value={employee.category_id} required>
               <option value="">Select Category</option>
@@ -161,7 +162,7 @@ const AddEmployee = () => {
               <option value="Tech">Tech-Section</option>
             </select>
           </div>
-          <div className="col-12">
+          <div className="col-md-6 mb-3">
             <label htmlFor="inputImage" className="form-label">
               Image
             </label>
