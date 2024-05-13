@@ -121,8 +121,9 @@ class Events(db.Model):
 
     def update_event(self, title, start, end):
         self.title = title
-        self.start = start
-        self.end = end
+        self.start = start.replace(tzinfo=None)  # Assume start and end are in UTC format
+        self.end = end.replace(tzinfo=None)  # Assume start and end are in UTC format
+        print(start, end)
         db.session.commit()
 
     def delete_event(self):
@@ -349,12 +350,12 @@ def update_event(event_id):
     event = Events.query.get(event_id)
     if event:
         event.title = title
-        event.start = start
-        event.end = end
+        event.start = start.replace(tzinfo=None)  # Assume start and end are in UTC format
+        event.end = end.replace(tzinfo=None)  # Assume start and end are in UTC format
         db.session.commit()
         return jsonify({'message': 'Event updated successfully'}), 200
     else:
-        return jsonify({'error': 'Event not found'}), 404
+        return jsonify({'error': 'Event not found'}), 400
 
 @app.route('/auth/delete_event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
@@ -365,8 +366,7 @@ def delete_event(event_id):
     else:
         return jsonify({'error': 'Event not found'}), 404
 
-# Route to fetch all events
-@app.route('/auth/get_events', methods=['GET'])
+@app.route('/auth/get_events', methods=['GET', 'POST'])
 def get_events():
     events = Events.query.all()
     events_data = [event.to_dict() for event in events]
