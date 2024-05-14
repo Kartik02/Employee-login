@@ -20,6 +20,7 @@ CORS(app, resources={r"/auth/*": {
 }})
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -85,18 +86,26 @@ class ProjectList(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    projectName = db.Column(db.String(100), nullable=False)
-    tag = db.Column(db.String(100))
-    timeElapsed = db.Column(db.Integer, nullable=False)
+    projectName = db.Column(db.String(255))
+    task = db.Column(db.String(255))  # Change 'task' to 'description'
+    tags = db.Column(db.String(255))
+    timeElapsed = db.Column(db.Integer)
+
+    def __init__(self, projectName, task, tags, timeElapsed):
+        self.projectName = projectName
+        self.task = task
+        self.tags = tags
+        self.timeElapsed = timeElapsed
 
     def to_dict(self):
         return {
             'id': self.id,
+            'task': self.task,
             'projectName': self.projectName,
-            'tag': self.tag,
+            'tags': self.tags,
             'timeElapsed': self.timeElapsed
         }
-
+    
 class Events(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -121,9 +130,8 @@ class Events(db.Model):
 
     def update_event(self, title, start, end):
         self.title = title
-        self.start = start.replace(tzinfo=None)  # Assume start and end are in UTC format
-        self.end = end.replace(tzinfo=None)  # Assume start and end are in UTC format
-        print(start, end)
+        self.start = start
+        self.end = end
         db.session.commit()
 
     def delete_event(self):
@@ -153,6 +161,7 @@ admin.add_view(ModelView(TagList, db.session))
 def home():
     return redirect(url_for('admin.index'))
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
+
 def adminlogin():
     data = request.json
     email = data.get('email')
@@ -350,12 +359,12 @@ def update_event(event_id):
     event = Events.query.get(event_id)
     if event:
         event.title = title
-        event.start = start.replace(tzinfo=None)  # Assume start and end are in UTC format
-        event.end = end.replace(tzinfo=None)  # Assume start and end are in UTC format
+        event.start = start
+        event.end = end
         db.session.commit()
         return jsonify({'message': 'Event updated successfully'}), 200
     else:
-        return jsonify({'error': 'Event not found'}), 400
+        return jsonify({'error': 'Event not found'}), 404
 
 @app.route('/auth/delete_event/<int:event_id>', methods=['POST'])
 def delete_event(event_id):
@@ -366,11 +375,42 @@ def delete_event(event_id):
     else:
         return jsonify({'error': 'Event not found'}), 404
 
-@app.route('/auth/get_events', methods=['GET', 'POST'])
+# Route to fetch all events
+@app.route('/auth/get_events', methods=['GET'])
 def get_events():
     events = Events.query.all()
     events_data = [event.to_dict() for event in events]
     return jsonify(events_data), 200
+
+'''
+@app.route('/auth/add_project_data', methods=['POST'])
+def add_project_data():
+    task = request.json.get('task')
+    projectName = request.json.get('projectName')
+    tags = request.json.get('tags')
+    timeElapsed = request.json.get('timeElapsed')
+    
+    # Create a new Project instance and add it to the database
+    new_project = Project(task=task, projectName=projectName, tags=tags, timeElapsed=timeElapsed)
+    db.session.add(new_project)
+    db.session.commit()
+    
+    return jsonify({'message': 'Project data added successfully!'}), 201
+'''
+@app.route('/auth/add_project_data', methods=['POST'])
+def add_project_data():
+    data = request.json
+    projectName = data.get('projectName')
+    task = data.get('task')  # Updated to 'description'
+    tags = ','.join(data.get('tags'))  # Convert list of tags to comma-separated string
+    timeElapsed = data.get('timeElapsed')
+    
+    # Create a new Project instance and add it to the database
+    new_project = Project(projectName=projectName, task=task, tags=tags, timeElapsed=timeElapsed)
+    db.session.add(new_project)
+    db.session.commit()
+    
+    return jsonify({'message': 'Project data added successfully!'}), 201
 
 @app.route('/auth/projects', methods=['GET', 'POST'])  # Allow both GET and POST requests
 def handle_projects():

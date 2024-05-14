@@ -73,7 +73,6 @@ const Stopwatch = () => {
     setTags(tags.map(tag => ({ ...tag, checked: false })));
   };
 
-
   const handleTagClick = () => {
     setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
   };
@@ -97,22 +96,26 @@ const Stopwatch = () => {
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
 
-    // Do something with the task, projectName, and selectedTags
-    //console.log("Task:", task);
-    //console.log("Project Name:", projectName);
-    //console.log("Selected Tags:", selectedTags);
-    axios.post('https://empbackend.vercel.app/auth/projects', newProject)
+    // Send data to backend to store in database
+    axios.post('http://localhost:5000/auth/add_project_data', {
+      task,
+      projectName,
+      tags: selectedTags,
+      timeElapsed
+    })
       .then(response => {
         console.log(response.data);
+        // Retrieve new project data from server response
         setProjects([...projects, newProject]);
         resetTimer();
         handleReset();
+        // Display pop-up message
+        //alert("Project data added successfully!");
       })
       .catch(error => {
         console.error('Error adding project:', error);
-        alert('Failed to add project');
+        //alert('Failed to add project');
       });
-    // Clear form fields and stop the timer
     handleReset();
   };
 
