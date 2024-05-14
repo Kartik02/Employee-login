@@ -10,6 +10,7 @@ const Stopwatch = () => {
   const [pausedTime, setPausedTime] = useState(0);
   const [projects, setProjects] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false); // State to control the visibility of the dropdown
+  const [submittedDetails, setSubmittedDetails] = useState([]); // State to store submitted details
   const intervalRef = useRef(); // Ref to store the interval reference
 
   useEffect(() => {
@@ -97,21 +98,15 @@ const Stopwatch = () => {
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
 
-    // Do something with the task, projectName, and selectedTags
-    //console.log("Task:", task);
-    //console.log("Project Name:", projectName);
-    //console.log("Selected Tags:", selectedTags);
-    axios.post('https://empbackend.vercel.app/auth/projects', newProject)
-      .then(response => {
-        console.log(response.data);
-        setProjects([...projects, newProject]);
-        resetTimer();
-        handleReset();
-      })
-      .catch(error => {
-        console.error('Error adding project:', error);
-        alert('Failed to add project');
-      });
+    // Store the submitted details
+    const newDetails = {
+      projectName: projectName,
+      task: task,
+      tags: selectedTags,
+      timeTaken: formatTime(timeElapsed)
+    };
+    setSubmittedDetails([...submittedDetails, newDetails]);
+
     // Clear form fields and stop the timer
     handleReset();
   };
@@ -225,6 +220,30 @@ const Stopwatch = () => {
           </button>
         )}
       </div>
+
+      {/* Submitted details table */}
+      <div className="tw-p-4">
+      <table className="tw-mt-4 tw-border tw-border-collapse tw-w-full">
+  <thead>
+    <tr>
+      <th className="tw-border tw-p-2 tw-w-1/4">Project Name</th>
+      <th className="tw-border tw-p-2 tw-w-1/4">Description</th>
+      <th className="tw-border tw-p-2 tw-w-1/4">Tag</th>
+      <th className="tw-border tw-p-2 tw-w-1/4">Time Taken</th>
+    </tr>
+  </thead>
+  <tbody>
+    {submittedDetails.map((detail, index) => (
+      <tr key={index}>
+        <td className="tw-border tw-p-2 tw-w-1/4">{detail.projectName}</td>
+        <td className="tw-border tw-p-2 tw-w-1/4">{detail.task}</td>
+        <td className="tw-border tw-p-2 tw-w-1/4">{detail.tags.join(", ")}</td>
+        <td className="tw-border tw-p-2 tw-w-1/4">{detail.timeTaken}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+</div>
     </>
   );
 };

@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 
-const CalenderComponent = () => {
+const CalendarComponent = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({ id: '', title: '', start: '', end: '', allDay: false });
@@ -67,6 +67,7 @@ const CalenderComponent = () => {
         start: newEvent.start,
         end: newEvent.end,
         allDay: newEvent.allDay,
+        creationDate: new Date().toISOString(), // Store the creation date
       };
 
       axios.post('http://localhost:5000/auth/add_event', newEventObj)
@@ -84,53 +85,49 @@ const CalenderComponent = () => {
 
   const handleEditEvent = () => {
     if (!newEvent || !newEvent.start) {
-        console.error('Invalid newEvent object:', newEvent);
-        return;
+      console.error('Invalid newEvent object:', newEvent);
+      return;
     }
 
-    console.log('Before conversion:', newEvent.start, newEvent.end);
-
     const updatedEvents = currentEvents.map(event => {
-        if (event.id === newEvent.id) {
-            return {
-                ...event,
-                title: newEvent.title,
-                start: new Date(newEvent.start).toISOString(), // Convert to UTC format
-                end: new Date(newEvent.end).toISOString(), // Convert to UTC format
-            };
-        }
-        return event;
+      if (event.id === newEvent.id) {
+        return {
+          ...event,
+          title: newEvent.title,
+          start: new Date(newEvent.start).toISOString(), // Convert to UTC format
+          end: new Date(newEvent.end).toISOString(), // Convert to UTC format
+        };
+      }
+      return event;
     });
-
-    console.log('After conversion:', updatedEvents.find(event => event.id === newEvent.id)?.start, updatedEvents.find(event => event.id === newEvent.id)?.end);
 
     // Send the updated event data to the backend
     axios.post(`http://localhost:5000/auth/update_event/${newEvent.id}`, {
-        title: newEvent.title,
-        start: new Date(newEvent.start).toISOString(), // Convert to UTC format
-        end: new Date(newEvent.end).toISOString(), // Convert to UTC format
+      title: newEvent.title,
+      start: new Date(newEvent.start).toISOString(), // Convert to UTC format
+      end: new Date(newEvent.end).toISOString(), // Convert to UTC format
     })
-    .then(() => {
+      .then(() => {
         setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
         handleModalClose();
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error('Error updating event:', error);
-    });
-};
+      });
+  };
 
   const handleDeleteEvent = () => {
     const updatedEvents = currentEvents.filter(event => event.id !== newEvent.id);
 
     // Send a request to delete the event from the backend
     axios.post(`http://localhost:5000/auth/delete_event/${newEvent.id}`)
-        .then(() => {
-            setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
-            handleModalClose();
-        })
-        .catch(error => {
-            console.error('Error deleting event:', error);
-        });
+      .then(() => {
+        setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
+        handleModalClose();
+      })
+      .catch(error => {
+        console.error('Error deleting event:', error);
+      });
   };
 
   const handleKeyPress = (event) => {
@@ -219,4 +216,4 @@ const CalenderComponent = () => {
   );
 };
 
-export default CalenderComponent;
+export default CalendarComponent;
