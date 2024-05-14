@@ -167,9 +167,11 @@ def adminlogin():
     email = data.get('email')
     password = data.get('password')
     adminData = AdminData.query.filter_by(email=email).first()
+     
     if  adminData and adminData.password == password:
         print('Login successful')
         session['logged_in'] = True
+        db.session.commit()
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
@@ -201,6 +203,7 @@ def login():
         print('Login successful')
         session['logged_in'] = True
         session['empid'] = empid
+        db.session.commit()
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
@@ -236,6 +239,7 @@ def get_employees():
             'category': employee.category
         }
         employee_list.append(employee_dict)
+        db.session.commit()
     return jsonify({'Status': True, 'Result': employee_list}), 200
 
 @app.route('/auth/update_employee', methods=['POST'])
