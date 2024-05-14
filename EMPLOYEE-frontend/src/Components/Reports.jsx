@@ -6,7 +6,7 @@ const Reports = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/auth/projects')
+    fetch('https://empbackend.vercel.app/auth/projects')
       .then(response => {
         if (response.ok) {
           return response.json();

@@ -9,7 +9,7 @@ const AddProject = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Send a POST request to the backend
-        axios.post('http://localhost:5000/auth/add_projects', project)
+        axios.post('https://empbackend.vercel.app/auth/add_projects', project)
             .then((response) => {
                 if (response.status === 201) {
                     console.log(response.data.message);

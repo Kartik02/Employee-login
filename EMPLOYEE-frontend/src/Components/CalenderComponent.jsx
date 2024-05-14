@@ -11,7 +11,7 @@ const CalendarComponent = () => {
 
   useEffect(() => {
     // Fetch events from the database
-    axios.get('http://localhost:5000/auth/get_events')
+    axios.get('https://empbackend.vercel.app/auth/get_events')
       .then(response => {
         setCurrentEvents(response.data);
         // Store events in local storage
@@ -70,7 +70,7 @@ const CalendarComponent = () => {
         creationDate: new Date().toISOString(), // Store the creation date
       };
 
-      axios.post('http://localhost:5000/auth/add_event', newEventObj)
+      axios.post('https://empbackend.vercel.app/auth/add_event', newEventObj)
         .then(response => {
           setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
           // Update local storage with new events
@@ -102,7 +102,7 @@ const CalendarComponent = () => {
     });
 
     // Send the updated event data to the backend
-    axios.post(`http://localhost:5000/auth/update_event/${newEvent.id}`, {
+    axios.post(`https://empbackend.vercel.app/auth/update_event/${newEvent.id}`, {
       title: newEvent.title,
       start: new Date(newEvent.start).toISOString(), // Convert to UTC format
       end: new Date(newEvent.end).toISOString(), // Convert to UTC format
@@ -120,7 +120,7 @@ const CalendarComponent = () => {
     const updatedEvents = currentEvents.filter(event => event.id !== newEvent.id);
 
     // Send a request to delete the event from the backend
-    axios.post(`http://localhost:5000/auth/delete_event/${newEvent.id}`)
+    axios.post(`https://empbackend.vercel.app/auth/delete_event/${newEvent.id}`)
       .then(() => {
         setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
         handleModalClose();

@@ -20,7 +20,7 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/project_list');
+      const response = await axios.get('https://empbackend.vercel.app/auth/project_list');
       setProjects(response.data); // Update with the response data directly
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -29,7 +29,7 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/tag_list');
+      const response = await axios.get('https://empbackend.vercel.app/auth/tag_list');
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false }))); // Initialize tags with unchecked state
     } catch (error) {
       console.error('Error fetching tags:', error);
@@ -223,27 +223,27 @@ const Stopwatch = () => {
 
       {/* Submitted details table */}
       <div className="tw-p-4">
-      <table className="tw-mt-4 tw-border tw-border-collapse tw-w-full">
-  <thead>
-    <tr>
-      <th className="tw-border tw-p-2 tw-w-1/4">Project Name</th>
-      <th className="tw-border tw-p-2 tw-w-1/4">Description</th>
-      <th className="tw-border tw-p-2 tw-w-1/4">Tag</th>
-      <th className="tw-border tw-p-2 tw-w-1/4">Time Taken</th>
-    </tr>
-  </thead>
-  <tbody>
-    {submittedDetails.map((detail, index) => (
-      <tr key={index}>
-        <td className="tw-border tw-p-2 tw-w-1/4">{detail.projectName}</td>
-        <td className="tw-border tw-p-2 tw-w-1/4">{detail.task}</td>
-        <td className="tw-border tw-p-2 tw-w-1/4">{detail.tags.join(", ")}</td>
-        <td className="tw-border tw-p-2 tw-w-1/4">{detail.timeTaken}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-</div>
+        <table className="tw-mt-4 tw-border tw-border-collapse tw-w-full">
+          <thead>
+            <tr>
+              <th className="tw-border tw-p-2 tw-w-1/4">Project Name</th>
+              <th className="tw-border tw-p-2 tw-w-1/4">Description</th>
+              <th className="tw-border tw-p-2 tw-w-1/4">Tag</th>
+              <th className="tw-border tw-p-2 tw-w-1/4">Time Taken</th>
+            </tr>
+          </thead>
+          <tbody>
+            {submittedDetails.map((detail, index) => (
+              <tr key={index}>
+                <td className="tw-border tw-p-2 tw-w-1/4">{detail.projectName}</td>
+                <td className="tw-border tw-p-2 tw-w-1/4">{detail.task}</td>
+                <td className="tw-border tw-p-2 tw-w-1/4">{detail.tags.join(", ")}</td>
+                <td className="tw-border tw-p-2 tw-w-1/4">{detail.timeTaken}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

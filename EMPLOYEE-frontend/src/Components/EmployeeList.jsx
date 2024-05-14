@@ -5,7 +5,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/auth/employees')
+    axios.get('https://empbackend.vercel.app/auth/employees')
       .then(result => {
         if (result.data.Status) {
           setEmployees(result.data.Result);

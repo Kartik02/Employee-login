@@ -11,7 +11,7 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/employee", {
+      .get("https://empbackend.vercel.app/auth/employee", {
         withCredentials: true,
       })
       .then((response) => {
@@ -28,7 +28,7 @@ function Profile() {
   const handleEmailChange = () => {
     axios
       .post(
-        "http://localhost:5000/auth/update_employee",
+        "https://empbackend.vercel.app/auth/update_employee",
         { email: editedEmail },
         { withCredentials: true }
       )
@@ -44,7 +44,7 @@ function Profile() {
   const handlePasswordChange = () => {
     axios
       .post(
-        "http://localhost:5000/auth/update_employee",
+        "https://empbackend.vercel.app/auth/update_employee",
         { password: editedPassword },
         { withCredentials: true }
       )
@@ -63,7 +63,7 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("http://localhost:5000/auth/upload_profile", formData, {
+      .post("https://empbackend.vercel.app/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

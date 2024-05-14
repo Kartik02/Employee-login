@@ -16,7 +16,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/auth/category')
+    axios.get('https://empbackend.vercel.app/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -43,7 +43,7 @@ const AddEmployee = () => {
     formData.append('category_id', employee.category_id);
     formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-    axios.post('http://localhost:5000/auth/add_employee', formData, {
+    axios.post('https://empbackend.vercel.app/auth/add_employee', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -72,7 +72,7 @@ const AddEmployee = () => {
     <div className="d-flex justify-content-center align-items-center mt-3 ">
       <div className="p-3 rounded w-100 border">
         <h2 className="text-center">Add Employee</h2>
-        <br/>
+        <br />
         {successMessage && (
           <div className="alert alert-success d-flex align-items-center justify-content-between">
             <span>{successMessage}</span>
