@@ -22,6 +22,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -162,19 +163,34 @@ def home():
     return redirect(url_for('admin.index'))
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
 
+@app.route('/auth/adminlogin', methods=['POST'])
 def adminlogin():
     data = request.json
     email = data.get('email')
     password = data.get('password')
     adminData = AdminData.query.filter_by(email=email).first()
      
-    if  adminData and adminData.password == password:
-        print('Login successful')
-        session['logged_in'] = True
-        db.session.commit()
+    if adminData and adminData.password == password:
+        session['logged_in'] = True  # Set session variable
+        session['admin_email'] = email  # Optionally, store admin email
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+
+@app.route('/auth/login', methods=['POST'])
+def login():
+    data = request.json
+    empid = data.get('empid')
+    password = data.get('password')
+    user = EmpData.query.filter_by(empid=empid).first()
+    
+    if user and user.password == password:
+        session['logged_in'] = True  # Set session variable
+        session['empid'] = empid  # Optionally, store employee ID
+        return jsonify({'loginStatus': True}), 200
+    else:
+        return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+
 
 @app.route('/auth/add_employee', methods=['POST'])
 def addEmp():
@@ -192,21 +208,6 @@ def addEmp():
     db.session.commit()
 
     return jsonify({'message': 'Employee added successfully'}), 200
-
-@app.route('/auth/login', methods=['GET', 'POST'])
-def login():
-    data = request.json
-    empid = data.get('empid')
-    password = data.get('password')
-    user = EmpData.query.filter_by(empid=empid).first()
-    if  user and user.password == password:
-        print('Login successful')
-        session['logged_in'] = True
-        session['empid'] = empid
-        db.session.commit()
-        return jsonify({'loginStatus': True}), 200
-    else:
-        return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
 @app.route('/auth/employee', methods=['GET', 'POST'])
 def get_employee_data():
