@@ -165,12 +165,12 @@ def home():
 def adminlogin():
     try:
         data = request.json
-        email = data.get('email')
+        username = data.get('username')
         password = data.get('password')
-        admin_data = AdminData.query.filter_by(email=email).first()
-        if admin_data and admin_data.password == password:
+        admin = Admin.query.filter_by(username=username).first()
+        if admin and admin.password == password:
             session['logged_in'] = True
-            session['admin_email'] = email
+            session['username'] = username
             return jsonify({'loginStatus': True}), 200
         else:
             return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
@@ -178,11 +178,12 @@ def adminlogin():
         return jsonify({'error': 'Internal Server Error'}), 500
 
 @app.route('/auth/login', methods=['POST'])
-def login():
+def employee_login():
     try:
         data = request.json
         empid = data.get('empid')
         password = data.get('password')
+
         user = EmpData.query.filter_by(empid=empid).first()
         if user and user.password == password:
             session['logged_in'] = True
