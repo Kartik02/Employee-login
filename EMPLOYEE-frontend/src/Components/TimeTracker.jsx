@@ -74,7 +74,6 @@ const Stopwatch = () => {
     setTags(tags.map(tag => ({ ...tag, checked: false })));
   };
 
-
   const handleTagClick = () => {
     setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
   };

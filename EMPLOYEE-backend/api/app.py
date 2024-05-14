@@ -162,8 +162,6 @@ admin.add_view(ModelView(TagList, db.session))
 def home():
     return redirect(url_for('admin.index'))
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
-
-@app.route('/auth/adminlogin', methods=['POST'])
 def adminlogin():
     data = request.json
     email = data.get('email')
