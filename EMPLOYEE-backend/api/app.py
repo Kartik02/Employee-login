@@ -163,32 +163,35 @@ def home():
     return redirect(url_for('admin.index'))
 @app.route('/auth/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    adminData = AdminData.query.filter_by(email=email).first()
-     
-    if adminData and adminData.password == password:
-        session['logged_in'] = True  # Set session variable
-        session['admin_email'] = email  # Optionally, store admin email
-        return jsonify({'loginStatus': True}), 200
-    else:
-        return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+        admin_data = AdminData.query.filter_by(email=email).first()
+        if admin_data and admin_data.password == password:
+            session['logged_in'] = True
+            session['admin_email'] = email
+            return jsonify({'loginStatus': True}), 200
+        else:
+            return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 @app.route('/auth/login', methods=['POST'])
 def login():
-    data = request.json
-    empid = data.get('empid')
-    password = data.get('password')
-    user = EmpData.query.filter_by(empid=empid).first()
-    
-    if user and user.password == password:
-        session['logged_in'] = True  # Set session variable
-        session['empid'] = empid  # Optionally, store employee ID
-        return jsonify({'loginStatus': True}), 200
-    else:
-        return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
-
+    try:
+        data = request.json
+        empid = data.get('empid')
+        password = data.get('password')
+        user = EmpData.query.filter_by(empid=empid).first()
+        if user and user.password == password:
+            session['logged_in'] = True
+            session['empid'] = empid
+            return jsonify({'loginStatus': True}), 200
+        else:
+            return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 @app.route('/auth/add_employee', methods=['POST'])
 def addEmp():
