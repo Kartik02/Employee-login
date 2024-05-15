@@ -15,7 +15,7 @@ const AdminLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://empbackend.vercel.app/auth/adminlogin", values)
+      .post("https://backendemp.vercel.app/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
           navigate("/admindashboard");

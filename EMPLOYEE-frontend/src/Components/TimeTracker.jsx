@@ -20,7 +20,7 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://empbackend.vercel.app/auth/project_list');
+      const response = await axios.get('https://backendemp.vercel.app/auth/project_list');
       setProjects(response.data); // Update with the response data directly
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -29,7 +29,7 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('https://empbackend.vercel.app/auth/tag_list');
+      const response = await axios.get('https://backendemp.vercel.app/auth/tag_list');
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false }))); // Initialize tags with unchecked state
     } catch (error) {
       console.error('Error fetching tags:', error);
