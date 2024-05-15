@@ -9,6 +9,8 @@ import random
 from sqlalchemy import LargeBinary
 from flask_migrate import Migrate
 import base64
+from flask_mysqldb import MySQL
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -18,11 +20,20 @@ CORS(app, resources={r"/auth/*": {
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
 }})
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'employee'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/employee'
+
+mysql = MySQL(app)
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-app.config['SESSION_TYPE'] = 'filesystem'
+
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
