@@ -1,24 +1,15 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "api/app.py",
-            "use": "@vercel/python",
-            "config": {
-                "maxLambdaSize": "50mb"
-            }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "api/app.py"
-        }
-    ],
-    "env": {
-        "MYSQL_HOST": "localhost",
-        "MYSQL_USER": "root",
-        "MYSQL_PASSWORD": "root",
-        "MYSQL_DATABASE": "employee"
+  "version": 2,
+  "functions": {
+    "api/app.py": {
+      "maxDuration": 60,
+      "memory": 1024
     }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/app.py"
+    }
+  ]
 }
