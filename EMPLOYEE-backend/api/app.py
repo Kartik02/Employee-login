@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS
-from flask_mail import Mail
+from flask_mail import Mail,Message
 from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
 from datetime import datetime
 import ssl
+import random
 import base64
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -31,7 +32,7 @@ client = MongoClient(
     connectTimeoutMS=30000
 )
 
-  # Update this with your MongoDB URI
+# Update this with your MongoDB URI
 db = client['employeee']
 
 # Mail configuration
@@ -43,7 +44,7 @@ app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
 app.config['MAIL_PASSWORD'] = 'app_password'
 mail = Mail(app)
 
-
+#models
 class AdminDataForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -64,6 +65,13 @@ class LeavesForm(FlaskForm):
     numberOfDays = DecimalField('Number of Days', validators=[DataRequired()])
     fromDate = StringField('From Date', validators=[DataRequired()])
     toDate = StringField('To Date', validators=[DataRequired()])
+    
+class ProjectForm(FlaskForm):
+    projectName = StringField('Project Name', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+    tags = StringField('Tags', validators=[DataRequired()])
+    timeElapsed = DecimalField('Time Elapsed', validators=[DataRequired()])
+
 
 class ProjectForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -75,6 +83,8 @@ class EventForm(FlaskForm):
     allDay = StringField('All Day')
 
 
+
+# views
 class AdminDataView(ModelView):
     column_list = ('email', 'password')
     form = AdminDataForm
@@ -94,6 +104,9 @@ class ProjectView(ModelView):
 class EventView(ModelView):
     column_list = ('title', 'start', 'end', 'allDay')
     form = EventForm
+    
+ 
+
 
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(AdminDataView(db.admin_data, 'Admin Data'))
@@ -101,6 +114,7 @@ admin.add_view(EmployeeDataView(db.emp_data, 'Employee Data'))
 admin.add_view(LeavesView(db.leaves, 'Leaves'))
 admin.add_view(ProjectView(db.project_list, 'Projects'))
 admin.add_view(EventView(db.events, 'Events'))
+
 
 def initialize_db():
     # Check if collections already exist
@@ -118,6 +132,7 @@ def initialize_db():
     if 'events' not in collections:
         db.create_collection('events')
 
+        
     # Create indexes
     db.admin_data.create_index('email', unique=True)
     db.emp_data.create_index('email', unique=True)
@@ -125,6 +140,7 @@ def initialize_db():
     db.leaves.create_index('employeeId', unique=True)
     db.project_list.create_index('name', unique=True)
     db.events.create_index('title', unique=True)
+    
 
 
 initialize_db()
@@ -363,6 +379,24 @@ def get_projects():
     except Exception as e:
         print(f"Error fetching projects: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/auth/forgot_password', methods=['POST'])
+def forgot_password():
+    data = request.json
+    email = data.get('email')
+
+    user = db.emp_data.find_one({'email': email})
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
+
+    new_password = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=8))
+    db.emp_data.update_one({'email': email}, {'$set': {'password': new_password}})
+
+    msg = Message('Password Reset', sender='rushideshmukh824@gmail.com', recipients=[email])
+    msg.body = f'Your new password is: {new_password}'
+    mail.send(msg)
+
+    return jsonify({'message': 'Password reset email sent successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)
