@@ -20,7 +20,7 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://backendemp.vercel.app/auth/project_list');
+      const response = await axios.get('http://localhost:5000/auth/project_list');
       setProjects(response.data); // Update with the response data directly
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -29,7 +29,7 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('https://backendemp.vercel.app/auth/tag_list');
+      const response = await axios.get('http://localhost:5000/auth/tag_list');
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false }))); // Initialize tags with unchecked state
     } catch (error) {
       console.error('Error fetching tags:', error);
@@ -74,6 +74,22 @@ const Stopwatch = () => {
     setTags(tags.map(tag => ({ ...tag, checked: false })));
   };
 
+  const handleRun = (index) => {
+    const startTime = Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
+    setIsRunning(true);
+    intervalRef.current = setInterval(() => {
+      const elapsedTime = Date.now() - startTime;
+      const newDetails = [...submittedDetails];
+      newDetails[index].timeTaken = formatTime(elapsedTime);
+      setSubmittedDetails(newDetails);
+    }, 1000);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+    clearInterval(intervalRef.current);
+  };
+
   const handleTagClick = () => {
     setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
   };
@@ -116,6 +132,11 @@ const Stopwatch = () => {
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
 
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const timeToMilliseconds = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+    return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
   };
 
   return (
@@ -229,6 +250,7 @@ const Stopwatch = () => {
               <th className="tw-border tw-p-2 tw-w-1/4">Description</th>
               <th className="tw-border tw-p-2 tw-w-1/4">Tag</th>
               <th className="tw-border tw-p-2 tw-w-1/4">Time Taken</th>
+              <th className="tw-border tw-p-2 tw-w-1/4">Actions</th> {/* New column for actions */}
             </tr>
           </thead>
           <tbody>
@@ -238,6 +260,23 @@ const Stopwatch = () => {
                 <td className="tw-border tw-p-2 tw-w-1/4">{detail.task}</td>
                 <td className="tw-border tw-p-2 tw-w-1/4">{detail.tags.join(", ")}</td>
                 <td className="tw-border tw-p-2 tw-w-1/4">{detail.timeTaken}</td>
+                <td className="tw-border tw-p-2 tw-w-1/4">
+                  {!isRunning ? ( 
+                    <button
+                      onClick={() => handleRun(index)} 
+                      className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+                    >
+                      Run
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleStop}
+                      className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+                    >
+                      Stop
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
