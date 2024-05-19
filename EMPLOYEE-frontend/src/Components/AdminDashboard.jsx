@@ -14,9 +14,9 @@ const AdminDashboard = () => {
     });
   };
   return (
-    <div className="container-fluid min-vh-100">
-      <div className="row">
-        <div className="col-md-3 col-lg-2 bg-dark px-0">
+    <div className="container-fluid hover tw-bg-base-300 tw-text-base-content">
+      <div className="row flex-nowrap">
+        <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark hover:bg-gray-900">
           <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
             <Link
               to="/admindashboard"
@@ -26,11 +26,11 @@ const AdminDashboard = () => {
                 Admin Panel
               </span>
             </Link>
-            <ul className="nav nav-pills flex-column mb-sm-auto mb-0">
-              <li>
+            <ul className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
+              <li className="w-100">
                 <Link
                   to="/admindashboard/employee"
-                  className="nav-link text-white px-0 align-middle"
+                  className="nav-link text-white px-0 align-middle hover:text-primary"
                 >
                   <i className="fs-4 bi-people me-2"></i>
                   <span className="d-none d-sm-inline">Manage Employee</span>
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
                   className="nav-link text-white px-0 align-middle"
                 >
                   <i className="fs-4 bi-people me-2"></i>
-                  <span className="d-none d-sm-inline">Employee Details</span>
+                  <span className="ms-2 d-none d-sm-inline">Employee Details</span>
                 </Link>
               </li>
               <li>
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
                   className="nav-link text-white px-0 align-middle"
                 >
                   <i className="fs-4 bi-power me-2"></i>
-                  <span className="d-none d-sm-inline">Logout</span>
+                  <span className="ms-2 d-none d-sm-inline">Logout</span>
                 </Link>
               </li>
             </ul>

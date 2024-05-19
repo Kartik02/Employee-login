@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 
 const Dashboard = () => {
@@ -147,23 +148,7 @@ const Dashboard = () => {
             </ul>
           </div>
         </div>
-        <div className="col p-0 m-0">
-          <div className="p-2 d-flex justify-content-md-end gap-4 fs-4 shadow">
-            <button className="btn btn-secondary dropdown-toggle" type="button"
-              id="dropdownMenubutton" toggle="dropdown">workspace
-
-
-            </button>
-
-            <i class="bi bi-envelope-plus-fill"></i>
-            <i class="bi bi-bell-fill"></i>
-            <i class="bi bi-question-circle"></i>
-            <Link to="/dashboard/profile">
-              <i class="bi bi-person-circle"></i>
-            </Link>
-          </div>
-          <Outlet />
-        </div>
+        <Navbar/>
       </div>
     </div>
   );
