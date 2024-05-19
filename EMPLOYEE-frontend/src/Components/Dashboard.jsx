@@ -1,11 +1,16 @@
-import React from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import Navbar from "./Navbar";
 
 
+
+
 const Dashboard = () => {
+
+
+
   const navigate = useNavigate()
   axios.defaults.withCredentials = true
   const handleLogout = () => {
@@ -16,8 +21,10 @@ const Dashboard = () => {
         }
       })
   }
+
+
   return (
-    <div className="container-fluid hover">
+    <div className="container-fluid hover tw-bg-base-300 tw-text-base-content ">
       <div className="row flex-nowrap">
         <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark hover:bg-gray-900">
           <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
@@ -63,7 +70,7 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Category</span>
                 </Link>
               </li> */}
-              <li className="w-100">
+              <li className="w-100 ">
                 <Link
                   to="/dashboard/timesheet"
                   className="nav-link text-white px-0 align-middle"
@@ -148,7 +155,11 @@ const Dashboard = () => {
             </ul>
           </div>
         </div>
-        <Navbar/>
+
+<Navbar/>
+
+
+       
       </div>
     </div>
   );

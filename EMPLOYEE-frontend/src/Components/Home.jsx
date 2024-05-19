@@ -19,10 +19,9 @@ import {
   CRow,
   CWidgetStatsA,
 
-} 
-from '@coreui/react'
-// import CIcon from '@coreui/icons-react'
-// import { cilCloudDownload} from '@coreui/icons'
+} from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilCloudDownload} from '@coreui/icons'
 import MainChart from './MainChart'
 
 const Home = () => {
@@ -173,7 +172,7 @@ const Home = () => {
   }
   return (
     <>
-      <div className='w-100 tw-px-5 tw-bg-gray-700'>
+      <div className='w-100 tw-px-5'>
         <div className='tw-flex tw-justify-between tw-items-center px-4'>
           <h2
             className={`py-5 tw-font-bold tw-pl-5`}
@@ -192,10 +191,9 @@ const Home = () => {
         }
 
 
-
         <JoinMeeting meeting={meeting} />
 
-        <CCard className="mb-4">
+        {/* <CCard className="mb-4">
         <CCardBody>
           <CRow>
             <CCol sm={5}>
@@ -206,7 +204,7 @@ const Home = () => {
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
-                {/* <CIcon icon={cilCloudDownload} /> */}
+                <CIcon icon={cilCloudDownload} />
               </CButton>
               <CButtonGroup className="float-end me-3">
                 {['Day', 'Month', 'Year'].map((value) => (
@@ -248,7 +246,7 @@ const Home = () => {
             ))}
           </CRow>
         </CCardFooter>
-      </CCard>
+      </CCard> */}
 
 
         {/* <div className='tw-px-5 tw-bg-gray-800'>
@@ -640,4 +638,4 @@ const Home = () => {
 
 export default Home
 
-//done
+
