@@ -2,16 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 
 const Stopwatch = () => {
-  const [task, setTask] = useState(""); // State for the task description
+  const [task, setTask] = useState("");
   const [projectName, setProjectName] = useState("");
-  const [tags, setTags] = useState([]); // State for storing selected tags
+  const [tags, setTags] = useState([]);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [pausedTime, setPausedTime] = useState(0);
   const [projects, setProjects] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false); // State to control the visibility of the dropdown
-  const [submittedDetails, setSubmittedDetails] = useState([]); // State to store submitted details
-  const intervalRef = useRef(); // Ref to store the interval reference
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [submittedDetails, setSubmittedDetails] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+  const intervalRef = useRef();
 
   useEffect(() => {
     fetchProjects();
@@ -20,8 +21,8 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/project_list');
-      setProjects(response.data); // Update with the response data directly
+      const response = await axios.get('https://backendemp.vercel.app/auth/project_list');
+      setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -29,8 +30,8 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/tag_list');
-      setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false }))); // Initialize tags with unchecked state
+      const response = await axios.get('https://backendemp.vercel.app/auth/tag_list');
+      setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
     } catch (error) {
       console.error('Error fetching tags:', error);
     }
@@ -49,32 +50,33 @@ const Stopwatch = () => {
       return;
     }
     setIsRunning(true);
-    startTimer(); // Start the timer
+    startTimer();
   };
 
   const handlePause = () => {
     setIsRunning(false);
-    clearInterval(intervalRef.current); // Clear the interval
+    clearInterval(intervalRef.current);
     setPausedTime(timeElapsed);
   };
 
   const handleResume = () => {
     setIsRunning(true);
-    startTimer(); // Resume the timer
+    startTimer();
   };
 
   const handleReset = () => {
-    clearInterval(intervalRef.current); // Clear the interval
+    clearInterval(intervalRef.current);
     setTimeElapsed(0);
     setPausedTime(0);
     setIsRunning(false);
     setTask("");
     setProjectName("");
-    // Reset tags to their initial state (unchecked)
     setTags(tags.map(tag => ({ ...tag, checked: false })));
   };
 
   const handleRun = (index) => {
+    if (isRunning) return; // Prevent running if already running
+    setEditIndex(index);
     const startTime = Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
@@ -86,23 +88,23 @@ const Stopwatch = () => {
   };
 
   const handleStop = () => {
+    if (!isRunning) return; // Prevent stopping if already stopped
     setIsRunning(false);
     clearInterval(intervalRef.current);
   };
 
   const handleTagClick = () => {
-    setShowDropdown(!showDropdown); // Toggle the visibility of the dropdown
+    setShowDropdown(!showDropdown);
   };
 
   const handleTagSelect = (tagName) => {
-    // Toggle the checked state of the clicked tag
     const updatedTags = tags.map(tag =>
       tag.name === tagName ? { ...tag, checked: !tag.checked } : tag
     );
     setTags(updatedTags);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!task.trim()) {
       alert("Task description is required!");
       return;
@@ -113,17 +115,41 @@ const Stopwatch = () => {
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
 
-    // Store the submitted details
     const newDetails = {
-      projectName: projectName,
-      task: task,
+      projectName,
+      task,
       tags: selectedTags,
       timeTaken: formatTime(timeElapsed)
     };
-    setSubmittedDetails([...submittedDetails, newDetails]);
+    try {
+      const response = await axios.post('https://backendemp.vercel.app/auth/add_project_data', {
+        task,
+        projectName,
+        tags: selectedTags,
+        timeElapsed
+      });
+      setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
+      handleReset();
+    } catch (error) {
+      console.error('Error adding project:', error);
+    }
+  };
 
-    // Clear form fields and stop the timer
-    handleReset();
+  const handleUpdateSubmit = async (index) => {
+    const detail = submittedDetails[index];
+    const projectId = detail.projectid; // Retrieve projectid from project detail object
+    try {
+      await axios.post(`https://backendemp.vercel.app/auth/update_project_data/${projectId}`, {
+        projectid: projectId,
+        task: detail.task,
+        projectName: detail.projectName,
+        tags: detail.tags,
+        timeElapsed: timeToMilliseconds(detail.timeTaken)
+      });
+      setEditIndex(null);
+    } catch (error) {
+      console.error('Error updating project:', error);
+    }
   };
 
   const formatTime = (milliseconds) => {
@@ -149,10 +175,9 @@ const Stopwatch = () => {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }} // Adjust border radius for left input
+            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
           />
           <div className="tw-relative tw-flex-1">
-            {/* Project dropdown */}
             <select
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
@@ -166,16 +191,14 @@ const Stopwatch = () => {
               ))}
             </select>
           </div>
-          <div className="absolute tw-right ">
-            {/* Tag symbol */}
+          <div className="absolute tw-right">
             <div
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
-              onClick={handleTagClick} // Handle click to show dropdown
-              style={{ marginRight: '8px' }} // Reduce space between tag and project
+              onClick={handleTagClick}
+              style={{ marginRight: '8px' }}
             >
               {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
             </div>
-            {/* Dropdown */}
             {showDropdown && (
               <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md">
                 <ul>
@@ -197,9 +220,9 @@ const Stopwatch = () => {
           {!isRunning ? (
             <button
               onClick={handleStart}
-              disabled={!projectName.trim()} // Disable button if projectName is empty or contains only whitespace
+              disabled={!projectName.trim()}
               className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${!projectName.trim() && "tw-opacity-50 tw-cursor-not-allowed"}`}
-              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} // Adjust border radius for start button
+              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               Start
             </button>
@@ -241,40 +264,47 @@ const Stopwatch = () => {
         )}
       </div>
 
-      {/* Submitted details table */}
       <div className="tw-p-4">
         <table className="tw-mt-4 tw-border tw-border-collapse tw-w-full">
           <thead>
             <tr>
-              <th className="tw-border tw-p-2 tw-w-1/4">Project Name</th>
-              <th className="tw-border tw-p-2 tw-w-1/4">Description</th>
-              <th className="tw-border tw-p-2 tw-w-1/4">Tag</th>
-              <th className="tw-border tw-p-2 tw-w-1/4">Time Taken</th>
-              <th className="tw-border tw-p-2 tw-w-1/4">Actions</th> {/* New column for actions */}
+              <th className="tw-border tw-p-2 tw-w-1/5">Project Name</th>
+              <th className="tw-border tw-p-2 tw-w-1/5">Description</th>
+              <th className="tw-border tw-p-2 tw-w-1/5">Tag</th>
+              <th className="tw-border tw-p-2 tw-w-1/5">Time Taken</th>
+              <th className="tw-border tw-p-2 tw-w-1/5">Actions</th>
             </tr>
           </thead>
           <tbody>
             {submittedDetails.map((detail, index) => (
               <tr key={index}>
-                <td className="tw-border tw-p-2 tw-w-1/4">{detail.projectName}</td>
-                <td className="tw-border tw-p-2 tw-w-1/4">{detail.task}</td>
-                <td className="tw-border tw-p-2 tw-w-1/4">{detail.tags.join(", ")}</td>
-                <td className="tw-border tw-p-2 tw-w-1/4">{detail.timeTaken}</td>
-                <td className="tw-border tw-p-2 tw-w-1/4">
-                  {!isRunning ? ( 
+                <td className="tw-border tw-p-2 tw-w-1/5">{detail.projectName}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">{detail.task}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">{detail.tags.join(", ")}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">
+                  {editIndex !== index ? (
                     <button
-                      onClick={() => handleRun(index)} 
+                      onClick={() => handleRun(index)}
                       className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
                     >
                       Run
                     </button>
                   ) : (
-                    <button
-                      onClick={handleStop}
-                      className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-                    >
-                      Stop
-                    </button>
+                    <>
+                      <button
+                        onClick={handleStop}
+                        className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded tw-mr-2"
+                      >
+                        Stop
+                      </button>
+                      <button
+                        onClick={() => handleUpdateSubmit(index)}
+                        className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
+                      >
+                        Submit
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

@@ -19,9 +19,10 @@ import {
   CRow,
   CWidgetStatsA,
 
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilCloudDownload} from '@coreui/icons'
+}
+  from '@coreui/react'
+// import CIcon from '@coreui/icons-react'
+// import { cilCloudDownload} from '@coreui/icons'
 import MainChart from './MainChart'
 
 const Home = () => {
@@ -50,48 +51,6 @@ const Home = () => {
 
     return () => clearInterval(intervalId); // Cleanup the interval on component unmount
   }, [colors.length]);
-
-
-  //add data from join meeting
-  const meeting = [
-    {
-      title: "Meeting Title 1",
-      date: "2024-05-06",
-      time: "14:00",
-      meetingID: "123456789",
-    },
-    {
-      title: "Meeting Title 2",
-      date: "2024-05-06",
-      time: "15:00",
-      meetingID: "123456789",
-    },
-    {
-      title: "Meeting Title 3",
-      date: "2024-05-06",
-      time: "16:00",
-      meetingID: "123456789",
-    },
-    {
-      title: "Meeting Title 4",
-      date: "2024-05-06",
-      time: "17:00",
-      meetingID: "123456789",
-    }
-    ,
-    {
-      title: "Meeting Title 3",
-      date: "2024-05-06",
-      time: "16:00",
-      meetingID: "123456789",
-    },
-    {
-      title: "Meeting Title 4",
-      date: "2024-05-06",
-      time: "17:00",
-      meetingID: "123456789",
-    }
-  ]
 
   // // State variables
   // const [isMeetingRunning, setIsMeetingRunning] = useState(false);
@@ -172,7 +131,7 @@ const Home = () => {
   }
   return (
     <>
-      <div className='w-100 tw-px-5'>
+      <div className='w-100 tw-px-5 tw-bg-gray-700'>
         <div className='tw-flex tw-justify-between tw-items-center px-4'>
           <h2
             className={`py-5 tw-font-bold tw-pl-5`}
@@ -191,62 +150,63 @@ const Home = () => {
         }
 
 
-        <JoinMeeting meeting={meeting} />
 
-        {/* <CCard className="mb-4">
-        <CCardBody>
-          <CRow>
-            <CCol sm={5}>
-              <h4 id="traffic" className="card-title mb-0">
-                Traffic
-              </h4>
-              <div className="small text-body-secondary">January - July 2023</div>
-            </CCol>
-            <CCol sm={7} className="d-none d-md-block">
-              <CButton color="primary" className="float-end">
-                <CIcon icon={cilCloudDownload} />
-              </CButton>
-              <CButtonGroup className="float-end me-3">
-                {['Day', 'Month', 'Year'].map((value) => (
-                  <CButton
-                    color="outline-secondary"
-                    key={value}
-                    className="mx-0"
-                    active={value === 'Month'}
-                  >
-                    {value}
-                  </CButton>
-                ))}
-              </CButtonGroup>
-            </CCol>
-          </CRow>
-          <MainChart />
-        </CCardBody>
-        <CCardFooter>
-          <CRow
-            xs={{ cols: 1, gutter: 4 }}
-            sm={{ cols: 2 }}
-            lg={{ cols: 4 }}
-            xl={{ cols: 5 }}
-            className="mb-2 text-center"
-          >
-            {progressExample.map((item, index, items) => (
-              <CCol
-                className={classNames({
-                  'd-none d-xl-block': index + 1 === items.length,
-                })}
-                key={index}
-              >
-                <div className="text-body-secondary">{item.title}</div>
-                <div className="fw-semibold text-truncate">
-                  {item.value} ({item.percent}%)
-                </div>
-                <CProgress thin className="mt-2" color={item.color} value={item.percent} />
+        <JoinMeeting />
+
+        <CCard className="mb-4">
+          <CCardBody>
+            <CRow>
+              <CCol sm={5}>
+                <h4 id="traffic" className="card-title mb-0">
+                  Traffic
+                </h4>
+                <div className="small text-body-secondary">January - July 2023</div>
               </CCol>
-            ))}
-          </CRow>
-        </CCardFooter>
-      </CCard> */}
+              <CCol sm={7} className="d-none d-md-block">
+                <CButton color="primary" className="float-end">
+                  {/* <CIcon icon={cilCloudDownload} /> */}
+                </CButton>
+                <CButtonGroup className="float-end me-3">
+                  {['Day', 'Month', 'Year'].map((value) => (
+                    <CButton
+                      color="outline-secondary"
+                      key={value}
+                      className="mx-0"
+                      active={value === 'Month'}
+                    >
+                      {value}
+                    </CButton>
+                  ))}
+                </CButtonGroup>
+              </CCol>
+            </CRow>
+            <MainChart />
+          </CCardBody>
+          <CCardFooter>
+            <CRow
+              xs={{ cols: 1, gutter: 4 }}
+              sm={{ cols: 2 }}
+              lg={{ cols: 4 }}
+              xl={{ cols: 5 }}
+              className="mb-2 text-center"
+            >
+              {progressExample.map((item, index, items) => (
+                <CCol
+                  className={classNames({
+                    'd-none d-xl-block': index + 1 === items.length,
+                  })}
+                  key={index}
+                >
+                  <div className="text-body-secondary">{item.title}</div>
+                  <div className="fw-semibold text-truncate">
+                    {item.value} ({item.percent}%)
+                  </div>
+                  <CProgress thin className="mt-2" color={item.color} value={item.percent} />
+                </CCol>
+              ))}
+            </CRow>
+          </CCardFooter>
+        </CCard>
 
 
         {/* <div className='tw-px-5 tw-bg-gray-800'>
@@ -637,5 +597,4 @@ const Home = () => {
 }
 
 export default Home
-
 
