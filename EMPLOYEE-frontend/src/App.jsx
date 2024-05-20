@@ -26,12 +26,15 @@ import Tag from "./Components/Tag";
 import CreateMeeting from "./Components/CreateMeeting";
 
 function App() {
+
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
-        <Route path="/admindashboard" element={<AdminDashboard />}>
+        <Route path="/admindashboard" element={<AdminDashboard  />}>
+        <Route path="" element={<Home />}></Route>
           <Route
             path="/admindashboard/employee" 
             element={<Employee />}
@@ -55,7 +58,7 @@ function App() {
           <Route path="/admindashboard/CreateMeeting" element={<CreateMeeting />}></Route>
         </Route>
         <Route path="/adminlogin" element={<AdminLogin />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route path="/dashboard" element={<Dashboard  />}>
           <Route path="" element={<Home />}></Route>
           {/* <Route path='/dashboard/category' element={<Category/>}></Route>  */}
           <Route path="/dashboard/profile" element={<Profile />}></Route>
