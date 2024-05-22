@@ -169,19 +169,20 @@ const Stopwatch = () => {
     <>
       <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
         <div className="tw-mb-4 tw-border-2 tw-border-black tw-rounded tw-p-2 tw-flex tw-w-full">
-          <input
-            type="text"
-            placeholder="What are you working on?"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
-          />
+        <input
+          type="text"
+          placeholder="What are you working on?"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1 "
+          style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0, color: 'black' }}
+        />
           <div className="tw-relative tw-flex-1">
             <select
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
+              style={{color: 'black'}}
             >
               <option value="">Select Project</option>
               {projects.map((project, index) => (
@@ -200,7 +201,7 @@ const Stopwatch = () => {
               {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
             </div>
             {showDropdown && (
-              <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md">
+              <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md" style={{color: 'black'}}>
                 <ul>
                   {tags.map((tag, index) => (
                     <li key={index} className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
@@ -208,6 +209,7 @@ const Stopwatch = () => {
                         type="checkbox"
                         checked={tag.checked}
                         onChange={() => handleTagSelect(tag.name)}
+                        
                       />
                       {tag.name}
                     </li>

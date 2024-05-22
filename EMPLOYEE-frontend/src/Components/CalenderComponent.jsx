@@ -158,6 +158,7 @@ const CalendarComponent = () => {
                 bottom: 0,
                 backgroundColor: 'rgba(0, 0, 0, 0.75)',
                 zIndex: 1000,
+                color: 'black'
               },
               content: {
                 position: 'absolute',
@@ -172,6 +173,7 @@ const CalendarComponent = () => {
                 maxWidth: '90%',
                 zIndex: 1001,
               },
+              
             }}
           >
             <h2>{newEvent.id ? 'Edit Event' : 'Add Event'}</h2>

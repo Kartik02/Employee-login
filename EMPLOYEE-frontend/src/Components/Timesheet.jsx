@@ -74,7 +74,7 @@ const Timesheet = () => {
         <table className="tw-w-full tw-border-collapse tw-border tw-border-gray-400">
           <thead>
             <tr>
-              <th className="tw-border tw-border-gray-400 tw-px-4 tw-py-2">Project Name</th>
+              <th className="tw-border tw-border-gray-400 tw-px-4 tw-py-2" >Project Name</th>
               {weekDates.map((date, index) => (
                 <th key={index} className="tw-border tw-border-gray-400 tw-px-4 tw-py-2">
                   {`${date.day}, ${date.date}`}
@@ -92,6 +92,7 @@ const Timesheet = () => {
                     value={row.projectName}
                     onChange={(e) => handleChange(rowIndex, 'projectName', e.target.value)}
                     className="tw-w-full tw-outline-none"
+                    style={{color: 'black'}}
                   >
                     <option value="">Select Project</option>
                     {projects.map((project, index) => (
@@ -108,6 +109,7 @@ const Timesheet = () => {
                       className="tw-w-full tw-outline-none"
                       value={cell}
                       onChange={(e) => handleChange(rowIndex, weekDates[cellIndex].day, e.target.value)}
+                      style={{color: 'black'}}
                     />
                   </td>
                 ))}
