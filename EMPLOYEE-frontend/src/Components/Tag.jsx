@@ -77,7 +77,7 @@ function Tag() {
         <tbody>
           {tags.map((tag, index) => (
             <tr key={index}>
-              <td>{tag.id}</td>
+              <td>{index + 1}</td>
               <td>{tag.tag}</td>
             </tr>
           ))}
