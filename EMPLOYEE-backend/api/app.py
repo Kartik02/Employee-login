@@ -1,17 +1,20 @@
 from flask import Flask, jsonify, request, session, redirect, url_for
 from flask_cors import CORS
-from flask_mail import Mail,Message
+from flask_mail import Mail, Message
 from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
 from datetime import datetime
 import ssl
-import random
 import base64
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, FileField, DecimalField, SelectField
+from wtforms import StringField, PasswordField, FileField, DecimalField, SelectField, DateField, TimeField, EmailField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired
+from flask_admin.form import rules
+from bson import ObjectId
+import random
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -32,7 +35,7 @@ client = MongoClient(
     connectTimeoutMS=30000
 )
 
-# Update this with your MongoDB URI
+  # Update this with your MongoDB URI
 db = client['employeee']
 
 # Mail configuration
@@ -44,14 +47,14 @@ app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
 app.config['MAIL_PASSWORD'] = 'app_password'
 mail = Mail(app)
 
-#models
+
 class AdminDataForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
 
 class EmployeeDataForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
     empid = StringField('Employee ID', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     salary = DecimalField('Salary', validators=[DataRequired()])
@@ -63,28 +66,53 @@ class LeavesForm(FlaskForm):
     employeeId = StringField('Employee ID', validators=[DataRequired()])
     reason = StringField('Reason', validators=[DataRequired()])
     numberOfDays = DecimalField('Number of Days', validators=[DataRequired()])
-    fromDate = StringField('From Date', validators=[DataRequired()])
-    toDate = StringField('To Date', validators=[DataRequired()])
-    
-class ProjectForm(FlaskForm):
-    projectName = StringField('Project Name', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
-    tags = StringField('Tags', validators=[DataRequired()])
-    timeElapsed = DecimalField('Time Elapsed', validators=[DataRequired()])
+    fromDate = DateField('From Date', validators=[DataRequired()], format='%Y-%m-%d')
+    toDate = DateField('To Date', validators=[DataRequired()], format='%Y-%m-%d')
 
-
-class ProjectForm(FlaskForm):
+class ProjectListForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
 
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
-    start = StringField('Start', validators=[DataRequired()])
-    end = StringField('End', validators=[DataRequired()])
-    allDay = StringField('All Day')
+    start = DateTimeField('Start', validators=[DataRequired()], format='%Y-%m-%d %H:%M:%S')
+    end = DateTimeField('End', validators=[DataRequired()], format='%Y-%m-%d %H:%M:%S')
+    allDay = BooleanField('All Day')
+
+class TagListForm(FlaskForm):
+    tag = StringField('Tag', validators=[DataRequired()])
+
+class ProjectForm(FlaskForm):
+    projectid = StringField('Project ID', validators=[DataRequired()])
+    projectName = StringField('Project Name', validators=[DataRequired()])
+    task = StringField('Task', validators=[DataRequired()])
+    tags = StringField('Tags', validators=[DataRequired()])
+    timeElapsed = DecimalField('Time Elapsed', validators=[DataRequired()])
+
+class MeetingForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    meeting_code = StringField('Meeting Code', validators=[DataRequired()])
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    time = TimeField('Time', format='%H:%M:%S', validators=[DataRequired()])
+    attendees = StringField('Attendees', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+
+class MeetingView(ModelView):
+    column_list = ('title', 'meeting_code', 'date', 'time', 'attendees', 'description')
+
+    def scaffold_form(self):
+        return MeetingForm
+
+    def on_model_change(self, form, model, is_created):
+        model['date'] = form.date.data.strftime('%Y-%m-%d')
+        model['time'] = form.time.data.strftime('%H:%M:%S')
+
+    def on_form_prefill(self, form, id):
+        meeting = self.get_meeting_data(id)
+        if meeting:
+            form.date.data = datetime.strptime(meeting['date'], '%Y-%m-%d').date()
+            form.time.data = datetime.strptime(meeting['time'], '%H:%M:%S').time()
 
 
-
-# views
 class AdminDataView(ModelView):
     column_list = ('email', 'password')
     form = AdminDataForm
@@ -97,24 +125,31 @@ class LeavesView(ModelView):
     column_list = ('name', 'employeeId', 'reason', 'numberOfDays', 'fromDate', 'toDate')
     form = LeavesForm
 
-class ProjectView(ModelView):
+class ProjectListView(ModelView):
     column_list = ('name',)
+    form = ProjectListForm
+
+class TagListView(ModelView):
+    column_list = ('tag',)
+    form = TagListForm
+    
+class ProjectView(ModelView):
+    column_list = ('projectid', 'projectName', 'task', 'tags', 'timeElapsed')
     form = ProjectForm
 
 class EventView(ModelView):
     column_list = ('title', 'start', 'end', 'allDay')
     form = EventForm
-    
- 
-
 
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(AdminDataView(db.admin_data, 'Admin Data'))
 admin.add_view(EmployeeDataView(db.emp_data, 'Employee Data'))
 admin.add_view(LeavesView(db.leaves, 'Leaves'))
-admin.add_view(ProjectView(db.project_list, 'Projects'))
+admin.add_view(ProjectListView(db.project_list, 'Project List'))
+admin.add_view(TagListView(db.tag_list, 'Tag List'))
+admin.add_view(ProjectView(db.projects, 'Projects'))
 admin.add_view(EventView(db.events, 'Events'))
-
+admin.add_view(MeetingView(db.meeting, 'Meetings'))
 
 def initialize_db():
     # Check if collections already exist
@@ -129,10 +164,15 @@ def initialize_db():
         db.create_collection('leaves')
     if 'project_list' not in collections:
         db.create_collection('project_list')
+    if 'tag_list' not in collections:
+        db.create_collection('tag_list')
+    if 'projects' not in collections:
+        db.create_collection('projects')
     if 'events' not in collections:
         db.create_collection('events')
+    if 'meeting' not in collections:
+        db.create_collection('meeting')
 
-        
     # Create indexes
     db.admin_data.create_index('email', unique=True)
     db.emp_data.create_index('email', unique=True)
@@ -140,7 +180,6 @@ def initialize_db():
     db.leaves.create_index('employeeId', unique=True)
     db.project_list.create_index('name', unique=True)
     db.events.create_index('title', unique=True)
-    
 
 
 initialize_db()
@@ -161,6 +200,14 @@ def adminlogin():
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+
+@app.route('/auth/category', methods=['GET'])
+def get_categories():
+    categories = [
+        {'id': '1', 'name': 'HR'},
+        {'id': '2', 'name': 'Tech'}
+    ]
+    return jsonify({'Status': True, 'Result': categories}), 200
 
 @app.route('/auth/add_employee', methods=['POST'])
 def addEmp():
@@ -380,6 +427,119 @@ def get_projects():
         print(f"Error fetching projects: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
+@app.route('/auth/tag_list', methods=['GET'])
+def get_tag_list():
+    tags = db.tag_list.find({}, {'_id': 0, 'tag': 1})
+    tags_list = [{'tag': tag['tag']} for tag in tags]
+    return jsonify({'tags': tags_list})
+
+@app.route('/auth/add_tag', methods=['POST'])
+def add_tag():
+    data = request.json
+    tag_name = data.get('tag')
+
+    existing_tag = db.tag_list.find_one({'tag': tag_name})
+    if existing_tag:
+        return jsonify({'error': 'Tag already exists'}), 400
+
+    new_tag = {'tag': tag_name}
+    db.tag_list.insert_one(new_tag)
+    return jsonify({'message': 'Tag added successfully'}), 201
+
+@app.route('/auth/add_meeting', methods=['POST'])
+def add_meeting():
+    data = request.json
+    title = data.get('title')
+    meeting_code = data.get('meeting_code')
+    date = data.get('date')
+    time = data.get('time')
+    attendees = data.get('attendees')
+    description = data.get('description')
+
+    new_meeting = {
+        'title': title,
+        'meeting_code': meeting_code,
+        'date': date,
+        'time': time,
+        'attendees': attendees,
+        'description': description
+    }
+
+    db.meeting.insert_one(new_meeting)
+    return jsonify({'message': 'Meeting added successfully!'}), 201
+
+@app.route('/auth/meetings', methods=['GET'])
+def get_meetings():
+    # Query the MongoDB collection to fetch all meetings
+    meetings_cursor = db.meeting.find()
+
+    # Initialize list to store serialized meeting data
+    meetings_data = []
+
+    # Iterate over the cursor and serialize meeting data
+    for meeting in meetings_cursor:
+        meeting_data = {
+            'title': meeting['title'],
+            'meeting_code': meeting['meeting_code'],
+            'date': meeting['date'],
+            'time': meeting['time'],
+            'attendees': meeting['attendees']
+        }
+        meetings_data.append(meeting_data)
+
+    # Return the serialized meeting data as JSON response
+    return jsonify(meetings_data), 200
+
+@app.route('/auth/project_list', methods=['GET'])
+def get_project_list():
+    projects = db.project_list.find({}, {'_id': 0, 'name': 1})
+    project_names = [project['name'] for project in projects]
+    return jsonify(project_names)
+
+@app.route('/auth/add_project_data', methods=['POST'])
+def add_project_data():
+    data = request.json
+    projectName = data.get('projectName')
+    task = data.get('task')  
+    tags = data.get('tags') 
+    timeElapsed = data.get('timeElapsed')
+    
+    # Generate projectid using ObjectId
+    projectid = str(ObjectId())
+
+    new_project = {
+        'projectid': projectid,
+        'projectName': projectName,
+        'task': task,
+        'tags': tags,
+        'timeElapsed': timeElapsed
+    }
+    result = db.projects.insert_one(new_project)
+    
+    if result.inserted_id:
+        return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
+    else:
+        return jsonify({'error': 'Failed to add project data.'}), 500
+
+@app.route('/auth/update_project_data/<index>', methods=['POST'])
+def update_project_data(index):
+    data = request.json
+    projectid = data.get('projectid')
+    task = data.get('task')
+    projectName = data.get('projectName')
+    tags = data.get('tags')
+    timeElapsed = data.get('timeElapsed')
+
+    result = db.projects.update_one(
+        {'projectid': index},
+        {'$set': {'projectid': projectid, 'task': task, 'projectName': projectName, 'tags': tags, 'timeElapsed': timeElapsed}}
+    )
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'Project data updated successfully!'}), 200
+    else:
+        return jsonify({'error': 'Failed to update project data.'}), 500
+    
 @app.route('/auth/forgot_password', methods=['POST'])
 def forgot_password():
     data = request.json

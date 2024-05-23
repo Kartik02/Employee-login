@@ -54,6 +54,7 @@ const Leave = () => {
               value={formData.name}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
           <div>
@@ -65,6 +66,7 @@ const Leave = () => {
               value={formData.employeeId}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
         </div>
@@ -77,6 +79,7 @@ const Leave = () => {
               value={formData.reason}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
           <div>
@@ -88,6 +91,7 @@ const Leave = () => {
               value={formData.numberOfDays}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
         </div>
@@ -101,6 +105,7 @@ const Leave = () => {
               value={formData.fromDate}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
           <div>
@@ -112,6 +117,7 @@ const Leave = () => {
               value={formData.toDate}
               onChange={handleChange}
               className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
+              style={{color: 'black'}}
             />
           </div>
         </div>
