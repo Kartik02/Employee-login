@@ -131,7 +131,7 @@ const Home = () => {
   }
   return (
     <>
-      <div className='w-100 tw-px-5 tw-bg-gray-700'>
+      <div className='w-100 tw-px-5 '>
         <div className='tw-flex tw-justify-between tw-items-center px-4'>
           <h2
             className={`py-5 tw-font-bold tw-pl-5`}
