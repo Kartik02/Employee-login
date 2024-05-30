@@ -53,8 +53,8 @@ const Leave = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
           <div>
@@ -65,8 +65,8 @@ const Leave = () => {
               name="employeeId"
               value={formData.employeeId}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
         </div>
@@ -78,8 +78,8 @@ const Leave = () => {
               name="reason"
               value={formData.reason}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
           <div>
@@ -90,8 +90,8 @@ const Leave = () => {
               name="numberOfDays"
               value={formData.numberOfDays}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
         </div>
@@ -104,8 +104,8 @@ const Leave = () => {
               name="fromDate"
               value={formData.fromDate}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
           <div>
@@ -116,8 +116,8 @@ const Leave = () => {
               name="toDate"
               value={formData.toDate}
               onChange={handleChange}
-              className="tw-w-full tw-border tw-rounded-md tw-px-3 tw-py-2"
-              style={{color: 'black'}}
+              className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+
             />
           </div>
         </div>

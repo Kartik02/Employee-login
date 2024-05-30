@@ -11,7 +11,7 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get("https://backendemp.vercel.app/auth/employee", {
+      .get("https://rmbackend.vercel.app/auth/employee", {
         withCredentials: true,
       })
       .then((response) => {
@@ -28,7 +28,7 @@ function Profile() {
   const handleEmailChange = () => {
     axios
       .post(
-        "https://backendemp.vercel.app/auth/update_employee",
+        "https://rmbackend.vercel.app/auth/update_employee",
         { email: editedEmail },
         { withCredentials: true }
       )
@@ -44,7 +44,7 @@ function Profile() {
   const handlePasswordChange = () => {
     axios
       .post(
-        "https://backendemp.vercel.app/auth/update_employee",
+        "https://rmbackend.vercel.app/auth/update_employee",
         { password: editedPassword },
         { withCredentials: true }
       )
@@ -63,7 +63,7 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("https://backendemp.vercel.app/auth/upload_profile", formData, {
+      .post("https://rmbackend.vercel.app/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -88,11 +88,11 @@ function Profile() {
 
   return (
     <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="card mt-5">
-            <div className="card-body">
-              <h1 className="card-title tw-font-bold tw-text-2xl">
+      <div className="row justify-content-center ">
+        <div className="col-md-8 tw-border tw-border-base-content mt-5 tw-rounded">
+          <div className="">
+            <div className="mb-5">
+              <h1 className=" tw-font-bold tw-text-2xl">
                 Profile Settings
               </h1>
               <div className="row">
@@ -104,7 +104,7 @@ function Profile() {
                     >
                       Profile Photo
                     </label>
-                    <small className="text-muted d-block mb-2">
+                    <small className=" d-block mb-2">
                       Formats: png, jpg, gif. Max size: 1 MB.
                     </small>
                     <div className="d-flex align-items-center mb-3">
@@ -137,11 +137,11 @@ function Profile() {
                   </div>
                 </div>
                 <div className="col-md-8">
-                  <div className="border-top pt-4">
+                  <div className="tw-border-t tw-border-base-content pt-4">
                     <h2 className="card-title tw-font-semibold">
                       Personal Info
                     </h2>
-                    <p className="text-muted mb-4">
+                    <p className=" mb-4">
                       Your log-in credentials and the name that is displayed in
                       reports.
                     </p>
@@ -156,7 +156,7 @@ function Profile() {
                           </label>
                           <input
                             type="text"
-                            className="form-control"
+                            className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
                             id="name"
                             value={empData?.name || ""}
                             readOnly
@@ -172,7 +172,7 @@ function Profile() {
                           <div className="input-group">
                             <input
                               type="email"
-                              className="form-control"
+                              className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
                               value={editedEmail}
                               onChange={(e) => setEditedEmail(e.target.value)}
                             />
@@ -200,7 +200,7 @@ function Profile() {
                           <div className="input-group">
                             <input
                               type="password"
-                              className="form-control"
+                              className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
                               value={editedPassword}
                               onChange={(e) =>
                                 setEditedPassword(e.target.value)

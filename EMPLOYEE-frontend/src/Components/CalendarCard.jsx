@@ -16,7 +16,7 @@ const CalendarCard = ({ events, onDateClick, onEventClick, onTitleEdit }) => {
                 <h5 className="tw-card-title">Calendar</h5>
             </div>
             <div className="tw-card-body">
-                <div className="tw-row" style={{color: 'black'}}>
+                <div className="tw-row" >
                     <div className="tw-col">
                         <FullCalendar
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
@@ -31,7 +31,7 @@ const CalendarCard = ({ events, onDateClick, onEventClick, onTitleEdit }) => {
                                 center: "title",
                                 right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             }}
-                            
+
                         />
                     </div>
                 </div>

@@ -10,16 +10,13 @@ const CalendarComponent = () => {
   const [newEvent, setNewEvent] = useState({ id: '', title: '', start: '', end: '', allDay: false });
 
   useEffect(() => {
-    // Fetch events from the database
     axios.get('https://backendemp.vercel.app/auth/get_events')
       .then(response => {
         setCurrentEvents(response.data);
-        // Store events in local storage
         localStorage.setItem('events', JSON.stringify(response.data));
       })
       .catch(error => {
         console.error('Error fetching events:', error);
-        // If fetching from database fails, try to load events from local storage
         const storedEvents = localStorage.getItem('events');
         if (storedEvents) {
           setCurrentEvents(JSON.parse(storedEvents));
@@ -67,13 +64,12 @@ const CalendarComponent = () => {
         start: newEvent.start,
         end: newEvent.end,
         allDay: newEvent.allDay,
-        creationDate: new Date().toISOString(), // Store the creation date
+        creationDate: new Date().toISOString(),
       };
 
       axios.post('https://backendemp.vercel.app/auth/add_event', newEventObj)
         .then(response => {
           setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
-          // Update local storage with new events
           localStorage.setItem('events', JSON.stringify([...currentEvents, { id: response.data.id, ...newEventObj }]));
           handleModalClose();
         })
@@ -84,45 +80,24 @@ const CalendarComponent = () => {
   };
 
   const handleEditEvent = () => {
-    if (!newEvent || !newEvent.start) {
-      console.error('Invalid newEvent object:', newEvent);
-      return;
+    if (newEvent.id && newEvent.title) {
+      axios.post(`https://backendemp.vercel.app/auth/update_event/${newEvent.id}`, { title: newEvent.title })
+        .then(response => {
+          setCurrentEvents(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event));
+          localStorage.setItem('events', JSON.stringify(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event)));
+          handleModalClose();
+        })
+        .catch(error => {
+          console.error('Error updating event:', error);
+        });
     }
-
-    const updatedEvents = currentEvents.map(event => {
-      if (event.id === newEvent.id) {
-        return {
-          ...event,
-          title: newEvent.title,
-          start: new Date(newEvent.start).toISOString(), // Convert to UTC format
-          end: new Date(newEvent.end).toISOString(), // Convert to UTC format
-        };
-      }
-      return event;
-    });
-
-    // Send the updated event data to the backend
-    axios.post(`https://backendemp.vercel.app/auth/update_event/${newEvent.id}`, {
-      title: newEvent.title,
-      start: new Date(newEvent.start).toISOString(), // Convert to UTC format
-      end: new Date(newEvent.end).toISOString(), // Convert to UTC format
-    })
-      .then(() => {
-        setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
-        handleModalClose();
-      })
-      .catch(error => {
-        console.error('Error updating event:', error);
-      });
   };
 
-  const handleDeleteEvent = () => {
-    const updatedEvents = currentEvents.filter(event => event.id !== newEvent.id);
-
-    // Send a request to delete the event from the backend
-    axios.post(`https://backendemp.vercel.app/auth/delete_event/${newEvent.id}`)
-      .then(() => {
-        setCurrentEvents(updatedEvents); // Update the events array in the state after the backend request is successful
+  const handleDeleteEvent = (eventId) => {
+    axios.post(`https://backendemp.vercel.app/auth/delete_event`, { id: eventId })
+      .then(response => {
+        setCurrentEvents(currentEvents.filter(event => event.id !== eventId));
+        localStorage.setItem('events', JSON.stringify(currentEvents.filter(event => event.id !== eventId)));
         handleModalClose();
       })
       .catch(error => {
@@ -173,7 +148,7 @@ const CalendarComponent = () => {
                 maxWidth: '90%',
                 zIndex: 1001,
               },
-              
+
             }}
           >
             <h2>{newEvent.id ? 'Edit Event' : 'Add Event'}</h2>
@@ -183,7 +158,7 @@ const CalendarComponent = () => {
               name="title"
               value={newEvent.title}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress} // Add event listener for Enter key
+              onKeyPress={handleKeyPress}
               className="form-control mb-3"
             />
             <div className="d-flex justify-content-between">
@@ -196,7 +171,7 @@ const CalendarComponent = () => {
                     <FaEdit /> Edit
                   </button>
                   <button
-                    onClick={handleDeleteEvent}
+                    onClick={() => handleDeleteEvent(newEvent.id)}
                     className="btn btn-danger"
                   >
                     <FaTrash /> Delete

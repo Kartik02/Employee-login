@@ -19,8 +19,8 @@ function Navbar() {
   // Theme functionality end
 
   return (
-    <div className="col p-0 m-0 tw-w-full">
-      <div className="p-2 d-flex justify-content-md-end justify-content-evenly gap-3 fs-4 shadow tw-w-100">
+    <div className="col p-0 m-0 tw-w-full tw-bg-base-300 tw-text-base-content">
+      <div className="p-2 d-flex justify-content-md-end justify-content-evenly tw-items-center gap-3 fs-4 shadow tw-w-100">
         <button
           className="btn btn-secondary dropdown-toggle"
           type="button"
@@ -62,7 +62,9 @@ function Navbar() {
           <i className="bi bi-person-circle"></i>
         </Link>
       </div>
-      <Outlet />
+      <div className="tw-h-screen">
+        <Outlet />
+      </div>
     </div>
   );
 }
