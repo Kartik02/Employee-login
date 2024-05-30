@@ -32,14 +32,14 @@ const AddProject = () => {
 
     return (
         <div className="tw-d-flex tw-justify-content-center tw-align-items-center tw-mt-3 ">
-            <div className="p-3 rounded w-50 border ">
+            <div className="p-3 rounded w-50 tw-border tw-border-base-content ">
                 <form className="row g-1" onSubmit={handleSubmit}>
                     <label htmlFor="inputName" className="form-label">
                         Name <span className="text-danger">*</span>
                     </label>
                     <input
                         type="text"
-                        className="form-control rounded-0"
+                        className="form-control rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
                         placeholder="Enter Project Name"
                         onChange={(e) => setProject({ ...project, name: e.target.value })}
                         required
