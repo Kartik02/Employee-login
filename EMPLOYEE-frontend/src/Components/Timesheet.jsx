@@ -4,7 +4,7 @@ import axios from 'axios';
 const Timesheet = () => {
   const [rows, setRows] = useState([]);
   const [weekDates, setWeekDates] = useState([]);
-  const [projects, setProjects] = useState([]); 
+  const [projects, setProjects] = useState([]);
 
   const addRow = () => {
     const newRow = { id: rows.length + 1, projectName: '', data: Array(weekDates.length).fill('') };
@@ -13,21 +13,21 @@ const Timesheet = () => {
 
   const generateWeekDates = () => {
     const today = new Date();
-    const currentDay = today.getDay(); 
-    const weekStart = new Date(today); 
-    weekStart.setDate(today.getDate() - currentDay); 
+    const currentDay = today.getDay();
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - currentDay);
     const dates = [];
     for (let i = 0; i < 7; i++) {
       const currentDate = new Date(weekStart);
       currentDate.setDate(weekStart.getDate() + i);
-      const day = currentDate.toLocaleString('en', { weekday: 'short' }); 
-      const date = currentDate.getDate(); 
+      const day = currentDate.toLocaleString('en', { weekday: 'short' });
+      const date = currentDate.getDate();
       dates.push({ day, date });
     }
     setWeekDates(dates);
   };
 
-  
+
   useEffect(() => {
     fetchProjects();
     generateWeekDates();
@@ -36,8 +36,8 @@ const Timesheet = () => {
   // Fetch projects from backend
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/auth/project_list');
-      setProjects(response.data); 
+      const response = await axios.get('https://backendemp.vercel.app/auth/project_list');
+      setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -70,8 +70,8 @@ const Timesheet = () => {
           <span className="tw-border tw-border-3">this week</span>
         </h3>
       </div>
-      <div className="tw-container tw-mx-auto p-4">
-        <table className="tw-w-full tw-border-collapse tw-border tw-border-gray-400">
+      <div className="tw-container tw-mx-auto p-4 tw-overflow-x-auto">
+        <table className=" tw-border-collapse tw-min-w-full tw-border tw-border-gray-400">
           <thead>
             <tr>
               <th className="tw-border tw-border-gray-400 tw-px-4 tw-py-2" >Project Name</th>
@@ -80,7 +80,7 @@ const Timesheet = () => {
                   {`${date.day}, ${date.date}`}
                 </th>
               ))}
-              <th className="tw-border tw-border-gray-400 tw-px-4 tw-py-2">Total</th> 
+              <th className="tw-border tw-border-gray-400 tw-px-4 tw-py-2">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -92,7 +92,7 @@ const Timesheet = () => {
                     value={row.projectName}
                     onChange={(e) => handleChange(rowIndex, 'projectName', e.target.value)}
                     className="tw-w-full tw-outline-none"
-                    style={{color: 'black'}}
+
                   >
                     <option value="">Select Project</option>
                     {projects.map((project, index) => (
@@ -109,7 +109,7 @@ const Timesheet = () => {
                       className="tw-w-full tw-outline-none"
                       value={cell}
                       onChange={(e) => handleChange(rowIndex, weekDates[cellIndex].day, e.target.value)}
-                      style={{color: 'black'}}
+
                     />
                   </td>
                 ))}
