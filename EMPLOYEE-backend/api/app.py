@@ -703,7 +703,7 @@ import string
 def forgot_password():
     data = request.json
     email = data.get('email')
-
+    print(email)
     user = db.emp_data.find_one({'email': email})
     if not user:
         return jsonify({'error': 'Employee not found'}), 404
