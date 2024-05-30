@@ -46,17 +46,17 @@ const ProjectManagement = () => {
     <>
       <div className='container'>
         <div className='row justify-content-center'>
-          <div className="tw-flex tw-items-center tw-justify-between tw-p-4 tw-bg-gray-200">
+          <div className="tw-flex tw-items-center tw-justify-between tw-p-4">
             {/* Search input */}
             <input
               type="text"
               placeholder="Search..."
-              className="tw-flex-grow tw-px-4 tw-py-2 tw-ml-4 tw-text-gray-800 tw-bg-white tw-border tw-border-gray-300 tw-rounded tw-shadow-md tw-focus:outline-none tw-focus:ring tw-focus:ring-blue-500"
+              className="tw-flex-grow tw-px-4 tw-py-2 tw-ml-4 tw-border tw-border-base-content tw-rounded tw-shadow-md tw-focus:outline-none tw-focus:ring tw-focus:ring-blue-500"
             />
           </div>
-          <table className="tw-w-full tw-border-collapse tw-border tw-border-gray-800">
+          <table className="tw-w-full tw-border-collapse tw-border tw-border-base-content">
             <thead>
-              <tr className="tw-bg-gray-200">
+              <tr className="">
                 <th className="tw-py-2 tw-px-4">Name</th>
                 <th className="tw-py-2 tw-px-4">Tracked</th>
                 <th className="tw-py-2 tw-px-4">Progress</th>
