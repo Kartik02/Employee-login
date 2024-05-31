@@ -18,6 +18,7 @@ from wtforms.validators import DataRequired
 from flask_admin.form import rules
 from bson import ObjectId
 import random
+import logging
 
 """
 Database Setup
@@ -26,7 +27,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 CORS(app, resources={r"/auth/*": {
-    "origins": ["http://localhost:5173", "https://employeelogin.vercel.app"],
+    "origins": ["http://localhost:5173", "https://employeelogin.vercel.app", "https://rmbackend.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
@@ -388,31 +389,30 @@ def get_meetings():
 """
 Profile Page - Show Employee Details
 """
-
-
 @app.route('/auth/employee', methods=['GET'])
 def get_employee_data():
-    if 'logged_in' not in session or not session['logged_in']:
-        return jsonify({'error': 'Not logged in'}), 401
+    try:
+        if 'logged_in' not in session or not session['logged_in']:
+            return jsonify({'error': 'Not logged in'}), 401
 
-    empid = session['empid']
-    user = db.emp_data.find_one({'empid': empid})
-    if not user:
-        return jsonify({'error': 'Employee not found'}), 404
+        empid = session['empid']
+        user = db.emp_data.find_one({'empid': empid})
+        if not user:
+            return jsonify({'error': 'Employee not found'}), 404
 
-    return jsonify({
-        'name': user['name'],
-        'email': user['email'],
-        'password': user['password'],
-        'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
-    }), 200
-
+        return jsonify({
+            'name': user['name'],
+            'email': user['email'],
+            'password': user['password'],
+            'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
+        }), 200
+    except Exception as e:
+        logging.error(f"Error fetching employee data: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 """
  Profile Page - Update Employee Details
 """
-
-
 @app.route('/auth/update_employee', methods=['POST'])
 def update_employee():
     data = request.json
@@ -696,7 +696,6 @@ def get_tag_count():
 Forget and Reset Password
 """
 import string
-
 
 # Route for sending OTP
 @app.route('/auth/forgot_password', methods=['POST'])

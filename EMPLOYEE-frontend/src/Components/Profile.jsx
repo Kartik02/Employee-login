@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function Profile() {
@@ -13,12 +13,12 @@ function Profile() {
     axios
       .get("https://rmbackend.vercel.app/auth/employee", {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((response) => {
         setEmpData(response.data);
-        setEditedEmail(response.data.email);
-        setProfileImageBase64(response.data.profileImage);
-        console.log("Profile Image:", response.data.profileImage);
       })
       .catch((error) => {
         console.error("Error fetching employee data:", error);
@@ -30,7 +30,12 @@ function Profile() {
       .post(
         "https://rmbackend.vercel.app/auth/update_employee",
         { email: editedEmail },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
       )
       .then(() => {
         setEmpData({ ...empData, email: editedEmail });
@@ -46,7 +51,12 @@ function Profile() {
       .post(
         "https://rmbackend.vercel.app/auth/update_employee",
         { password: editedPassword },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
       )
       .then(() => {
         console.log("Password updated successfully");
@@ -66,6 +76,7 @@ function Profile() {
       .post("https://rmbackend.vercel.app/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           "Content-Type": "multipart/form-data",
         },
       })
