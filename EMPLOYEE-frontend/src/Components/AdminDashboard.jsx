@@ -20,32 +20,32 @@ const AdminDashboard = () => {
   return (
     <div className="container-fluid min-vh-100 tw-bg-base-300 tw-text-base-content ">
       <div className="row flex-nowrap ">
-      <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark hover:bg-gray-900">
+        <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark hover:bg-gray-900">
 
-        <div className>
-          <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <Link
-              to="/admindashboard"
-              className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none"
-            >
-              <span className="fs-5 fw-bolder d-none d-sm-inline">
-                Admin Panel
-              </span>
-            </Link>
-          <ul
-              className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-              id="menu"
-            >
-          <li className="w-100">
-                  <Link to="/admindashboard/employee" 
-                  className="nav-link text-white px-0 align-middle">
+          <div className>
+            <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+              <Link
+                to="/admindashboard"
+                className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none"
+              >
+                <span className="fs-5 fw-bolder d-none d-sm-inline">
+                  Admin Panel
+                </span>
+              </Link>
+              <ul
+                className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                id="menu"
+              >
+                <li className="w-100">
+                  <Link to="/admindashboard/employee"
+                    className="nav-link text-white px-0 align-middle">
                     <i className="fs-4 bi bi-people ms-2"></i>
                     <span className="ms-2 d-none d-sm-inline"> Manage Employee</span>
                   </Link>
                 </li>
                 <li className="w-100">
                   <Link to="/admindashboard/employeelist" className="nav-link text-white px-0 align-middle">
-                    <i className="fs-4 bi bi-card-list ms-2"></i> 
+                    <i className="fs-4 bi bi-card-list ms-2"></i>
                     <span className="ms-2 d-none d-sm-inline"> Employee Details</span>
                   </Link>
                 </li>
@@ -69,12 +69,12 @@ const AdminDashboard = () => {
                 </li>
                 <li className="w-100" onClick={handleLogout}>
                   <Link to="/adminlogin" className="nav-link text-white px-0 align-middle">
-                    <i className="fs-4 bi bi-box-arrow-right ms-2"></i> 
+                    <i className="fs-4 bi bi-box-arrow-right ms-2"></i>
                     <span className="ms-2 d-none d-sm-inline"> Logout</span>
                   </Link>
                 </li>
-                </ul>
-          </div>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -177,7 +177,7 @@ export default AdminDashboard;
 //   const navigate = useNavigate();
 //   axios.defaults.withCredentials = true;
 //   const handleLogout = () => {
-//     axios.get("http://localhost:5000/auth/logout").then((result) => {
+//     axios.get("https://backendemp.vercel.app/auth/logout").then((result) => {
 //       if (result.data.Status) {
 //         navigate("adminlogin");
 //       }

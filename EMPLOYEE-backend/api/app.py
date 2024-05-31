@@ -473,23 +473,45 @@ Leave Page
 @app.route('/auth/leave', methods=['POST'])
 def add_leave():
     data = request.json
+    
+    # Extract data from the request
     name = data.get('name')
     empid = data.get('employeeId')
     reason = data.get('reason')
     numberOfDays = data.get('numberOfDays')
-    fromDate = datetime.strptime(data.get('fromDate'), '%Y-%m-%d')
-    toDate = datetime.strptime(data.get('toDate'), '%Y-%m-%d')
+    fromDate = data.get('fromDate')
+    toDate = data.get('toDate')
+    
+    # Validate input data
+    if not empid:
+        return jsonify({'error': 'Employee ID is required'}), 400
+    if not name or not reason or not numberOfDays or not fromDate or not toDate:
+        return jsonify({'error': 'All fields are required'}), 400
+    
+    # Convert dates to datetime objects
+    try:
+        fromDate = datetime.strptime(fromDate, '%Y-%m-%d')
+        toDate = datetime.strptime(toDate, '%Y-%m-%d')
+    except ValueError:
+        return jsonify({'error': 'Invalid date format'}), 400
 
     new_leave = {
         'name': name,
-        'empid': empid,
+        'employeeId': empid,
         'reason': reason,
         'numberOfDays': numberOfDays,
         'fromDate': fromDate,
         'toDate': toDate
     }
-    db.leaves.insert_one(new_leave)
-    return jsonify({'message': 'Leave added successfully'}), 200
+    
+    try:
+        db.leaves.insert_one(new_leave)
+        return jsonify({'message': 'Leave added successfully'}), 200
+    except pymongo.errors.DuplicateKeyError as e:
+        return jsonify({'error': 'Duplicate employee ID'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 """

@@ -17,11 +17,11 @@ const EmployeeList = () => {
   }, []);
 
   return (
-    <div className="mt-3">
-      <h2 className="text-center mb-3">Employee List</h2>
-      <table className="table table-bordered">
+    <div className="tw-mt-3 tw-bg-transparent">
+      <h2 className="tw-text-center tw-mb-3">Employee List</h2>
+      <table className="tw-table tw-table-bordered  tw-bg-transparent">
         <thead>
-          <tr>
+          <tr className="tw-bg-transparent">
             <th>Name</th>
             <th>Email</th>
             <th>Employee ID</th>
@@ -31,7 +31,7 @@ const EmployeeList = () => {
         </thead>
         <tbody>
           {employees.map((employee, index) => (
-            <tr key={index}>
+            <tr key={index} className="tw-bg-transparent">
               <td>{employee.name}</td>
               <td>{employee.email}</td>
               <td>{employee.employee_id}</td>

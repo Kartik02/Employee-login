@@ -55,12 +55,12 @@ const CreateMeeting = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
       <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="text-center mb-4">
+        <div className="col-md-8 col-lg-6">
+          <div className="text-center mb-2">
             <h1 className="display-6 fw-bold">Create Meeting</h1>
-            <p className="text-muted">Fill out the form to schedule a new meeting.</p>
+            <p className="tw-text-gray-600">Fill out the form to schedule a new meeting.</p>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -69,7 +69,7 @@ const CreateMeeting = () => {
               </label>
               <input
                 type="text"
-                className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                className={`form-control tw-placeholder-gray-600 tw-border-gray-600 tw-bg-base-300 tw-text-base-content ${errors.title ? 'is-invalid' : ''}`}
                 name="title"
                 placeholder="Enter meeting title"
                 value={formData.title}
@@ -79,33 +79,15 @@ const CreateMeeting = () => {
                 <div className="invalid-feedback">{errors.title}</div>
               )}
             </div>
-            {/* New field */}
-            <div className="mb-3">
-              <label className="form-label">
-                Meeting Code <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className={`form-control ${errors.meeting_code ? 'is-invalid' : ''}`}
-                name="meeting_code"
-                placeholder="Enter meeting code"
-                value={formData.meeting_code}
-                onChange={handleChange}
-              />
-              {errors.meeting_code && (
-                <div className="invalid-feedback">{errors.meeting_code}</div>
-              )}
-            </div>
-            {/* End of new field */}
-            <div className="row">
-              <div className="col">
+            <div className="row ">
+              <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">
                     Date <span className="text-danger">*</span>
                   </label>
                   <input
                     type="date"
-                    className={`form-control ${errors.date ? 'is-invalid' : ''}`}
+                    className={`form-control  tw-border-gray-600 tw-bg-base-300 tw-text-base-content ${errors.date ? 'is-invalid' : ''}`}
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
@@ -115,17 +97,16 @@ const CreateMeeting = () => {
                   )}
                 </div>
               </div>
-              <div className="col">
+              <div className="col-md-6">
                 <div className="mb-3">
                   <label className="form-label">
                     Time <span className="text-danger">*</span>
                   </label>
                   <input
                     type="time"
-                    className={`form-control ${errors.time ? 'is-invalid' : ''}`}
+                    className={`form-control  tw-border-gray-600 tw-bg-base-300 tw-text-base-content ${errors.time ? 'is-invalid' : ''}`}
                     name="time"
                     value={formData.time}
-                    step="1"
                     onChange={handleChange}
                   />
                   {errors.time && (
@@ -139,7 +120,7 @@ const CreateMeeting = () => {
                 Attendees <span className="text-danger">*</span>
               </label>
               <textarea
-                className={`form-control ${errors.attendees ? 'is-invalid' : ''}`}
+                className={`form-control tw-placeholder-gray-600 tw-border-gray-600 tw-bg-base-300 tw-text-base-content ${errors.attendees ? 'is-invalid' : ''}`}
                 name="attendees"
                 rows={3}
                 placeholder="Enter email addresses separated by commas"
@@ -155,7 +136,7 @@ const CreateMeeting = () => {
                 Description <span className="text-danger">*</span>
               </label>
               <textarea
-                className={`form-control ${errors.description ? 'is-invalid' : ''}`}
+                className={`form-control tw-placeholder-gray-600 tw-border-gray-600 tw-bg-base-300 tw-text-base-content ${errors.description ? 'is-invalid' : ''}`}
                 name="description"
                 rows={3}
                 placeholder="Enter a description for the meeting"

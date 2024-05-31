@@ -55,7 +55,7 @@ function Tag() {
             <label htmlFor="inputTag" className="visually-hidden">Tag</label>
             <input
               type="text"
-              className="form-control mb-3"
+              className="form-control mb-3 tw-bg-base-300 tw-text-base-content tw-border tw-border-base-content tw-placeholder-base-content"
               id="inputTag"
               placeholder="Add new tag"
               value={inputValue}
@@ -67,7 +67,7 @@ function Tag() {
           </div>
         </div>
       </form>
-      <table className="table mt-3 table">
+      <table className="tw-table tw-table-bordered tw-mt-8  tw-bg-transparent">
         <thead>
           <tr>
             <th>#</th>
