@@ -18,7 +18,6 @@ from wtforms.validators import DataRequired
 from flask_admin.form import rules
 from bson import ObjectId
 import random
-import logging
 
 """
 Database Setup
@@ -27,12 +26,12 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 CORS(app, resources={r"/auth/*": {
-    "origins": ["http://localhost:5173", "https://employeelogin.vercel.app", "https://rmbackend.vercel.app"],
+    "origins": ["http://localhost:5173", "https://employeelogin.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
 }})
-
+'''
 # MongoDB configuration
 client = MongoClient(
     'mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -44,6 +43,9 @@ client = MongoClient(
 
 # Update this with your MongoDB URI
 db = client['employeee']
+'''
+client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
+db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -340,6 +342,8 @@ def add_meeting():
 """
 Employee Login and operations
 """
+
+
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
@@ -351,14 +355,16 @@ def login():
         print('Login successful')
         session['logged_in'] = True
         session['empid'] = empid
-        print('Session:', session)
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
+
 """
 Dashboard Page - Meeting Details
 """
+
+
 @app.route('/auth/meetings', methods=['GET'])
 def get_meetings():
     # Query the MongoDB collection to fetch all meetings
@@ -385,31 +391,31 @@ def get_meetings():
 """
 Profile Page - Show Employee Details
 """
+
+
 @app.route('/auth/employee', methods=['GET'])
 def get_employee_data():
-    try:
-        if 'logged_in' not in session or not session['logged_in']:
-            return jsonify({'error': 'Not logged in'}), 401
+    if 'logged_in' not in session or not session['logged_in']:
+        return jsonify({'error': 'Not logged in'}), 401
 
-        print('Session:', session)
-        empid = session['empid']
-        user = db.emp_data.find_one({'empid': empid})
-        if not user:
-            return jsonify({'error': 'Employee not found'}), 404
+    empid = session['empid']
+    user = db.emp_data.find_one({'empid': empid})
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
 
-        return jsonify({
-            'name': user['name'],
-            'email': user['email'],
-            'password': user['password'],
-            'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
-        }), 200
-    except Exception as e:
-        logging.error(f"Error fetching employee data: {e}")
-        return jsonify({'error': 'Internal Server Error'}), 500
+    return jsonify({
+        'name': user['name'],
+        'email': user['email'],
+        'password': user['password'],
+        'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
+    }), 200
+
 
 """
  Profile Page - Update Employee Details
 """
+
+
 @app.route('/auth/update_employee', methods=['POST'])
 def update_employee():
     data = request.json
@@ -470,27 +476,12 @@ Leave Page
 @app.route('/auth/leave', methods=['POST'])
 def add_leave():
     data = request.json
-    
-    # Extract data from the request
     name = data.get('name')
     empid = data.get('employeeId')
     reason = data.get('reason')
     numberOfDays = data.get('numberOfDays')
-    fromDate = data.get('fromDate')
-    toDate = data.get('toDate')
-    
-    # Validate input data
-    if not empid:
-        return jsonify({'error': 'Employee ID is required'}), 400
-    if not name or not reason or not numberOfDays or not fromDate or not toDate:
-        return jsonify({'error': 'All fields are required'}), 400
-    
-    # Convert dates to datetime objects
-    try:
-        fromDate = datetime.strptime(fromDate, '%Y-%m-%d')
-        toDate = datetime.strptime(toDate, '%Y-%m-%d')
-    except ValueError:
-        return jsonify({'error': 'Invalid date format'}), 400
+    fromDate = datetime.strptime(data.get('fromDate'), '%Y-%m-%d')
+    toDate = datetime.strptime(data.get('toDate'), '%Y-%m-%d')
 
     new_leave = {
         'name': name,
@@ -500,14 +491,8 @@ def add_leave():
         'fromDate': fromDate,
         'toDate': toDate
     }
-    
-    try:
-        db.leaves.insert_one(new_leave)
-        return jsonify({'message': 'Leave added successfully'}), 200
-    except pymongo.errors.DuplicateKeyError as e:
-        return jsonify({'error': 'Duplicate employee ID'}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    db.leaves.insert_one(new_leave)
+    return jsonify({'message': 'Leave added successfully'}), 200
 
 
 
@@ -529,40 +514,46 @@ def add_event():
     return jsonify({'message': 'Event added successfully'}), 201
 
 
-@app.route('/auth/update_event/<event_id>', methods=['PUT'])
-def update_event(event_id):
+@app.route('/auth/update_event/<id>', methods=['POST'])
+def update_event(id):
     data = request.json
-    title = data.get('title')
-    start = data.get('start')
-    end = data.get('end')
+    new_title = data.get('title')
 
-    event = db.events.find_one({'_id': ObjectId(event_id)})
-    if not event:
-        return jsonify({'error': 'Event not found'}), 404
+    if not new_title:
+        return jsonify({"error": "New title is required"}), 400
 
-    event['title'] = title
-    event['start'] = start
-    event['end'] = end
+    try:
+        result = db.events.update_one({'_id': ObjectId(id)}, {'$set': {'title': new_title}})
+        if result.modified_count == 1:
+            return jsonify({"message": "Event title updated successfully"}), 200
+        else:
+            return jsonify({"error": "Event not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    db.events.update_one({'_id': ObjectId(event_id)}, {'$set': event})
-    return jsonify({'message': 'Event updated successfully'}), 200
+@app.route('/auth/delete_event', methods=['POST'])
+def delete_event():
+    data = request.json
+    event_id = data.get('id')
 
+    if not event_id:
+        return jsonify({"error": "Event ID is required"}), 400
 
-@app.route('/auth/delete_event/<event_id>', methods=['DELETE'])
-def delete_event(event_id):
-    result = db.events.delete_one({'_id': ObjectId(event_id)})
-    if result.deleted_count == 0:
-        return jsonify({'error': 'Event not found'}), 404
-
-    return jsonify({'message': 'Event deleted successfully'}), 200
+    try:
+        result = db.events.delete_one({'_id': ObjectId(event_id)})
+        if result.deleted_count == 1:
+            return jsonify({"message": "Event deleted successfully"}), 200
+        else:
+            return jsonify({"error": "Event not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/auth/get_events', methods=['GET'])
 def get_events():
     try:
         events = db.events.find()
-        event_list = [{'id': str(event['_id']), 'title': event['title'], 'start': event['start'], 'end': event['end'],
-                       'allDay': event['all_day']} for event in events]
+        event_list = [{'id': str(event['_id']), 'title': event['title'], 'start': event['start'], 'end': event['end'], 'allDay': event['all_day']} for event in events]
         return jsonify(event_list), 200
     except Exception as e:
         print(f"Error fetching events: {e}")
@@ -573,6 +564,17 @@ def get_events():
 TimeTracker - To show available projects list in dropdown 
 """
 
+@app.route('/auth/project_list', methods=['GET'])
+def get_project_list():
+    projects = db.project_list.find({}, {'_id': 0, 'name': 1})
+    project_names = [project['name'] for project in projects]
+    return jsonify(project_names)
+
+@app.route('/auth/tag_list', methods=['GET'])
+def get_tag_list():
+    tags = db.tag_list.find({}, {'_id': 0, 'tag': 1})
+    tags_list = [{'tag': tag['tag']} for tag in tags]
+    return jsonify({'tags': tags_list})
 
 @app.route('/auth/get_projects', methods=['GET'])
 def get_projects():
@@ -589,7 +591,7 @@ def get_projects():
 TimeTracker - Add Project To Databaase
 """
 
-
+'''
 @app.route('/auth/add_project_data', methods=['POST'])
 def add_project_data():
     print(f'Session contents: {session}')
@@ -623,25 +625,53 @@ def add_project_data():
         return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
     else:
         return jsonify({'error': 'Failed to add project data.'}), 500
+'''
+@app.route('/auth/add_project_data', methods=['POST'])
+def add_project_data():
+    data = request.json
+    projectName = data.get('projectName')
+    task = data.get('task')  
+    tags = data.get('tags') 
+    timeElapsed = data.get('timeElapsed')
+    
+    # Generate projectid using ObjectId
+    projectid = str(ObjectId())
 
-
+    new_project = {
+        'projectid': projectid,
+        'projectName': projectName,
+        'task': task,
+        'tags': tags,
+        'timeElapsed': timeElapsed
+    }
+    result = db.projects.insert_one(new_project)
+    
+    if result.inserted_id:
+        return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
+    else:
+        return jsonify({'error': 'Failed to add project data.'}), 500
+    
 """
 TimeTracker - Display worked project details
 """
 
-
+'''
 @app.route('/auth/get_employee_projects', methods=['GET'])
 def get_employee_projects():
-    if 'empid' not in session:
-        return jsonify({'error': 'Not logged in'}), 401
-
-    empid = session['empid']
+    
     projects = db.projects.find({'empid': empid})
     project_list = [{'projectid': project['projectid'], 'projectName': project['projectName'], 'task': project['task'],
                      'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
 
     return jsonify({'projects': project_list}), 200
+'''
+@app.route('/auth/get_employee_projects', methods=['GET'])
+def get_employee_projects():
+    projects = db.projects.find()
+    project_list = [{'projectid': project['projectid'], 'projectName': project['projectName'], 'task': project['task'],
+                     'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
 
+    return jsonify({'projects': project_list}), 200
 
 """
 TimeTracker Page - To Update Project - Start / Resume and update in database 
@@ -659,8 +689,7 @@ def update_project_data(index):
 
     result = db.projects.update_one(
         {'projectid': index},
-        {'$set': {'projectid': projectid, 'task': task, 'projectName': projectName, 'tags': tags,
-                  'timeElapsed': timeElapsed}}
+        {'$set': {'projectid': projectid, 'task': task, 'projectName': projectName, 'tags': tags, 'timeElapsed': timeElapsed}}
     )
 
     if result.modified_count > 0:
@@ -715,6 +744,7 @@ def get_tag_count():
 Forget and Reset Password
 """
 import string
+
 
 # Route for sending OTP
 @app.route('/auth/forgot_password', methods=['POST'])

@@ -9,7 +9,7 @@ const JoinMeeting = () => {
     // Function to fetch logged-in user's email
     const fetchLoggedInUser = async () => {
       try {
-        const response = await axios.get('https://backendemp.vercel.app/auth/employee', {
+        const response = await axios.get('https://rmbackend.vercel.app/auth/employee', {
           withCredentials: true,
         });
         setLoggedInEmail(response.data.email);
@@ -25,7 +25,7 @@ const JoinMeeting = () => {
     // Function to fetch meeting data from the backend
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get('https://backendemp.vercel.app/auth/meetings');
+        const response = await axios.get('https://rmbackend.vercel.app/auth/meetings');
         const filteredMeetings = response.data.filter(meeting => meeting.attendees.includes(loggedInEmail)); // Filter meetings based on logged-in user's email
         setMeetings(filteredMeetings.map(meeting => {
           const meetingDate = new Date(`${meeting.date}T${meeting.time}`);

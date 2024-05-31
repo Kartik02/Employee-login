@@ -22,7 +22,7 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://backendemp.vercel.app/auth/project_list');
+      const response = await axios.get('https://rmbackend.vercel.app/auth/project_list');
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -31,7 +31,7 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('https://backendemp.vercel.app/auth/tag_list');
+      const response = await axios.get('https://rmbackend.vercel.app/auth/tag_list');
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
     } catch (error) {
       console.error('Error fetching tags:', error);
@@ -40,7 +40,7 @@ const Stopwatch = () => {
 
   const fetchEmployeeProjects = async () => {
     try {
-      const response = await axios.get('https://backendemp.vercel.app/auth/get_employee_projects', { withCredentials: true });
+      const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_projects', { withCredentials: true });
       const employeeProjects = response.data.projects;
       // Assuming the employeeProjects data format is similar to the submittedDetails state
       setSubmittedDetails(employeeProjects);
@@ -134,7 +134,7 @@ const Stopwatch = () => {
       timeTaken: formatTime(timeElapsed)
     };
     try {
-      const response = await axios.post('https://backendemp.vercel.app/auth/add_project_data', {
+      const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
         task,
         projectName,
         tags: selectedTags,
@@ -151,7 +151,7 @@ const Stopwatch = () => {
     const detail = submittedDetails[index];
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
-      await axios.post(`https://backendemp.vercel.app/auth/update_project_data/${projectId}`, {
+      await axios.post(`https://rmbackend.vercel.app/auth/update_project_data/${projectId}`, {
         projectid: projectId,
         task: detail.task,
         projectName: detail.projectName,

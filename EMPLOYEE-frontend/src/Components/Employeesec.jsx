@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const Employeesec = () => {
     const [category, setCategory] = useState([])
     useEffect(() => {
-        axios.get('https://backendemp.vercel.app/auth/category')
+        axios.get('https://rmbackend.vercel.app/auth/category')
             .then(result => {
                 if (result.data.Status) {
                     setCategory(result.data.Result)

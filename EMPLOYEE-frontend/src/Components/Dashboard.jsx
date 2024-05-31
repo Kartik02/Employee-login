@@ -12,7 +12,7 @@ const Dashboard = () => {
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
-    axios.get('https://backendemp.vercel.app/auth/logout')
+    axios.get('https://rmbackend.vercel.app/auth/logout')
       .then(result => {
         if (result.data.Status) {
           navigate('adminlogin');
@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Example data fetching, replace with your actual data fetching logic
-    axios.get('https://backendemp.vercel.app/some-endpoint')
+    axios.get('https://rmbackend.vercel.app/some-endpoint')
       .then(response => {
         setData(response.data);
         setLoading(false);

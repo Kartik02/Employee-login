@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://backendemp.vercel.app/auth/forgotpassword", {
+      const response = await axios.post("https://rmbackend.vercel.app/auth/forgotpassword", {
         email,
       });
       alert(response.data.message);
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
   const handleResetPassword = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://backendemp.vercel.app/auth/resetpassword", {
+      const response = await axios.post("https://rmbackend.vercel.app/auth/resetpassword", {
         email,
         otp,
         password: newPassword,

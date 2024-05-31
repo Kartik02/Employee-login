@@ -9,7 +9,7 @@ const ProjectManagement = () => {
   }, []);
 
   const fetchProjects = async () => {
-    const response = await fetch('https://backendemp.vercel.app/auth/projects');
+    const response = await fetch('https://rmbackend.vercel.app/auth/projects');
     const data = await response.json();
     setProjects(data);
   };
