@@ -340,8 +340,6 @@ def add_meeting():
 """
 Employee Login and operations
 """
-
-
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
@@ -353,16 +351,14 @@ def login():
         print('Login successful')
         session['logged_in'] = True
         session['empid'] = empid
+        print('Session:', session)
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
-
 """
 Dashboard Page - Meeting Details
 """
-
-
 @app.route('/auth/meetings', methods=['GET'])
 def get_meetings():
     # Query the MongoDB collection to fetch all meetings
@@ -395,6 +391,7 @@ def get_employee_data():
         if 'logged_in' not in session or not session['logged_in']:
             return jsonify({'error': 'Not logged in'}), 401
 
+        print('Session:', session)
         empid = session['empid']
         user = db.emp_data.find_one({'empid': empid})
         if not user:
