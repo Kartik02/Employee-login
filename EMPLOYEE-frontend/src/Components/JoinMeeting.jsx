@@ -3,31 +3,15 @@ import axios from 'axios';
 
 const JoinMeeting = () => {
   const [meetings, setMeetings] = useState([]);
-  const [loggedInEmail, setLoggedInEmail] = useState('');
-
-  useEffect(() => {
-    // Function to fetch logged-in user's email
-    const fetchLoggedInUser = async () => {
-      try {
-        const response = await axios.get('https://rmbackend.vercel.app/auth/employee', {
-          withCredentials: true,
-        });
-        setLoggedInEmail(response.data.email);
-      } catch (error) {
-        console.error('Error fetching logged-in user data:', error);
-      }
-    };
-
-    fetchLoggedInUser(); // Call the fetchLoggedInUser function when component mounts
-  }, []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Function to fetch meeting data from the backend
     const fetchMeetings = async () => {
       try {
         const response = await axios.get('https://rmbackend.vercel.app/auth/meetings');
-        const filteredMeetings = response.data.filter(meeting => meeting.attendees.includes(loggedInEmail)); // Filter meetings based on logged-in user's email
-        setMeetings(filteredMeetings.map(meeting => {
+        const formattedMeetings = response.data.map(meeting => {
           const meetingDate = new Date(`${meeting.date}T${meeting.time}`);
           return {
             ...meeting,
@@ -44,22 +28,32 @@ const JoinMeeting = () => {
               hour12: true
             })
           };
-        })); // Set the fetched meetings in state
+        });
+        setMeetings(formattedMeetings);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching meetings:', error);
+        setError('Error fetching meetings');
+        setLoading(false);
       }
     };
 
-    if (loggedInEmail) {
-      fetchMeetings(); // Call the fetchMeetings function when logged-in user's email is available
-    }
-  }, [loggedInEmail]);
+    fetchMeetings(); // Call the fetchMeetings function when component mounts
+  }, []);
 
   const handleJoinMeeting = (meetingCode) => {
     // Redirect to the Google Meet URL with the meeting code appended
     const meetURL = `https://meet.google.com/${meetingCode}`;
     window.open(meetURL, '_blank');
   };
+
+  if (loading) {
+    return <div>Loading meetings...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (!Array.isArray(meetings) || !meetings.length) {
     return <div>No meetings available</div>;
@@ -92,11 +86,4 @@ const JoinMeeting = () => {
   );
 };
 
-
 export default JoinMeeting;
-//done
-
-
-
-
-
