@@ -40,10 +40,11 @@ client = MongoClient(
     socketTimeoutMS=30000,
     connectTimeoutMS=30000
 )
+db = client['employeee']
 
 # Update this with your MongoDB URI
-db = client['employeee']
-client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+# client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+# db = client['employeee']
 # client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
 # db = client['ems']
 
@@ -388,16 +389,22 @@ def get_meetings():
 """
 Dashboard Page - Admin and Employee Count
 """
+# Select the database and collections
+db = client['employeee']
+admins_collection = db['admin_data']
+employees_collection = db['emp_data']
+
 @app.route('/auth/admin_count', methods=['GET'])
-def get_admin_count():
-    try:
-        admin_count = db.admin_data.count_documents({})
-        return jsonify({'admin_count': admin_count}), 200
-    except Exception as e:
-        print(f"Error fetching admin count: {e}")
-        return jsonify({'error': 'Internal Server Error'}), 500
+def admin_count():
+    admin_count = admins_collection.count_documents({})
+    return jsonify({"admin_count": admin_count})
 
 @app.route('/auth/employee_count', methods=['GET'])
+def employee_count():
+    employee_count = employees_collection.count_documents({})
+    return jsonify({"employee_count": employee_count})
+
+@app.route('/auth/employee_count', methods=['GET', 'POST'])
 def get_employee_count():
     try:
         employee_count = db.emp_data.count_documents({})
