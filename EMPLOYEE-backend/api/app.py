@@ -390,28 +390,19 @@ def get_meetings():
 Dashboard Page - Admin and Employee Count
 """
 # Select the database and collections
-db = client['employeee']
-admins_collection = db['admin_data']
-employees_collection = db['emp_data']
+# db = client['employeee']
+# admins_collection = db['admin_data']
+# employees_collection = db['emp_data']
 
 @app.route('/auth/admin_count', methods=['GET'])
 def admin_count():
-    admin_count = admins_collection.count_documents({})
+    admin_count = db.admin_data.count_documents({})
     return jsonify({"admin_count": admin_count})
 
 @app.route('/auth/employee_count', methods=['GET'])
 def employee_count():
-    employee_count = employees_collection.count_documents({})
+    employee_count = db.emp_data.count_documents({})
     return jsonify({"employee_count": employee_count})
-
-@app.route('/auth/employee_count', methods=['GET', 'POST'])
-def get_employee_count():
-    try:
-        employee_count = db.emp_data.count_documents({})
-        return jsonify({'employee_count': employee_count}), 200
-    except Exception as e:
-        print(f"Error fetching employee count: {e}")
-        return jsonify({'error': 'Internal Server Error'}), 500
 
 """
 Profile Page - Show Employee Details
@@ -653,10 +644,10 @@ def add_project_data():
 def add_project_data():
     data = request.json
     projectName = data.get('projectName')
-    task = data.get('task')  
-    tags = data.get('tags') 
+    task = data.get('task')
+    tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    
+
     # Generate projectid using ObjectId
     projectid = str(ObjectId())
 
@@ -668,12 +659,12 @@ def add_project_data():
         'timeElapsed': timeElapsed
     }
     result = db.projects.insert_one(new_project)
-    
+
     if result.inserted_id:
         return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
     else:
         return jsonify({'error': 'Failed to add project data.'}), 500
-    
+
 """
 TimeTracker - Display worked project details
 """
@@ -681,7 +672,7 @@ TimeTracker - Display worked project details
 '''
 @app.route('/auth/get_employee_projects', methods=['GET'])
 def get_employee_projects():
-    
+
     projects = db.projects.find({'empid': empid})
     project_list = [{'projectid': project['projectid'], 'projectName': project['projectName'], 'task': project['task'],
                      'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
