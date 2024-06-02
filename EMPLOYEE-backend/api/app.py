@@ -31,7 +31,7 @@ CORS(app, resources={r"/auth/*": {
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
 }})
-'''
+
 # MongoDB configuration
 client = MongoClient(
     'mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -43,9 +43,9 @@ client = MongoClient(
 
 # Update this with your MongoDB URI
 db = client['employeee']
-'''
-client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
-db = client['ems']
+client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+# client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
+# db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -363,8 +363,6 @@ def login():
 """
 Dashboard Page - Meeting Details
 """
-
-
 @app.route('/auth/meetings', methods=['GET'])
 def get_meetings():
     # Query the MongoDB collection to fetch all meetings
@@ -387,12 +385,30 @@ def get_meetings():
     # Return the serialized meeting data as JSON response
     return jsonify(meetings_data), 200
 
+"""
+Dashboard Page - Admin and Employee Count
+"""
+@app.route('/auth/admin_count', methods=['GET'])
+def get_admin_count():
+    try:
+        admin_count = db.admin_data.count_documents({})
+        return jsonify({'admin_count': admin_count}), 200
+    except Exception as e:
+        print(f"Error fetching admin count: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+@app.route('/auth/employee_count', methods=['GET'])
+def get_employee_count():
+    try:
+        employee_count = db.emp_data.count_documents({})
+        return jsonify({'employee_count': employee_count}), 200
+    except Exception as e:
+        print(f"Error fetching employee count: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 """
 Profile Page - Show Employee Details
 """
-
-
 @app.route('/auth/employee', methods=['GET'])
 def get_employee_data():
     if 'logged_in' not in session or not session['logged_in']:
