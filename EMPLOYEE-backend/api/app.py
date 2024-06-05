@@ -398,11 +398,91 @@ Dashboard Page - Admin and Employee Count
 def admin_count():
     admin_count = db.admin_data.count_documents({})
     return jsonify({"admin_count": admin_count})
-
 @app.route('/auth/employee_count', methods=['GET'])
 def employee_count():
     employee_count = db.emp_data.count_documents({})
     return jsonify({"employee_count": employee_count})
+
+"""
+Dashboard Page - Wavelength Graph
+"""
+@app.route('/auth/wavelength_graph', methods=['GET'])
+def wavelength_graph():
+    # Get the aggregation level from query parameters
+    level = request.args.get('level', 'month')  # Default to 'month' if not provided
+
+    if level == 'day':
+        pipeline = [
+            {
+                "$group": {
+                    "_id": {
+                        "year": {"$year": "$date"},
+                        "month": {"$month": "$date"},
+                        "day": {"$dayOfMonth": "$date"}
+                    },
+                    "total_work_done": {"$sum": "$timeElapsed"}
+                }
+            },
+            {
+                "$sort": {
+                    "_id.year": 1,
+                    "_id.month": 1,
+                    "_id.day": 1
+                }
+            }
+        ]
+    elif level == 'year':
+        pipeline = [
+            {
+                "$group": {
+                    "_id": {
+                        "year": {"$year": "$date"}
+                    },
+                    "total_work_done": {"$sum": "$timeElapsed"}
+                }
+            },
+            {
+                "$sort": {
+                    "_id.year": 1
+                }
+            }
+        ]
+    else:  # Default to 'month' aggregation
+        pipeline = [
+            {
+                "$group": {
+                    "_id": {
+                        "year": {"$year": "$date"},
+                        "month": {"$month": "$date"}
+                    },
+                    "total_work_done": {"$sum": "$timeElapsed"}
+                }
+            },
+            {
+                "$sort": {
+                    "_id.year": 1,
+                    "_id.month": 1
+                }
+            }
+        ]
+
+    work_done_data = list(db.projects.aggregate(pipeline))
+
+    result = []
+    for data in work_done_data:
+        entry = {
+            "year": data['_id']['year'],
+            "total_work_done": data['total_work_done']
+        }
+        if 'month' in data['_id']:
+            entry["month"] = data['_id']['month']
+        if 'day' in data['_id']:
+            entry["day"] = data['_id']['day']
+
+        result.append(entry)
+
+    return jsonify(result), 200
+
 
 """
 Profile Page - Show Employee Details

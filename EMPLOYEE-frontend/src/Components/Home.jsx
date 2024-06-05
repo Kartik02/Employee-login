@@ -31,6 +31,7 @@ const Home = () => {
   const [salaryTotal, setSalaryTotal] = useState(0)
   const [admins, setAdmins] = useState(["shanoo"])
   const [show, setShow] = useState(false)
+  const [wavelengthData, setWavelengthData] = useState([]);
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
   const [colorIndex, setColorIndex] = useState(0);
@@ -112,6 +113,14 @@ const Home = () => {
         .catch(error => {
             console.error('Error fetching employee count:', error);
         });
+
+    axios.get('https://rmbackend.vercel.app/auth/wavelength_graph')
+        .then(response => {
+            setWavelengthData(response.data);
+        })
+        .catch(error => {
+            console.error('Error fetching wavelength data:', error);
+        });
   }, []);
 
 
@@ -133,6 +142,16 @@ const Home = () => {
       setShow(true)
     }
   }
+
+//   const showName = () => {
+//     setShow(!show);
+//   }
+  const formatChartData = () => {
+    const labels = wavelengthData.map(data => `${data.month}-${data.year}`);
+    const data = wavelengthData.map(data => data.total_work_done);
+    return { labels, data };
+  };
+  const chartData = formatChartData();
   return (
     <>
       <div className='w-100 tw-px-5 '>

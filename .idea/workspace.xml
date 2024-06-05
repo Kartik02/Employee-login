@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
