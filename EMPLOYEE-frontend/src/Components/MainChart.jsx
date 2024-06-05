@@ -150,7 +150,7 @@ const MainChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/auth/wavelength_graph?level=month')
+        const response = await axios.get('https://rmbackend.vercel.app/auth/wavelength_graph?level=month')
         const data = response.data
 
         const labels = data.map(item => `${item.month}/${item.year}`)

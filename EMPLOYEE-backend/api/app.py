@@ -770,8 +770,6 @@ def get_employee_projects():
 """
 TimeTracker Page - To Update Project - Start / Resume and update in database 
 """
-
-
 @app.route('/auth/update_project_data/<index>', methods=['POST'])
 def update_project_data(index):
     data = request.json
@@ -795,8 +793,6 @@ def update_project_data(index):
 """
 Report Page - Pie Chart and Bar Graph
 """
-
-
 @app.route('/auth/project_time', methods=['GET'])
 def get_project_time():
     try:
