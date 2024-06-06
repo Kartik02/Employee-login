@@ -17,7 +17,7 @@ const EmployeeList = () => {
   }, []);
 
   return (
-    <div className="tw-mt-3 tw-bg-transparent">
+    <div className="tw-mt-3 tw-bg-transparent tw-overflow-auto">
       <h2 className="tw-text-center tw-mb-3">Employee List</h2>
       <table className="tw-table tw-table-bordered  tw-bg-transparent">
         <thead>
