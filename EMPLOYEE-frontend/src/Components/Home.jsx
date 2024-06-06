@@ -26,12 +26,11 @@ import {
 import MainChart from './MainChart'
 
 const Home = () => {
-  const [adminTotal, setAdminTotal] = useState(0);
-  const [employeeTotal, setemployeeTotal] = useState(0);
+  const [adminTotal, setAdminTotal] = useState(0)
+  const [employeeTotal, setemployeeTotal] = useState(0)
   const [salaryTotal, setSalaryTotal] = useState(0)
   const [admins, setAdmins] = useState(["shanoo"])
   const [show, setShow] = useState(false)
-  const [wavelengthData, setWavelengthData] = useState([]);
   const widgetChartRef1 = useRef(null)
   const widgetChartRef2 = useRef(null)
   const [colorIndex, setColorIndex] = useState(0);
@@ -79,12 +78,12 @@ const Home = () => {
   // };
 
 
-//   useEffect(() => {
-// //     adminCount();
-// //     employeeCount();
-//     salaryCount();
-//     AdminRecords();
-//   }, [])
+  useEffect(() => {
+    adminCount();
+    employeeCount();
+    salaryCount();
+    AdminRecords();
+  }, [])
 
   const AdminRecords = () => {
     axios.get('http://localhost:3000/auth/admin_records')
@@ -97,33 +96,22 @@ const Home = () => {
       })
   }
 
-  useEffect(() => {
+  const adminCount = () => {
     axios.get('https://rmbackend.vercel.app/auth/admin_count')
-        .then(response => {
-            setAdminCount(response.data.admin_count);
-        })
-        .catch(error => {
-            console.error('Error fetching admin count:', error);
-        });
-
+      .then(result => {
+        if (result.data.Status) {
+          setAdminTotal(result.data.Result[0].admin)
+        }
+      })
+  }
+  const employeeCount = () => {
     axios.get('https://rmbackend.vercel.app/auth/employee_count')
-        .then(response => {
-            setEmpCount(response.data.employee_count);
-        })
-        .catch(error => {
-            console.error('Error fetching employee count:', error);
-        });
-
-    axios.get('https://rmbackend.vercel.app/auth/wavelength_graph')
-        .then(response => {
-            setWavelengthData(response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching wavelength data:', error);
-        });
-  }, []);
-
-
+      .then(result => {
+        if (result.data.Status) {
+          setemployeeTotal(result.data.Result[0].employee)
+        }
+      })
+  }
   const salaryCount = () => {
     axios.get('http://localhost:3000/auth/salary_count')
       .then(result => {
@@ -142,26 +130,16 @@ const Home = () => {
       setShow(true)
     }
   }
-
-//   const showName = () => {
-//     setShow(!show);
-//   }
-  const formatChartData = () => {
-    const labels = wavelengthData.map(data => `${data.month}-${data.year}`);
-    const data = wavelengthData.map(data => data.total_work_done);
-    return { labels, data };
-  };
-  const chartData = formatChartData();
   return (
     <>
-      <div className='w-100 tw-px-5 '>
+      <div className='tw-w-5/6 m-auto '>
         <div className='tw-flex tw-justify-between tw-items-center px-4'>
           <h2
             className={`py-5 tw-font-bold tw-pl-5`}
             style={{
               color: colors[colorIndex],
               transition: 'color 0.5s ease-in-out', // Smooth transition for color change
-              fontSize: '2rem'
+              fontSize: '1.6rem'
             }}
           >
             Dashboard

@@ -279,8 +279,8 @@ const Stopwatch = () => {
         )}
       </div>
 
-      <div className="tw-p-4">
-        <table className="tw-mt-4 tw-border tw-border-base-content tw-w-full">
+      <div className="tw-p-4 tw-overflow-x-auto">
+        <table className="tw-mt-4 tw-border tw-border-base-content tw-w-full  ">
           <thead>
             <tr>
               <th className="tw-border tw-p-2 tw-w-1/5">Project Name</th>
