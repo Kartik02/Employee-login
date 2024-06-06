@@ -138,7 +138,7 @@ class AdminDataView(ModelView):
 
 
 class EmployeeDataView(ModelView):
-    column_list = ('name', 'email', 'empid', 'salary', 'category', 'profile')
+    column_list = ('name', 'email', 'empid', 'password', 'salary', 'category', 'profile')
     form = EmployeeDataForm
 
 
