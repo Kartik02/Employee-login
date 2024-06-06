@@ -360,7 +360,6 @@ def login():
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
-
 """
 Dashboard Page - Meeting Details
 """
@@ -501,7 +500,7 @@ def get_employee_data():
         'name': user['name'],
         'email': user['email'],
         'password': user['password'],
-        'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
+        'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user.get('profile_image') else None
     }), 200
 
 """
