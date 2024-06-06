@@ -1,39 +1,58 @@
-import React from 'react'
-import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react'
-import {
-  CChartBar} from '@coreui/react-chartjs'
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react';
+import { CChartBar } from '@coreui/react-chartjs';
 
 const Charts = () => {
-  const dummyData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: 'GitHub Commits',
+        label: 'Total Time Spent on Projects',
         backgroundColor: '#f87979',
-        data: [40, 20, 12, 39, 10, 40, 39], // Dummy data
+        data: [],
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchProjectTime = async () => {
+      try {
+        const response = await axios.get('https://rmbackend.vercel.app/auth/project_time');
+        const projects = response.data;
+        const labels = projects.map(project => project.projectName);
+        const data = projects.map(project => project.totalTime);
+
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              label: 'Total Time Spent on Projects',
+              backgroundColor: '#f87979',
+              data: data,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching project times:', error);
+      }
+    };
+
+    fetchProjectTime();
+  }, []);
 
   return (
     <CRow>
-   
       <CCol>
         <CCard className="my-4">
           <CCardHeader>Bar Chart</CCardHeader>
-          <CCardBody className='w-100'>
-            <CChartBar className='w-100'
-              data={dummyData}
-              labels="months"
-            />
+          <CCardBody className="w-100">
+            <CChartBar className="w-100" data={chartData} />
           </CCardBody>
         </CCard>
       </CCol>
-  
     </CRow>
-  )
-}
+  );
+};
 
-export default Charts
-//done
+export default Charts;

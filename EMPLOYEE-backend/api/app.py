@@ -487,7 +487,7 @@ def wavelength_graph():
 """
 Profile Page - Show Employee Details
 """
-@app.route('/auth/employee', methods=['GET'])
+@app.route('/auth/get_employee_data', methods=['GET'])
 def get_employee_data():
     if 'logged_in' not in session or not session['logged_in']:
         return jsonify({'error': 'Not logged in'}), 401
@@ -504,12 +504,9 @@ def get_employee_data():
         'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user['profile_image'] else None
     }), 200
 
-
 """
  Profile Page - Update Employee Details
 """
-
-
 @app.route('/auth/update_employee', methods=['POST'])
 def update_employee():
     data = request.json
@@ -538,10 +535,8 @@ def update_employee():
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/auth/upload_profile', methods=['POST'])
 def upload_profile_image():
@@ -561,12 +556,9 @@ def upload_profile_image():
 
     return jsonify({'error': 'File format not allowed'}), 400
 
-
 """
 Leave Page
 """
-
-
 @app.route('/auth/leave', methods=['POST'])
 def add_leave():
     data = request.json
@@ -588,13 +580,9 @@ def add_leave():
     db.leaves.insert_one(new_leave)
     return jsonify({'message': 'Leave added successfully'}), 200
 
-
-
 """
 Calendar Page - Events
 """
-
-
 @app.route('/auth/add_event', methods=['POST'])
 def add_event():
     data = request.json
@@ -606,7 +594,6 @@ def add_event():
     new_event = {'title': title, 'start': start, 'end': end, 'all_day': allDay}
     db.events.insert_one(new_event)
     return jsonify({'message': 'Event added successfully'}), 201
-
 
 @app.route('/auth/update_event/<id>', methods=['POST'])
 def update_event(id):
@@ -642,7 +629,6 @@ def delete_event():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 @app.route('/auth/get_events', methods=['GET'])
 def get_events():
     try:
@@ -657,7 +643,6 @@ def get_events():
 """
 TimeTracker - To show available projects list in dropdown 
 """
-
 @app.route('/auth/project_list', methods=['GET'])
 def get_project_list():
     projects = db.project_list.find({}, {'_id': 0, 'name': 1})
@@ -789,7 +774,6 @@ def update_project_data(index):
     else:
         return jsonify({'error': 'Failed to update project data.'}), 500
 
-
 """
 Report Page - Pie Chart and Bar Graph
 """
@@ -810,7 +794,6 @@ def get_project_time():
         print(f"Error fetching project times: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
-
 @app.route('/auth/tag_count', methods=['GET'])
 def get_tag_count():
     try:
@@ -829,12 +812,10 @@ def get_tag_count():
         print(f"Error fetching tag counts: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
-
 """
 Forget and Reset Password
 """
 import string
-
 
 # Route for sending OTP
 @app.route('/auth/forgot_password', methods=['POST'])

@@ -7,7 +7,12 @@
     <list default="true" id="073cc012-b6f3-4187-a966-d334edb56dcb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/BarGraphComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/BarGraphComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/DonutChartComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/DonutChartComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Profile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
