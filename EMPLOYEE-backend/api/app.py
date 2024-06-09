@@ -656,7 +656,7 @@ def add_project_data():
     # date = datetime.strptime(date_str, '%Y-%m-%d')
 
     if not all([task, projectName, tags, timeElapsed, date, empid]):
-        return jsonify({'error': 'Missing data'}), 400
+        return jsonify({'error': 'Missing something...'}), 400
 
     project_data = {
         'task': task,
