@@ -119,35 +119,39 @@ const Stopwatch = () => {
 
   const handleSubmit = async () => {
     if (!task.trim()) {
-      alert("Task description is required!");
-      return;
+        alert("Task description is required!");
+        return;
     }
     if (!projectName.trim()) {
-      alert("Project name is required!");
-      return;
+        alert("Project name is required!");
+        return;
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
     const currentDate = new Date().toISOString().split('T')[0];
 
     const newDetails = {
-      projectName,
-      task,
-      tags: selectedTags,
-      timeTaken: formatTime(timeElapsed),
-      date: currentDate
-    };
-    try {
-      const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
-        task,
         projectName,
+        task,
         tags: selectedTags,
-        timeElapsed,
+        timeTaken: formatTime(timeElapsed),
         date: currentDate
-      });
-      setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
-      handleReset();
+    };
+
+    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed, date: currentDate });
+
+    try {
+        const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
+            task,
+            projectName,
+            tags: selectedTags,
+            timeElapsed,
+            date: currentDate,
+            empid: "2001"
+        });
+        setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
+        handleReset();
     } catch (error) {
-      console.error('Error adding project:', error);
+        console.error('Error adding project:', error);
     }
   };
 

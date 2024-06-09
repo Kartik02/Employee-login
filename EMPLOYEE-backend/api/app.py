@@ -18,6 +18,8 @@ from wtforms.validators import DataRequired
 from flask_admin.form import rules
 from bson import ObjectId
 import random
+from flask_pymongo import PyMongo
+from flask_wtf import FlaskForm
 
 """
 Database Setup
@@ -645,35 +647,28 @@ TimeTracker - Add Project To Databaase
 @app.route('/auth/add_project_data', methods=['POST'])
 def add_project_data():
     data = request.json
-    projectName = data.get('projectName')
     task = data.get('task')
+    projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    date_str = data.get('date')
+    date = data.get('date')
     empid = data.get('empid')
+    # date = datetime.strptime(date_str, '%Y-%m-%d')
 
-    # Generate projectid using ObjectId
-    # projectid = str(ObjectId())
-    try:
-        date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else None
-    except ValueError as e:
-        print(f"Error parsing date: {e}")
-        return jsonify({'error': 'Invalid date format'}), 400
+    if not all([task, projectName, tags, timeElapsed, date, empid]):
+        return jsonify({'error': 'Missing data'}), 400
 
-    new_project = {
-        'projectName': projectName,
+    project_data = {
         'task': task,
+        'projectName': projectName,
         'tags': tags,
         'timeElapsed': timeElapsed,
         'date': date,
         'empid': empid
     }
-    result = db.projects.insert_one(new_project)
 
-    if result.inserted_id:
-        return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
-    else:
-        return jsonify({'error': 'Failed to add project data.'}), 500
+    db.projects.insert_one(project_data)
+    return jsonify({'message': 'Project data added successfully!'}), 201
 
 """
 TimeTracker - Display worked project details
