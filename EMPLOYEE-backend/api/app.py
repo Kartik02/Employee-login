@@ -57,11 +57,9 @@ app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
 app.config['MAIL_PASSWORD'] = 'zdjwtxgxrwtgtnhm'
 mail = Mail(app)
 
-
 class AdminDataForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-
 
 class EmployeeDataForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -72,7 +70,6 @@ class EmployeeDataForm(FlaskForm):
     category = SelectField('Category', choices=[('1', 'HR'), ('2', 'TECH')], validators=[DataRequired()])
     profile = FileField('Profile Image')
 
-
 class LeavesForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     employeeId = StringField('Employee ID', validators=[DataRequired()])
@@ -81,10 +78,8 @@ class LeavesForm(FlaskForm):
     fromDate = DateField('From Date', validators=[DataRequired()], format='%Y-%m-%d')
     toDate = DateField('To Date', validators=[DataRequired()], format='%Y-%m-%d')
 
-
 class ProjectListForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
-
 
 class EventForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -92,10 +87,8 @@ class EventForm(FlaskForm):
     end = DateTimeField('End', validators=[DataRequired()], format='%Y-%m-%d %H:%M:%S')
     allDay = BooleanField('All Day')
 
-
 class TagListForm(FlaskForm):
     tag = StringField('Tag', validators=[DataRequired()])
-
 
 class ProjectForm(FlaskForm):
     projectid = StringField('Project ID', validators=[DataRequired()])
@@ -103,8 +96,8 @@ class ProjectForm(FlaskForm):
     task = StringField('Task', validators=[DataRequired()])
     tags = StringField('Tags', validators=[DataRequired()])
     timeElapsed = DecimalField('Time Elapsed', validators=[DataRequired()])
+    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
     empid = StringField('Employee ID', validators=[DataRequired()])
-
 
 class MeetingForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -113,7 +106,6 @@ class MeetingForm(FlaskForm):
     time = TimeField('Time', format='%H:%M:%S', validators=[DataRequired()])
     attendees = StringField('Attendees', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
-
 
 class MeetingView(ModelView):
     column_list = ('title', 'meeting_code', 'date', 'time', 'attendees', 'description')
@@ -131,41 +123,33 @@ class MeetingView(ModelView):
             form.date.data = datetime.strptime(meeting['date'], '%Y-%m-%d').date()
             form.time.data = datetime.strptime(meeting['time'], '%H:%M:%S').time()
 
-
 class AdminDataView(ModelView):
     column_list = ('email', 'password')
     form = AdminDataForm
-
 
 class EmployeeDataView(ModelView):
     column_list = ('name', 'email', 'empid', 'password', 'salary', 'category', 'profile')
     form = EmployeeDataForm
 
-
 class LeavesView(ModelView):
     column_list = ('name', 'employeeId', 'reason', 'numberOfDays', 'fromDate', 'toDate')
     form = LeavesForm
-
 
 class ProjectListView(ModelView):
     column_list = ('name',)
     form = ProjectListForm
 
-
 class TagListView(ModelView):
     column_list = ('tag',)
     form = TagListForm
 
-
 class ProjectView(ModelView):
-    column_list = ('projectid', 'projectName', 'task', 'tags', 'timeElapsed', 'empid')
+    column_list = ('projectName', 'task', 'tags', 'timeElapsed', 'date', 'empid')
     form = ProjectForm
-
 
 class EventView(ModelView):
     column_list = ('title', 'start', 'end', 'allDay')
     form = EventForm
-
 
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(AdminDataView(db.admin_data, 'Admin Data'))
@@ -176,7 +160,6 @@ admin.add_view(TagListView(db.tag_list, 'Tag List'))
 admin.add_view(ProjectView(db.projects, 'Projects Details'))
 admin.add_view(EventView(db.events, 'Events'))
 admin.add_view(MeetingView(db.meeting, 'Meetings'))
-
 
 def initialize_db():
     # Check if collections already exist
@@ -208,23 +191,18 @@ def initialize_db():
     db.project_list.create_index('name', unique=True)
     db.events.create_index('title', unique=True)
 
-
 initialize_db()
 
 """
 Start
 """
-
-
 @app.route('/')
 def home():
     return redirect(url_for('admin.index'))
 
-
 """
 Admin Login and Operations
 """
-
 
 @app.route('/auth/adminlogin', methods=['POST'])
 def adminlogin():
@@ -344,7 +322,6 @@ def add_meeting():
 Employee Login and operations
 """
 
-
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
@@ -392,7 +369,6 @@ Dashboard Page - Admin and Employee Count
 # db = client['employeee']
 # admins_collection = db['admin_data']
 # employees_collection = db['emp_data']
-
 @app.route('/auth/admin_count', methods=['GET'])
 def admin_count():
     admin_count = db.admin_data.count_documents({})
@@ -582,6 +558,16 @@ def add_leave():
 """
 Calendar Page - Events
 """
+@app.route('/auth/get_events', methods=['GET'])
+def get_events():
+    try:
+        events = db.events.find()
+        event_list = [{'id': str(event['_id']), 'title': event['title'], 'start': event['start'], 'end': event['end'], 'allDay': event['all_day']} for event in events]
+        return jsonify(event_list), 200
+    except Exception as e:
+        print(f"Error fetching events: {e}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 @app.route('/auth/add_event', methods=['POST'])
 def add_event():
     data = request.json
@@ -628,17 +614,6 @@ def delete_event():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/auth/get_events', methods=['GET'])
-def get_events():
-    try:
-        events = db.events.find()
-        event_list = [{'id': str(event['_id']), 'title': event['title'], 'start': event['start'], 'end': event['end'], 'allDay': event['all_day']} for event in events]
-        return jsonify(event_list), 200
-    except Exception as e:
-        print(f"Error fetching events: {e}")
-        return jsonify({'error': 'Internal Server Error'}), 500
-
-
 """
 TimeTracker - To show available projects list in dropdown 
 """
@@ -664,46 +639,9 @@ def get_projects():
         print(f"Error fetching projects: {e}")
         return jsonify({'error': 'Internal Server Error'}), 500
 
-
 """
 TimeTracker - Add Project To Databaase
 """
-
-'''
-@app.route('/auth/add_project_data', methods=['POST'])
-def add_project_data():
-    print(f'Session contents: {session}')
-    if 'empid' not in session:
-        return jsonify({'error': 'Not logged in'}), 401
-
-    empid = session['empid']
-    session['empid'] = empid
-    session.modified = True
-    print(f'Adding project data for empid: {empid}')
-    data = request.json
-    projectName = data.get('projectName')
-    task = data.get('task')
-    tags = data.get('tags')
-    timeElapsed = data.get('timeElapsed')
-
-    # Generate projectid using ObjectId
-    projectid = str(ObjectId())
-
-    new_project = {
-        'projectid': projectid,
-        'empid': empid,
-        'projectName': projectName,
-        'task': task,
-        'tags': tags,
-        'timeElapsed': timeElapsed
-    }
-    result = db.projects.insert_one(new_project)
-
-    if result.inserted_id:
-        return jsonify({'message': 'Project data added successfully!', 'projectid': projectid}), 201
-    else:
-        return jsonify({'error': 'Failed to add project data.'}), 500
-'''
 @app.route('/auth/add_project_data', methods=['POST'])
 def add_project_data():
     data = request.json
@@ -711,16 +649,24 @@ def add_project_data():
     task = data.get('task')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
+    date_str = data.get('date')
+    empid = data.get('empid')
 
     # Generate projectid using ObjectId
-    projectid = str(ObjectId())
+    # projectid = str(ObjectId())
+    try:
+        date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else None
+    except ValueError as e:
+        print(f"Error parsing date: {e}")
+        return jsonify({'error': 'Invalid date format'}), 400
 
     new_project = {
-        'projectid': projectid,
         'projectName': projectName,
         'task': task,
         'tags': tags,
-        'timeElapsed': timeElapsed
+        'timeElapsed': timeElapsed,
+        'date': date,
+        'empid': empid
     }
     result = db.projects.insert_one(new_project)
 
@@ -732,17 +678,6 @@ def add_project_data():
 """
 TimeTracker - Display worked project details
 """
-
-'''
-@app.route('/auth/get_employee_projects', methods=['GET'])
-def get_employee_projects():
-
-    projects = db.projects.find({'empid': empid})
-    project_list = [{'projectid': project['projectid'], 'projectName': project['projectName'], 'task': project['task'],
-                     'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
-
-    return jsonify({'projects': project_list}), 200
-'''
 @app.route('/auth/get_employee_projects', methods=['GET'])
 def get_employee_projects():
     projects = db.projects.find()
@@ -835,7 +770,6 @@ def forgot_password():
 
     return jsonify({'message': 'OTP sent successfully'}), 200
 
-
 # Route for resetting password
 @app.route('/auth/reset_password', methods=['POST'])
 def reset_password():
@@ -851,7 +785,6 @@ def reset_password():
     db.emp_data.update_one({'email': email}, {'$set': {'password': new_password}})
 
     return jsonify({'message': 'Password reset successfully'}), 200
-
 
 # @app.route('/auth/forgot_password', methods=['POST'])
 # def forgot_password():
