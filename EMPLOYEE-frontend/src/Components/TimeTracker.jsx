@@ -142,8 +142,7 @@ const Stopwatch = () => {
             task,
             projectName,
             tags: selectedTags,
-            timeElapsed,
-            empid: "2001"
+            timeElapsed
         });
         setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
         handleReset();
@@ -151,8 +150,6 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
     }
   };
-
-
 
   const handleUpdateSubmit = async (index) => {
     const detail = submittedDetails[index];

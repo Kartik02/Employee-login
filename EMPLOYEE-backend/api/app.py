@@ -651,8 +651,16 @@ def add_project_data():
     projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    empid = data.get('empid')
+    # empid = data.get('empid')
     current_date = datetime.now().strftime('%Y-%m-%d')
+
+    # To fetch empid of logged in employee
+    if 'logged_in' not in session or not session['logged_in']:
+        return jsonify({'error': 'Not logged in'}), 401
+    empid = session['empid']
+    user = db.emp_data.find_one({'empid': empid})
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
 
     if not all([task, projectName, tags, timeElapsed, empid]):
         return jsonify({'error': 'Missing something...'}), 400
