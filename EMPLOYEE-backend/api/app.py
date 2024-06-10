@@ -47,8 +47,8 @@ db = client['employeee']
 # Update this with your MongoDB URI
 # client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # db = client['employeee']
-# client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
-# db = client['ems']
+#client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
+#db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -375,6 +375,7 @@ Dashboard Page - Admin and Employee Count
 def admin_count():
     admin_count = db.admin_data.count_documents({})
     return jsonify({"admin_count": admin_count})
+
 @app.route('/auth/employee_count', methods=['GET'])
 def employee_count():
     employee_count = db.emp_data.count_documents({})
