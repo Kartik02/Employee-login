@@ -137,7 +137,7 @@ const Stopwatch = () => {
         date: currentDate
     };
 
-    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed, date: currentDate });
+    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed, date: currentDate, empid: "2001" });
 
     try {
         const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
@@ -154,6 +154,7 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
     }
   };
+
 
   const handleUpdateSubmit = async (index) => {
     const detail = submittedDetails[index];
