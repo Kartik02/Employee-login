@@ -651,11 +651,10 @@ def add_project_data():
     projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    date = data.get('date')
     empid = data.get('empid')
-    # date = datetime.strptime(date_str, '%Y-%m-%d')
+    current_date = datetime.now().strftime('%Y-%m-%d')
 
-    if not all([task, projectName, tags, timeElapsed, date, empid]):
+    if not all([task, projectName, tags, timeElapsed, empid]):
         return jsonify({'error': 'Missing something...'}), 400
 
     project_data = {
@@ -663,7 +662,7 @@ def add_project_data():
         'projectName': projectName,
         'tags': tags,
         'timeElapsed': timeElapsed,
-        'date': date,
+        'date': current_date,
         'empid': empid
     }
 

@@ -127,17 +127,15 @@ const Stopwatch = () => {
         return;
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
-    const currentDate = new Date().toISOString().split('T')[0];
 
     const newDetails = {
         projectName,
         task,
         tags: selectedTags,
         timeTaken: formatTime(timeElapsed),
-        date: currentDate
     };
 
-    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed, date: currentDate, empid: "2001" });
+    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed });
 
     try {
         const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
@@ -145,7 +143,6 @@ const Stopwatch = () => {
             projectName,
             tags: selectedTags,
             timeElapsed,
-            date: currentDate,
             empid: "2001"
         });
         setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
@@ -154,6 +151,7 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
     }
   };
+
 
 
   const handleUpdateSubmit = async (index) => {
