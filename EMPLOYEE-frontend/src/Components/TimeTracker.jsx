@@ -36,6 +36,7 @@ const Stopwatch = () => {
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
     } catch (error) {
       console.error('Error fetching tags:', error);
+      
     }
   };
 
@@ -142,7 +143,8 @@ const Stopwatch = () => {
             task,
             projectName,
             tags: selectedTags,
-            timeElapsed
+            timeElapsed,
+            empid: "2001"
         });
         setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
         handleReset();
@@ -150,6 +152,8 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
     }
   };
+
+
 
   const handleUpdateSubmit = async (index) => {
     const detail = submittedDetails[index];
@@ -215,7 +219,8 @@ const Stopwatch = () => {
               onClick={handleTagClick}
               style={{ marginRight: '8px' }}
             >
-              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).slice(0, 3).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 3 && <span> ...</span>}
             </div>
             {showDropdown && (
               <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md" style={{ color: 'black' }}>
@@ -299,7 +304,10 @@ const Stopwatch = () => {
               <tr key={index}>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.projectName}</td>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.task}</td>
-                <td className="tw-border tw-p-2 tw-w-1/5">{detail.tags.join(", ")}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">
+                  {detail.tags.slice(0, 3).join(", ")}
+                  {detail.tags.length > 3 && <span> ...</span>}
+                </td>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
                 <td className="tw-border tw-p-2 tw-w-1/5">
                   {editIndex !== index ? (

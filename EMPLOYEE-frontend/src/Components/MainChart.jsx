@@ -137,7 +137,6 @@
 
 
 
-
 import React, { useEffect, useRef, useState } from 'react'
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
@@ -150,10 +149,10 @@ const MainChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://rmbackend.vercel.app/auth/wavelength_graph?level=month')
+        const response = await axios.get('http://127.0.0.1:5000/auth/wavelength_graph') // Ensure this URL matches your Flask server URL
         const data = response.data
 
-        const labels = data.map(item => `${item.month}/${item.year}`)
+        const labels = data.map(item => `${item.month}/${item.year}`);
         const dataset = {
           label: 'Total Work Done',
           backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
@@ -162,7 +161,8 @@ const MainChart = () => {
           borderWidth: 2,
           data: data.map(item => item.total_work_done),
           fill: true,
-        }
+        };
+
 
         setChartData({
           labels,
