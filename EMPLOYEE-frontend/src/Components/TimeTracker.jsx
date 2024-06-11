@@ -36,6 +36,7 @@ const Stopwatch = () => {
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
     } catch (error) {
       console.error('Error fetching tags:', error);
+      
     }
   };
 
@@ -127,17 +128,15 @@ const Stopwatch = () => {
         return;
     }
     const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
-    const currentDate = new Date().toISOString().split('T')[0];
 
     const newDetails = {
         projectName,
         task,
         tags: selectedTags,
         timeTaken: formatTime(timeElapsed),
-        date: currentDate
     };
 
-    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed, date: currentDate });
+    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed });
 
     try {
         const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
@@ -145,7 +144,6 @@ const Stopwatch = () => {
             projectName,
             tags: selectedTags,
             timeElapsed,
-            date: currentDate,
             empid: "2001"
         });
         setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
@@ -154,6 +152,8 @@ const Stopwatch = () => {
         console.error('Error adding project:', error);
     }
   };
+
+
 
   const handleUpdateSubmit = async (index) => {
     const detail = submittedDetails[index];
@@ -219,7 +219,8 @@ const Stopwatch = () => {
               onClick={handleTagClick}
               style={{ marginRight: '8px' }}
             >
-              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).slice(0, 3).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 3 && <span> ...</span>}
             </div>
             {showDropdown && (
               <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md" style={{ color: 'black' }}>
@@ -303,7 +304,10 @@ const Stopwatch = () => {
               <tr key={index}>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.projectName}</td>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.task}</td>
-                <td className="tw-border tw-p-2 tw-w-1/5">{detail.tags.join(", ")}</td>
+                <td className="tw-border tw-p-2 tw-w-1/5">
+                  {detail.tags.slice(0, 3).join(", ")}
+                  {detail.tags.length > 3 && <span> ...</span>}
+                </td>
                 <td className="tw-border tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
                 <td className="tw-border tw-p-2 tw-w-1/5">
                   {editIndex !== index ? (

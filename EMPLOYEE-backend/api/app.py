@@ -47,8 +47,8 @@ db = client['employeee']
 # Update this with your MongoDB URI
 # client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # db = client['employeee']
-# client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
-# db = client['ems']
+#client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
+#db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -375,6 +375,7 @@ Dashboard Page - Admin and Employee Count
 def admin_count():
     admin_count = db.admin_data.count_documents({})
     return jsonify({"admin_count": admin_count})
+
 @app.route('/auth/employee_count', methods=['GET'])
 def employee_count():
     employee_count = db.emp_data.count_documents({})
@@ -651,11 +652,18 @@ def add_project_data():
     projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    date = data.get('date')
-    empid = data.get('empid')
-    # date = datetime.strptime(date_str, '%Y-%m-%d')
+    # empid = data.get('empid')
+    current_date = datetime.now().strftime('%Y-%m-%d')
 
-    if not all([task, projectName, tags, timeElapsed, date, empid]):
+    # To fetch empid of logged in employee
+    if 'logged_in' not in session or not session['logged_in']:
+        return jsonify({'error': 'Not logged in'}), 401
+    empid = session['empid']
+    user = db.emp_data.find_one({'empid': empid})
+    if not user:
+        return jsonify({'error': 'Employee not found'}), 404
+
+    if not all([task, projectName, tags, timeElapsed, empid]):
         return jsonify({'error': 'Missing something...'}), 400
 
     project_data = {
@@ -663,7 +671,7 @@ def add_project_data():
         'projectName': projectName,
         'tags': tags,
         'timeElapsed': timeElapsed,
-        'date': date,
+        'date': current_date,
         'empid': empid
     }
 

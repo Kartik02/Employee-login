@@ -78,12 +78,12 @@ const Home = () => {
   // };
 
 
-  useEffect(() => {
-    adminCount();
-    employeeCount();
-    salaryCount();
-    AdminRecords();
-  }, [])
+  //useEffect(() => {
+  //  adminCount();
+  //  employeeCount();
+  //  salaryCount();
+  //  AdminRecords();
+  //}, [])
 
   const AdminRecords = () => {
     axios.get('http://localhost:3000/auth/admin_records')
@@ -96,22 +96,24 @@ const Home = () => {
       })
   }
 
-  const adminCount = () => {
+  useEffect(() => {
     axios.get('https://rmbackend.vercel.app/auth/admin_count')
-      .then(result => {
-        if (result.data.Status) {
-          setAdminTotal(result.data.Result[0].admin)
-        }
-      })
-  }
-  const employeeCount = () => {
+        .then(response => {
+            setAdminTotal(response.data.admin_count);
+        })
+        .catch(error => {
+            console.error('Error fetching admin count:', error);
+        });
+
     axios.get('https://rmbackend.vercel.app/auth/employee_count')
-      .then(result => {
-        if (result.data.Status) {
-          setemployeeTotal(result.data.Result[0].employee)
-        }
-      })
-  }
+        .then(response => {
+            setemployeeTotal(response.data.employee_count);
+        })
+        .catch(error => {
+            console.error('Error fetching employee count:', error);
+        });
+  }, []);
+
   const salaryCount = () => {
     axios.get('http://localhost:3000/auth/salary_count')
       .then(result => {
