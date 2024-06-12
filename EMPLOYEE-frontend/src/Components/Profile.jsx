@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
+axios.defaults.withCredentials = true;
 function Profile() {
   const [empData, setEmpData] = useState({
     name: '',

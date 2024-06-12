@@ -2,11 +2,13 @@
 Import Libraries
 """
 from flask import Flask, jsonify, request, session, redirect, url_for
+from flask_session import Session
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
-from datetime import datetime
+# from datetime import datetime
+import datetime
 import ssl
 import base64
 from pymongo import MongoClient
@@ -27,6 +29,11 @@ Database Setup
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
+Session(app)
+
 CORS(app, resources={r"/auth/*": {
     "origins": ["http://localhost:5173", "https://employeelogin.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
@@ -42,7 +49,7 @@ client = MongoClient(
     socketTimeoutMS=30000,
     connectTimeoutMS=30000
 )
-db = client['employeee']
+db = client.employeee
 
 # Update this with your MongoDB URI
 # client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
@@ -335,6 +342,7 @@ def login():
         print('Login successful')
         session['logged_in'] = True
         session['empid'] = empid
+        print('Session data after login:', session)
         return jsonify({'loginStatus': True}), 200
     else:
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
@@ -468,6 +476,7 @@ Profile Page - Show Employee Details
 @app.route('/auth/get_employee_data', methods=['GET'])
 def get_employee_data():
     if 'logged_in' not in session or not session['logged_in']:
+        print(session)
         return jsonify({'error': 'Not logged in'}), 401
 
     empid = session['empid']
@@ -653,8 +662,9 @@ def add_project_data():
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
     # empid = data.get('empid')
-    current_date = datetime.now().strftime('%Y-%m-%d')
-
+    # current_date = datetime.now().strftime('%Y-%m-%d')
+    current_date = datetime.date.today()
+    print(current_date)
     # To fetch empid of logged in employee
     if 'logged_in' not in session or not session['logged_in']:
         return jsonify({'error': 'Not logged in'}), 401
