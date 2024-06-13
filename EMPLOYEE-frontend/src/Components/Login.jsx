@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import tenlogo from "./../assets/tencompany.jpg";
-
+axios.defaults.withCredentials = true;
 const Login = () => {
   const [values, setValues] = useState({
     empid: "",
