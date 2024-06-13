@@ -34,6 +34,7 @@ CORS(app, resources={r"/auth/*": {
     "supports_credentials": True
 }})
 
+
 # MongoDB configuration
 client = MongoClient(
     'mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -568,7 +569,8 @@ def get_events():
         event_list = [{'id': str(event['_id']), 'title': event['title'], 'start': event['start'], 'end': event['end'], 'allDay': event['all_day']} for event in events]
         return jsonify(event_list), 200
     except Exception as e:
-        print(f"Error fetching events: {e}")
+        print("Error fetching events:", e)
+
         return jsonify({'error': 'Internal Server Error'}), 500
 
 @app.route('/auth/add_event', methods=['POST'])
@@ -639,7 +641,8 @@ def get_projects():
         project_list = [{'id': str(project['_id']), 'name': project['name']} for project in projects]
         return jsonify(project_list), 200
     except Exception as e:
-        print(f"Error fetching projects: {e}")
+        print("Error fetching events:", e)
+
         return jsonify({'error': 'Internal Server Error'}), 500
 
 """
