@@ -146,7 +146,7 @@ const Home = () => {
           >
             Dashboard
           </h2>
-          <button className=" tw-bg-gray-800 btn btn-dark h-25" onClick={showName}>calendar</button>
+          <button className=" tw-bg-gray-800 btn btn-dark h-25 tw-mx-2 " onClick={showName}>calendar</button>
         </div>
         {
           show && (<CalenderComponent />)

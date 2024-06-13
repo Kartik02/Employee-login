@@ -19,7 +19,7 @@ function Profile() {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_data', { withCredentials: true });
+      const response = await axios.get('http://localhost:5000/auth/get_employee_data', { withCredentials: true });
       if (response.data) {
         setEmployee({
           name: response.data.name,
@@ -35,7 +35,7 @@ function Profile() {
   const handleEmailChange = () => {
     axios
       .post(
-        "https://rmbackend.vercel.app/auth/update_employee",
+        "http://localhost:5000/auth/update_employee",
         { email: editedEmail },
         { withCredentials: true }
       )
@@ -51,7 +51,7 @@ function Profile() {
   const handlePasswordChange = () => {
     axios
       .post(
-        "https://rmbackend.vercel.app/auth/update_employee",
+        "http://localhost:5000/auth/update_employee",
         { password: editedPassword },
         { withCredentials: true }
       )
@@ -70,7 +70,7 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("https://rmbackend.vercel.app/auth/upload_profile", formData, {
+      .post("http://localhost:5000/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

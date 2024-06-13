@@ -23,7 +23,7 @@ const Charts = () => {
         const labels = tags.map(tag => tag.tag);
         const data = tags.map(tag => tag.count);
 
-        // Generate dynamic colors
+      
         const colors = randomColor({
           count: labels.length,
           luminosity: 'bright',
@@ -46,13 +46,21 @@ const Charts = () => {
     fetchTagCount();
   }, []);
 
+  const options = {
+    plugins: {
+      legend: {
+        position: 'right', 
+      },
+    },
+  };
+
   return (
     <CRow>
       <CCol>
-        <CCard className="my-4">
+        <CCard className="my-1 tw-h-full">
           <CCardHeader>Doughnut Chart</CCardHeader>
-          <CCardBody className="w-100">
-            <CChartDoughnut className="w-50" data={chartData} />
+          <CCardBody className="d-flex justify-content-center">
+            <CChartDoughnut data={chartData} options={options} />
           </CCardBody>
         </CCard>
       </CCol>

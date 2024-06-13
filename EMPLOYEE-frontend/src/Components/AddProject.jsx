@@ -32,7 +32,7 @@ const AddProject = () => {
 
     return (
         <div className="tw-d-flex tw-justify-content-center tw-align-items-center tw-mt-3 ">
-            <div className="p-3 rounded w-50 tw-border tw-border-base-content ">
+            <div className="p-3 rounded  lg:tw-w-1/2 sm:tw-w-full tw-border tw-border-base-content ">
                 <form className="row g-1" onSubmit={handleSubmit}>
                     <label htmlFor="inputName" className="form-label">
                         Name <span className="text-danger">*</span>

@@ -40,14 +40,16 @@ const Charts = () => {
 
     fetchProjectTime();
   }, []);
-
+  const options = {
+    responsive: true,
+  };
   return (
     <CRow>
       <CCol>
-        <CCard className="my-4">
+        <CCard className="my-1 tw-h-full">
           <CCardHeader>Bar Chart</CCardHeader>
-          <CCardBody className="w-100">
-            <CChartBar className="w-100" data={chartData} />
+          <CCardBody className="w-100 d-flex justify-content-center" >
+            <CChartBar className="w-100" data={chartData} options={options} />
           </CCardBody>
         </CCard>
       </CCol>

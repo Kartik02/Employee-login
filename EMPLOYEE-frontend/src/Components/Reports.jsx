@@ -61,7 +61,7 @@ const Reports = () => {
 
   return (
     <>
-      <div className='lg:tw-flex tw-w-full tw-gap-1'>
+      <div className='lg:tw-flex tw-w-full tw-items-center tw-gap-1'>
 
 
         <div className='lg:w-50 w-100'>
