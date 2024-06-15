@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleOtpSubmit = async (event) => {
@@ -15,10 +15,20 @@ const ForgotPassword = () => {
       const response = await axios.post("https://rmbackend.vercel.app/auth/forgotpassword", {
         email,
       });
-      alert(response.data.message);
+      Swal.fire({
+        icon: 'success',
+        title: 'OTP Sent!',
+        text: response.data.message,
+        confirmButtonText: 'OK'
+      });
     } catch (error) {
       console.error("Error occurred:", error);
-      setErrorMessage("An error occurred while processing your request. Please try again later.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while processing your request. Please try again later.',
+        confirmButtonText: 'OK'
+      });
     }
   };
 
@@ -30,15 +40,24 @@ const ForgotPassword = () => {
         otp,
         password: newPassword,
       });
-      alert(response.data.message);
-      navigate("/");
+      Swal.fire({
+        icon: 'success',
+        title: 'Password Reset!',
+        text: response.data.message,
+        confirmButtonText: 'OK'
+      }).then(() => {
+        navigate("/");
+      });
     } catch (error) {
       console.error("Error occurred:", error);
-      setErrorMessage("An error occurred while processing your request. Please try again later.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while processing your request. Please try again later.',
+        confirmButtonText: 'OK'
+      });
     }
   };
-
-
 
   return (
     <div className="tw-h-screen tw-p-5 tw-flex tw-justify-center tw-items-center login">
@@ -65,7 +84,6 @@ const ForgotPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="tw-text-red-700 tw-font-semibold">{errorMessage}</div>
             <div className="tw-flex tw-justify-center tw-space-x-4  tw-py-4">
               <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-2 tw-rounded">
                 Send OTP
@@ -101,7 +119,6 @@ const ForgotPassword = () => {
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </div>
-            <div className="tw-text-red-700 tw-font-semibold">{errorMessage}</div>
             <div className="tw-flex tw-justify-center tw-space-x-4  tw-py-4">
               <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-2 tw-rounded">
                 Reset Password

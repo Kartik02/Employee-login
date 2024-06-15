@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -34,34 +35,50 @@ const AddEmployee = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('name', employee.name);
-    formData.append('email', employee.email);
-    formData.append('employee_id', employee.employee_id);
-    formData.append('password', employee.password);
-    formData.append('salary', employee.salary);
-    formData.append('category_id', employee.category_id);
-    formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to add this employee?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, add it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formData = new FormData();
+        formData.append('name', employee.name);
+        formData.append('email', employee.email);
+        formData.append('employee_id', employee.employee_id);
+        formData.append('password', employee.password);
+        formData.append('salary', employee.salary);
+        formData.append('category_id', employee.category_id);
+        formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-    axios.post('https://rmbackend.vercel.app/auth/add_employee', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+        axios.post('https://rmbackend.vercel.app/auth/add_employee', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+          .then(result => {
+            console.log(result.data);
+            Swal.fire(
+              'Added!',
+              'Employee has been added successfully.',
+              'success'
+            );
+            setEmployee({
+              name: '',
+              email: '',
+              employee_id: '',
+              password: '',
+              salary: '',
+              category_id: '',
+              image: null
+            });
+          })
+          .catch(err => console.log(err));
       }
-    })
-      .then(result => {
-        console.log(result.data);
-        setSuccessMessage('Employee added successfully');
-        setEmployee({
-          name: '',
-          email: '',
-          employee_id: '',
-          password: '',
-          salary: '',
-          category_id: '',
-          image: null
-        });
-      })
-      .catch(err => console.log(err));
+    });
   };
 
   const handleRemoveMessage = () => {

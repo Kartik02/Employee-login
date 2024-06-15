@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 const Leave = () => {
   const [formData, setFormData] = useState({
@@ -36,8 +38,19 @@ const Leave = () => {
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);
+        Swal.fire({
+          title: "Submitted Successfully!",
+          text: "Your leave request has been submitted.",
+          icon: "success"
+        });
       })
       .catch(err => console.error(err));
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>'
+      });
   };
 
 

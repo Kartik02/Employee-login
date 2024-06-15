@@ -3,6 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Dashboard = () => {
     axios.get('https://rmbackend.vercel.app/auth/logout')
       .then(result => {
         if (result.data.Status) {
+      
           navigate('adminlogin');
         }
       });

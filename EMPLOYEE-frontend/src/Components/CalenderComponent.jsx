@@ -3,7 +3,7 @@ import CalendarCard from './CalendarCard';
 import Modal from 'react-modal';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
-
+import Swal from 'sweetalert2';
 const CalendarComponent = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -71,10 +71,20 @@ const CalendarComponent = () => {
         .then(response => {
           setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
           localStorage.setItem('events', JSON.stringify([...currentEvents, { id: response.data.id, ...newEventObj }]));
+          Swal.fire({
+            title: 'Event Added Successfully!',
+            text: `The event "${newEvent.title}" has been added.`,
+            icon: 'success'
+          });
           handleModalClose();
         })
         .catch(error => {
           console.error('Error adding event:', error);
+          Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while adding the event. Please try again.',
+            icon: 'error'
+          });
         });
     }
   };
@@ -85,26 +95,57 @@ const CalendarComponent = () => {
         .then(response => {
           setCurrentEvents(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event));
           localStorage.setItem('events', JSON.stringify(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event)));
+          Swal.fire({
+            title: 'Event Updated Successfully!',
+            text: `The event "${newEvent.title}" has been updated.`,
+            icon: 'success'
+          });
           handleModalClose();
         })
         .catch(error => {
           console.error('Error updating event:', error);
+          Swal.fire({
+            title: 'Error!',
+            text: 'An error occurred while deleting the event. Please try again.',
+            icon: 'error'
+          });
         });
     }
   };
-
   const handleDeleteEvent = (eventId) => {
-    axios.post(`https://rmbackend.vercel.app/auth/delete_event`, { id: eventId })
-      .then(response => {
-        setCurrentEvents(currentEvents.filter(event => event.id !== eventId));
-        localStorage.setItem('events', JSON.stringify(currentEvents.filter(event => event.id !== eventId)));
-        handleModalClose();
-      })
-      .catch(error => {
-        console.error('Error deleting event:', error);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.post(`https://rmbackend.vercel.app/auth/delete_event`, { id: eventId })
+          .then(response => {
+            setCurrentEvents(currentEvents.filter(event => event.id !== eventId));
+            localStorage.setItem('events', JSON.stringify(currentEvents.filter(event => event.id !== eventId)));
+            handleModalClose();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your event has been deleted.",
+              icon: "success"
+            });
+          })
+          .catch(error => {
+            console.error('Error deleting event:', error);
+            Swal.fire({
+              title: "Error!",
+              text: "An error occurred while deleting the event. Please try again.",
+              icon: "error"
+            });
+          });
+      }
+    });
   };
-
+  
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleAddEvent();

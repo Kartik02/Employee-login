@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./AdminStyle.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const AdminLogin = () => {
   const [values, setValues] = useState({
@@ -18,12 +19,30 @@ const AdminLogin = () => {
       .post("https://rmbackend.vercel.app/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
+          Swal.fire({
+            title: "Login Successfully!",
+            text: "Welcome back! You have successfully logged in.",
+            icon: "success",
+          });
           navigate("/admindashboard");
         } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>',
+          });
           setError(result.data.Error);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "An error occurred. Please try again later.",
+        });
+      });
   };
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 loginPage">

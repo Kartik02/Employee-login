@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function Tag() {
   const [inputValue, setInputValue] = useState('');
   const [tags, setTags] = useState([]);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-
+  
   useEffect(() => {
     // Fetch tags from Flask backend when component mounts
     axios.get('https://rmbackend.vercel.app/auth/tag_list')
@@ -14,7 +13,7 @@ function Tag() {
         setTags(response.data.tags);
       })
       .catch(error => {
-        setError(error.message);
+        console.error('Error fetching tags:', error);
       });
   }, []);
 
@@ -32,14 +31,32 @@ function Tag() {
             // Add the new tag to the local state
             setTags([...tags, { id: tags.length + 1, tag: inputValue }]);
             setInputValue('');
-            setError(null);
-            setSuccessMessage('Tag added successfully!');
+            // Display success message using SweetAlert2
+            Swal.fire({
+              title: 'Success!',
+              text: 'Tag added successfully!',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
           } else {
-            setError(response.data.error);
+            // Display error message using SweetAlert2
+            Swal.fire({
+              title: 'Error!',
+              text: response.data.error || 'Something went wrong!',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
           }
         })
         .catch(error => {
-          setError(error.message);
+          console.error('Error adding tag:', error);
+          // Display error message using SweetAlert2
+          Swal.fire({
+            title: 'Error!',
+            text: 'Something went wrong!',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
         });
     }
   };
@@ -47,15 +64,13 @@ function Tag() {
   return (
     <div className="container">
       <p style={{ fontSize: '40px' }}>Tags</p>
-      {error && <p>Error: {error}</p>}
-      {successMessage && <p className="text-success">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-auto">
             <label htmlFor="inputTag" className="visually-hidden">Tag</label>
             <input
               type="text"
-              className="form-control mb-3 tw-bg-base-300 tw-text-base-content tw-border tw-border-base-content tw-placeholder-base-content"
+              className="form-control mb-3"
               id="inputTag"
               placeholder="Add new tag"
               value={inputValue}
@@ -67,7 +82,7 @@ function Tag() {
           </div>
         </div>
       </form>
-      <table className="tw-table tw-table-bordered tw-mt-8  tw-bg-transparent">
+      <table className="table table-bordered mt-3">
         <thead>
           <tr>
             <th>#</th>

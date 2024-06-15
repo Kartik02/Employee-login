@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import tenlogo from "./../assets/tencompany.jpg";
+import Swal from 'sweetalert2';
+
+
 axios.defaults.withCredentials = true;
 const Login = () => {
   const [values, setValues] = useState({
@@ -19,13 +22,31 @@ const Login = () => {
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {
+          Swal.fire({
+            title: "Login Successfully!",
+            text: "Welcome back! You have successfully logged in.",
+            icon: "success"
+        });
           console.log("Redirecting...");
           navigate("/dashboard");
+       
         } else {
           setError(result.data.Error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>'
+          });
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "An error occurred. Please try again later.",
+        });
+      });
   };
 
   const handleAdminClick = () => {
