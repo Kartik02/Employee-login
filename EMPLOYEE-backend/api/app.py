@@ -22,6 +22,7 @@ from bson import ObjectId
 import random
 from flask_pymongo import PyMongo
 from flask_wtf import FlaskForm
+from datetime import timedelta
 
 """
 Database Setup
@@ -32,6 +33,7 @@ app.secret_key = 'your_secret_key'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
 Session(app)
 
 CORS(app, resources={r"/auth/*": {
@@ -106,7 +108,7 @@ class ProjectForm(FlaskForm):
     task = StringField('Task', validators=[DataRequired()])
     tags = StringField('Tags', validators=[DataRequired()])
     timeElapsed = DecimalField('Time Elapsed', validators=[DataRequired()])
-    date = DateField('Date', format='%Y-%m-%d', validators=[DataRequired()])
+    date = DateField('Date', validators=[DataRequired()])
     empid = StringField('Employee ID', validators=[DataRequired()])
 
 class MeetingForm(FlaskForm):
@@ -335,18 +337,38 @@ Employee Login and operations
 @app.route('/auth/login', methods=['POST'])
 def login():
     data = request.json
-    print('Data Reveived: ', data)
+    print('Data Received: ', data)
+
     empid = data.get('empid')
     password = data.get('password')
+
+    if not empid or not password:
+        print('empid or password not provided')
+        return jsonify({'loginStatus': False, 'Error': 'empid and password are required'}), 400
+
     user = db.emp_data.find_one({'empid': empid})
     if user and user['password'] == password:
         print('Login successful')
         session['logged_in'] = True
         session['empid'] = empid
+        session['name'] = user['name']
+        session['email'] = user['email']
+        session.permanent = True  # Makes the session permanent
         print('Session data after login:', session)
         return jsonify({'loginStatus': True}), 200
     else:
+        print('Invalid credentials')
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
+
+
+@app.route('/auth/logout', methods=['POST'])
+def logout():
+    session.pop('logged_in', None)
+    session.pop('empid', None)
+    session.pop('name', None)
+    session.pop('email', None)
+    return jsonify({'logoutStatus': True}), 200
+
 
 """
 Dashboard Page - Meeting Details
