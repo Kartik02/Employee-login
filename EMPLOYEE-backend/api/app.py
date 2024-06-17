@@ -14,8 +14,7 @@ import base64
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, FileField, DecimalField, SelectField, DateField, TimeField, EmailField, \
-    DateTimeField, BooleanField
+from wtforms import StringField, PasswordField, FileField, DecimalField, SelectField, DateField, TimeField, EmailField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired
 from flask_admin.form import rules
 from bson import ObjectId
@@ -57,8 +56,8 @@ db = client.employeee
 # Update this with your MongoDB URI
 # client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 # db = client['employeee']
-#client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
-#db = client['ems']
+# client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
+# db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
