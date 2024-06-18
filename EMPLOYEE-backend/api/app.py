@@ -65,7 +65,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
-app.config['MAIL_PASSWORD'] = 'zdjwtxgxrwtgtnhm'
+app.config['MAIL_PASSWORD'] = 'invz tkuz brhp crkf'
 mail = Mail(app)
 
 class AdminDataForm(FlaskForm):
@@ -787,15 +787,25 @@ def get_tag_count():
 Forget and Reset Password
 """
 import string
-
 # Route for sending OTP
-@app.route('/auth/forgot_password', methods=['POST'])
+@app.route('/auth/forgotpassword', methods=['POST', 'OPTIONS'])
 def forgot_password():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'Preflight request'}), 200
+
     data = request.json
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
     email = data.get('email')
-    print(email)
+    if not email:
+        return jsonify({'error': 'Email not provided'}), 400
+
+    print(f"Email received for forgot password: {email}")
+
     user = db.emp_data.find_one({'email': email})
     if not user:
+        print(f"Email not fount in database for forgot password: {email}")
         return jsonify({'error': 'Employee not found'}), 404
 
     otp = ''.join(random.choices(string.digits, k=6))
@@ -808,12 +818,21 @@ def forgot_password():
     return jsonify({'message': 'OTP sent successfully'}), 200
 
 # Route for resetting password
-@app.route('/auth/reset_password', methods=['POST'])
+@app.route('/auth/resetpassword', methods=['POST', 'OPTIONS'])
 def reset_password():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'Preflight request'}), 200
+
     data = request.json
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
     email = data.get('email')
     otp = data.get('otp')
     new_password = data.get('password')
+
+    if not email or not otp or not new_password:
+        return jsonify({'error': 'Email, OTP, and new password must be provided'}), 400
 
     user = db.emp_data.find_one({'email': email, 'otp': otp})
     if not user:
@@ -822,6 +841,7 @@ def reset_password():
     db.emp_data.update_one({'email': email}, {'$set': {'password': new_password}})
 
     return jsonify({'message': 'Password reset successfully'}), 200
+
 
 # @app.route('/auth/forgot_password', methods=['POST'])
 # def forgot_password():
