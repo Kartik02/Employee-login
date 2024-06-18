@@ -100,7 +100,7 @@ function Profile() {
       <div className="row justify-content-center">
         <div className="col-md-8 tw-border tw-border-base-content mt-5 tw-rounded">
           <div className="">
-            <div className="mb-5">
+            <div className="mb-3">
               <h1 className=" tw-font-bold tw-text-2xl">Profile Settings</h1>
               <div className="row">
                 <div className="col-md-4">
@@ -114,7 +114,7 @@ function Profile() {
                     <small className=" d-block mb-2">
                       Formats: png, jpg, gif. Max size: 1 MB.
                     </small>
-                    <div className="d-flex align-items-center mb-3">
+                    <div className="d-md-flex flex-md-column d-flex justify-content-around align-items-center mt-4">
                       <img
                         src={
                           empData.profileImage
@@ -123,8 +123,8 @@ function Profile() {
                         }
                         alt="Profile"
                         className="rounded-circle"
-                        width="64"
-                        height="64"
+                        width="120"
+                        height="120"
                       />
                       <input
                         type="file"
@@ -135,12 +135,15 @@ function Profile() {
                       />
                       <label
                         htmlFor="profile-photo"
-                        className="btn btn-primary mt-2"
-                        style={{ fontSize: "12px", marginLeft: "12px" }}
+                        className="mt-4 tw-bg-gradient-to-r tw-from-pink-500 tw-to-red-500 tw-text-white py-2 px-4 rounded tw-cursor-pointer "
+                        style={{ fontSize: "12px", marginTop: "10px" }}
                       >
                         UPLOAD IMAGE
                       </label>
                     </div>
+
+
+
                   </div>
                 </div>
                 <div className="col-md-8">
@@ -241,3 +244,4 @@ function Profile() {
 }
 
 export default Profile;
+
