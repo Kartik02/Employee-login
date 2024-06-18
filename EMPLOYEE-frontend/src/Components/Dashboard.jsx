@@ -4,6 +4,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import ReactLoading from 'react-loading';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ const Dashboard = () => {
   }, []) : [];
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (<div className="tw-flex tw-items-center tw-justify-center tw-h-screen tw-bg-black ">
+       <ReactLoading type={"bubbles"} color={"#fff"} height={'10%'} width={'10%'} />    </div>);
   }
 
   return (

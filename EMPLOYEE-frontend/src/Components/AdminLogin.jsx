@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./AdminStyle.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -9,7 +8,7 @@ const AdminLogin = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -32,7 +31,7 @@ const AdminLogin = () => {
             text: "Something went wrong!",
             footer: '<a href="#">Why do I have this issue?</a>',
           });
-          setError(result.data.Error);
+          // setError(result.data.Error);
         }
       })
       .catch((err) => {
@@ -44,47 +43,55 @@ const AdminLogin = () => {
         });
       });
   };
+
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
-      <div className="p-3 rounded w-65 border loginForm">
-        <div className="text-warning">{error && error}</div>
-        <h2 className=" tw-text-[40px] tw-font-semibold">Login page</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="email">
-              <strong>Email:</strong>
-            </label>
-            <input
-              type="email"
-              name="email"
-              autoComplete="off"
-              placeholder="enter mail"
-              onChange={(e) => setValues({ ...values, email: e.target.value })}
-              className="form-control rounded 0"
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password">
-              <strong>Password:</strong>
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="enter password"
-              onChange={(e) =>
-                setValues({ ...values, password: e.target.value })
-              }
-              className="form-control rounded 0"
-            />
-          </div>
-          <button className="btn btn-success w-100 rounded 0">log in</button>
-          {/* <div className="mb-3">
-                <input type="checkbox" name="tick" id="tick"
-                <label htmlFor="password"><strong>Term & Condition</strong></label>
-                
-               
+    <div
+      className="tw-h-screen tw-text-black tw-backdrop-blur-3xl tw-bg-white/30 tw-p-5 tw-flex tw-justify-center tw-items-center loginPage"
+      style={{
+        backgroundImage: 'url(https://cdn.wallpapersafari.com/89/75/XcwfTN.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="tw-rounded-lg tw-border tw-bg-card tw-text-card-foreground tw-shadow-sm tw-mx-auto tw-max-w-sm tw-w-full tw-sm:tw-w-[500px] loginForm">
+        <div className="tw-flex tw-flex-col tw-p-6 tw-space-y-1">
+          <h2 className="tw-text-center tw-mb-4 tw-whitespace-nowrap tw-tracking-tight tw-text-[20px] tw-font-bold">Admin Login</h2>
+          <hr />
+          <form className="mt-4" onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="email">
+                <strong>Email:</strong>
+              </label>
+              <input
+                type="email"
+                name="email"
+                autoComplete="off"
+                placeholder="Enter your email"
+                onChange={(e) => setValues({ ...values, email: e.target.value })}
+                className="form-control rounded 0"
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password">
+                <strong>Password:</strong>
+              </label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                onChange={(e) => setValues({ ...values, password: e.target.value })}
+                className="form-control rounded 0"
+                required
+              />
+            </div>
+            <button className="btn btn-success w-100 rounded 0">Log In</button>
+            {/* <div className="mb-3">
+              <input type="checkbox" name="tick" id="tick" />
+              <label htmlFor="password"><strong>Term & Condition</strong></label>
             </div> */}
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

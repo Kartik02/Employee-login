@@ -53,84 +53,62 @@ const Login = () => {
     navigate("/adminlogin"); // Redirect to the admin section
   };
   return (
-    <div className="tw-h-screen tw-p-5 tw-flex tw-justify-center tw-items-center login">
-      <div className="tw-rounded-lg tw-border tw-bg-card tw-text-card-foreground tw-shadow-sm tw-mx-auto tw-max-w-sm tw-w-full tw-sm:tw-w-[500px]">
-        <div className="text-warning">{error && error}</div>
-        <div className="tw-flex tw-flex-col tw-p-6 tw-space-y-1">
-          <div className="tw-flex tw-flex-col tw-items-center tw-space-y-2">
-            <img
-              src={tenlogo}
-              alt="Logo"
-              width="100"
-              height="100"
-              className="rounded-lg"
-            />
-            <h3 className="tw-whitespace-nowrap tw-tracking-tight tw-text-2xl tw-font-bold">
-              Employee Login
-            </h3>
-          </div>
+    <div className="tw-h-screen tw-flex">
+    <div
+      className="tw-hidden md:tw-block md:tw-w-1/2 tw-bg-cover tw-bg-center"
+      style={{
+        backgroundImage: 'url(https://assets.weforum.org/article/image/yvewLY0GS9SWCu9vCUQxCK16PJsKX4ww-rxLLC-ch70.jpg)',
+      }}
+    >
+      <div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full tw-bg-black/50 tw-p-4">
+        <h2 className="tw-text-white tw-text-4xl tw-font-bold">Welcome Back</h2>
+        <p className="tw-text-white tw-text-lg tw-mt-4 tw-text-center">
+          We're excited to see you again! Log in to access your dashboard and continue making a difference. Your dedication and hard work are what drive our success.
+        </p>
+      </div>
+    </div>
+    <div className="tw-w-full md:tw-w-1/2 tw-bg-slate-800 tw-flex tw-justify-center tw-items-center">
+      <div className="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 tw-w-full tw-max-w-md">
+        
+        <div className="tw-flex tw-flex-col tw-items-center tw-mb-6">
+          <img src={tenlogo} alt="Logo" width="100" height="100" className="tw-rounded-lg" />
+          <h3 className="tw-text-2xl tw-font-bold">Employee Login</h3>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="tw-p-6 tw-space-y-4">
-            <div className="tw-space-y-2">
-              <label
-                className="tw-text-sm tw-font-medium tw-leading-none tw-peer-disabled:tw-cursor-not-allowed tw-peer-disabled:tw-opacity-70"
-                htmlFor="employeeid"
-              >
-                Employee ID
-              </label>
-              <input
-                className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background file:tw-border-0 file:tw-bg-transparent file:tw-text-sm file:tw-font-medium placeholder:tw-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
-                id="employeeid"
-                placeholder="Employee ID"
-                required=""
-                onChange={(e) =>
-                  setValues({ ...values, empid: e.target.value })
-                }
-                class="form-control rounded 0"
-              />
-            </div>
-            <div className="tw-space-y-2">
-              <label
-                className="tw-text-sm tw-font-medium tw-leading-none tw-peer-disabled:tw-cursor-not-allowed tw-peer-disabled:tw-opacity-70"
-                htmlFor="password"
-              >
-                Password
-              </label>
-              <input
-                className="tw-flex tw-h-10 tw-w-full tw-rounded-md tw-border tw-border-input tw-bg-background tw-px-3 tw-py-2 tw-text-sm tw-ring-offset-background file:tw-border-0 file:tw-bg-transparent file:tw-text-sm file:tw-font-medium placeholder:tw-text-muted-foreground focus-visible:tw-outline-none focus-visible:tw-ring-2 focus-visible:tw-ring-ring focus-visible:tw-ring-offset-2 disabled:tw-cursor-not-allowed disabled:tw-opacity-50"
-                id="password"
-                placeholder="Password"
-                required=""
-                type="password"
-                onChange={(e) =>
-                  setValues({ ...values, password: e.target.value })
-                }
-                class="form-control rounded 0"
-              />
-            </div>
-
-            <div>
-              <a className="tw-underline" href="/forgotpassword">
-                Forgot Password?
-              </a>
-            </div>
-            <div className="tw-text-center">
-              <button className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">
-                Login
-              </button>{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;
-              <button
-                className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
-                onClick={handleAdminClick}
-              >
-                Admin
-              </button>
-            </div>
+          <div className="tw-mb-4">
+            <label htmlFor="employeeid" className="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Employee ID</label>
+            <input
+              id="employeeid"
+              type="text"
+              placeholder="Employee ID"
+              required
+              onChange={(e) => setValues({ ...values, empid: e.target.value })}
+              className="tw-mt-1 tw-block tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-indigo-500"
+            />
+          </div>
+          <div className="tw-mb-4">
+            <label htmlFor="password" className="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Password</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              required
+              onChange={(e) => setValues({ ...values, password: e.target.value })}
+              className="tw-mt-1 tw-block tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-indigo-500"
+            />
+          </div>
+          <div className="tw-mb-4">
+            <a className="tw-text-sm tw-text-indigo-600 hover:tw-underline" href="/forgotpassword">Forgot Password?</a>
+          </div>
+          <div className="tw-flex tw-justify-center tw-space-x-4">
+            <button type="submit" className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded">Login</button>
+            <button type="button" className="tw-bg-black hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded" onClick={handleAdminClick}>Admin</button>
           </div>
         </form>
       </div>
     </div>
+  </div>
+  
   );
 };
 
