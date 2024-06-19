@@ -47,6 +47,14 @@ function App() {
             path="/admindashboard/add_employee"
             element={<AddEmployee />}
           ></Route>
+            <Route
+            path="/admindashboard/employeesec"
+            element={<Employeesec />}
+          ></Route>
+           <Route
+            path="/admindashboard/add_category"
+            element={<AddCategory />}
+          ></Route>
           <Route
             path="/admindashboard/addproject"
             element={<AddProject />}
@@ -62,10 +70,7 @@ function App() {
           <Route path="" element={<Home />}></Route>
           {/* <Route path='/dashboard/category' element={<Category/>}></Route>  */}
           <Route path="/dashboard/profile" element={<Profile />}></Route>
-          <Route
-            path="/dashboard/employeesec"
-            element={<Employeesec />}
-          ></Route>
+        
           <Route
             path="/dashboard/timetracker"
             element={<TimeTracker />}
@@ -80,10 +85,7 @@ function App() {
           ></Route>
           <Route path="/dashboard/leave" element={<Leave />}></Route>
           <Route path="/dashboard/timesheet" element={<Timesheet />}></Route>
-          <Route
-            path="/dashboard/add_category"
-            element={<AddCategory />}
-          ></Route>
+         
           <Route path="/dashboard/reports" element={<Reports />}></Route>
         </Route>
       </Routes>

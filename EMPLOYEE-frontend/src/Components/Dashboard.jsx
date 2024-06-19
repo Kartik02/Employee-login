@@ -48,8 +48,8 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container-fluid hover min-vh-100 tw-bg-base-300 tw-text-base-content">
-      <div className="row flex-nowrap  p-0">
+    <div className="container-fluid hover tw-bg-base-300 tw-text-base-content tw-h-screen sm:tw-h-full ">
+      <div className="row flex-nowrap  p-0 tw-h-screen">
         <div className="col-auto col-2 col-md-3 col-xl-2 px-xxl-2 px-0  hover:bg-gray-900 h-screen  overflow-y-auto  sm:h-full">
           <div className="d-flex bg-dark col-2 col-md-3 col-xl-2 px-sm-2 px-0 flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 tw-fixed sm:tw-h-full ">
             <Link
@@ -118,7 +118,7 @@ const Dashboard = () => {
                   <span className="ms-2 d-none d-sm-inline">Project</span>
                 </Link>
               </li>
-              <li className="w-100">
+              {/* <li className="w-100">
                 <Link
                   to="/dashboard/employeesec"
                   className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
@@ -126,7 +126,7 @@ const Dashboard = () => {
                   <i className="fs-9 bi bi-journal-text ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> Employee sec</span>
                 </Link>
-              </li>
+              </li> */}
               <li className="w-100">
                 <Link
                   to="/dashboard/profile"

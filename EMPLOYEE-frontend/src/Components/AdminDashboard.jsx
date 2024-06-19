@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="container-fluid min-vh-100 tw-bg-base-300 tw-text-base-content ">
-      <div className="row flex-nowrap ">
+      <div className="row flex-nowrap tw-h-screen">
         <div className="col-auto col-2 col-md-3 col-xl-2 px-0 hover:bg-gray-900">
 
           <div className>
@@ -59,6 +59,14 @@ const AdminDashboard = () => {
                   </Link>
                 </li>
                 <li className="w-100">
+                  <Link to="/admindashboard/employeesec" className="nav-link text-white px-0 align-middle">
+                  <i class="bi bi-person ms-2"></i>
+
+                    <span className="ms-2 d-none d-sm-inline">Employee sec</span>
+                  </Link>
+                </li>
+                
+                <li className="w-100">
                   <Link to="/admindashboard/addproject" className="nav-link text-white px-0 align-middle">
                     <i className="fs-9 bi bi-plus-circle ms-2"></i>
                     <span className="ms-2 d-none d-sm-inline">  Add Project</span>
@@ -76,6 +84,7 @@ const AdminDashboard = () => {
                     <span className="ms-2 d-none d-sm-inline">  Create Meeting</span>
                   </Link>
                 </li>
+                
                 <li className="w-100" onClick={handleLogout}>
                   <Link to="/adminlogin" className="nav-link text-white px-0 align-middle">
                     <i className="fs-9 bi bi-box-arrow-right ms-2"></i>

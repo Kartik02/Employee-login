@@ -24,7 +24,7 @@ const Employeesec = () => {
             <div className="d-flex justify-content-center">
                 <h3>Category</h3>
             </div>
-            <Link to='/dashboard/add_category' className="btn btn-success">Add Category</Link>
+            <Link to='/admindashboard/add_category' className="btn btn-success">Add Category</Link>
             <div className="mt-3 tw-border tw-border-base-content">
                 <table className="table-auto w-full">
                     <thead>
