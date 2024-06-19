@@ -48,7 +48,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="container-fluid hover tw-bg-base-300 tw-text-base-content tw-h-screen sm:tw-h-full ">
+    <div className="container-fluid hover min-vh-100 tw-bg-base-300 tw-text-base-content">
       <div className="row flex-nowrap  p-0">
         <div className="col-auto col-2 col-md-3 col-xl-2 px-xxl-2 px-0  hover:bg-gray-900 h-screen  overflow-y-auto  sm:h-full">
           <div className="d-flex bg-dark col-2 col-md-3 col-xl-2 px-sm-2 px-0 flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 tw-fixed sm:tw-h-full ">

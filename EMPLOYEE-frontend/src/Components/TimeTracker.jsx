@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 const Stopwatch = () => {
   const [task, setTask] = useState("");
@@ -15,6 +15,32 @@ const Stopwatch = () => {
   const [editIndex, setEditIndex] = useState(null);
   const intervalRef = useRef();
 
+  const [expandedRows, setExpandedRows] = useState({});
+
+  const toggleRowExpansion = (index) => {
+    if (expandedRows[index]) {
+      clearTimeout(expandedRows[index].timer);
+      setExpandedRows((prev) => {
+        const newExpandedRows = { ...prev };
+        delete newExpandedRows[index];
+        return newExpandedRows;
+      });
+    } else {
+      const timer = setTimeout(() => {
+        setExpandedRows((prev) => {
+          const newExpandedRows = { ...prev };
+          delete newExpandedRows[index];
+          return newExpandedRows;
+        });
+      }, 3000);
+
+      setExpandedRows((prev) => ({
+        ...prev,
+        [index]: { timer },
+      }));
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
     fetchTags();
@@ -23,31 +49,39 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://rmbackend.vercel.app/auth/project_list');
+      const response = await axios.get(
+        "https://rmbackend.vercel.app/auth/project_list"
+      );
       setProjects(response.data);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error("Error fetching projects:", error);
     }
   };
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get('https://rmbackend.vercel.app/auth/tag_list');
-      setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
+      const response = await axios.get(
+        "https://rmbackend.vercel.app/auth/tag_list"
+      );
+      setTags(
+        response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
+      );
     } catch (error) {
-      console.error('Error fetching tags:', error);
-      
+      console.error("Error fetching tags:", error);
     }
   };
 
   const fetchEmployeeProjects = async () => {
     try {
-      const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_projects', { withCredentials: true });
+      const response = await axios.get(
+        "https://rmbackend.vercel.app/auth/get_employee_projects",
+        { withCredentials: true }
+      );
       const employeeProjects = response.data.projects;
       // Assuming the employeeProjects data format is similar to the submittedDetails state
       setSubmittedDetails(employeeProjects);
     } catch (error) {
-      console.error('Error fetching employee projects:', error);
+      console.error("Error fetching employee projects:", error);
     }
   };
 
@@ -85,13 +119,14 @@ const Stopwatch = () => {
     setIsRunning(false);
     setTask("");
     setProjectName("");
-    setTags(tags.map(tag => ({ ...tag, checked: false })));
+    setTags(tags.map((tag) => ({ ...tag, checked: false })));
   };
 
   const handleRun = (index) => {
     if (isRunning) return; // Prevent running if already running
     setEditIndex(index);
-    const startTime = Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
+    const startTime =
+      Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
@@ -112,7 +147,7 @@ const Stopwatch = () => {
   };
 
   const handleTagSelect = (tagName) => {
-    const updatedTags = tags.map(tag =>
+    const updatedTags = tags.map((tag) =>
       tag.name === tagName ? { ...tag, checked: !tag.checked } : tag
     );
     setTags(updatedTags);
@@ -120,55 +155,69 @@ const Stopwatch = () => {
 
   const handleSubmit = async () => {
     if (!task.trim()) {
-        alert("Task description is required!");
-        return;
+      alert("Task description is required!");
+      return;
     }
     if (!projectName.trim()) {
-        alert("Project name is required!");
-        return;
+      alert("Project name is required!");
+      return;
     }
-    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
+    const selectedTags = tags
+      .filter((tag) => tag.checked)
+      .map((tag) => tag.name);
 
     const newDetails = {
-        projectName,
-        task,
-        tags: selectedTags,
-        timeTaken: formatTime(timeElapsed),
+      projectName,
+      task,
+      tags: selectedTags,
+      timeTaken: formatTime(timeElapsed),
     };
 
-    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed });
+    console.log("Sending data:", {
+      task,
+      projectName,
+      tags: selectedTags,
+      timeElapsed,
+    });
 
     try {
-        const response = await axios.post('https://rmbackend.vercel.app/auth/add_project_data', {
-            task,
-            projectName,
-            tags: selectedTags,
-            timeElapsed,
-            empid: "2001"
-        });
-        setSubmittedDetails([...submittedDetails, { ...newDetails, projectid: response.data.projectid }]);
-        handleReset();
+      const response = await axios.post(
+        "https://rmbackend.vercel.app/auth/add_project_data",
+        {
+          task,
+          projectName,
+          tags: selectedTags,
+          timeElapsed,
+          empid: "2001",
+        }
+      );
+      setSubmittedDetails([
+        ...submittedDetails,
+        { ...newDetails, projectid: response.data.projectid },
+      ]);
+      handleReset();
     } catch (error) {
-        console.error('Error adding project:', error);
+      console.error("Error adding project:", error);
     }
   };
-
-
 
   const handleUpdateSubmit = async (index) => {
     const detail = submittedDetails[index];
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
-      await axios.post(`https://rmbackend.vercel.app/auth/update_project_data/${projectId}`, {
-        projectid: projectId,
-        task: detail.task,
-        projectName: detail.projectName,
-        tags: detail.tags,
-        timeElapsed: timeToMilliseconds(detail.timeTaken)
-      });
+      await axios.post(
+        `https://rmbackend.vercel.app/auth/update_project_data/${projectId}`,
+        {
+          projectid: projectId,
+          task: detail.task,
+          projectName: detail.projectName,
+          tags: detail.tags,
+          timeElapsed: timeToMilliseconds(detail.timeTaken),
+        }
+      );
       setEditIndex(null);
     } catch (error) {
-      console.error('Error updating project:', error);
+      console.error("Error updating project:", error);
     }
   };
 
@@ -177,14 +226,13 @@ const Stopwatch = () => {
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
 
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const timeToMilliseconds = (timeString) => {
     const [hours, minutes, seconds] = timeString.split(":").map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
   };
-
 
   return (
     <>
@@ -196,14 +244,13 @@ const Stopwatch = () => {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             className="tw-border tw-w-full tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1 "
-            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0, }}
+            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
           />
           <div className="tw-relative tw-flex-1">
             <select
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-
             >
               <option value="">Select Project</option>
               {projects.map((project, index) => (
@@ -215,23 +262,38 @@ const Stopwatch = () => {
           </div>
           <div className="absolute tw-right">
             <div
-              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
+              className="tw-border bf tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick}
-              style={{ marginRight: '8px' }}
+              style={{ marginRight: "8px" }}
             >
-              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).slice(0, 3).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
-              {tags.filter(tag => tag.checked).length > 3 && <span> ...</span>}
+              {tags.filter((tag) => tag.checked).length > 0 ? (
+                tags
+                  .filter((tag) => tag.checked)
+                  .slice(0, 3)
+                  .map((tag) => tag.name)
+                  .join(", ")
+              ) : (
+                <i className="bi bi-tag"></i>
+              )}
+              {tags.filter((tag) => tag.checked).length > 3 && (
+                <span> ...</span>
+              )}
             </div>
             {showDropdown && (
-              <div className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md" style={{ color: 'black' }}>
+              <div
+                className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md"
+                style={{ color: "black" }}
+              >
                 <ul>
                   {tags.map((tag, index) => (
-                    <li key={index} className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200">
+                    <li
+                      key={index}
+                      className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200"
+                    >
                       <input
                         type="checkbox"
                         checked={tag.checked}
                         onChange={() => handleTagSelect(tag.name)}
-
                       />
                       {tag.name}
                     </li>
@@ -268,7 +330,9 @@ const Stopwatch = () => {
           )}
         </div>
         <div>
-          <h2 className="tw-font-bold">Time Taken: {formatTime(timeElapsed)}</h2>
+          <h2 className="tw-font-bold">
+            Time Taken: {formatTime(timeElapsed)}
+          </h2>
         </div>
         {isRunning && (
           <button
@@ -287,29 +351,48 @@ const Stopwatch = () => {
           </button>
         )}
       </div>
-
       <div className="tw-p-4 tw-overflow-x-auto">
-        <table className="tw-mt-4 tw-border tw-border-base-content tw-w-full  ">
+        
+        <table className="tw-mt-4 tw-w-full ">
           <thead>
-            <tr>
-              <th className="tw-border tw-p-2 tw-w-1/5">Project Name</th>
-              <th className="tw-border tw-p-2 tw-w-1/5">Description</th>
-              <th className="tw-border tw-p-2 tw-w-1/5">Tag</th>
-              <th className="tw-border tw-p-2 tw-w-1/5">Time Taken</th>
-              <th className="tw-border tw-p-2 tw-w-1/5">Actions</th>
+            <tr className=" tw-text-black ">
+              <th className="tw-p-2 tw-w-1/5">Project Name</th>
+              <th className="tw-p-2 tw-w-1/5">Description</th>
+              <th className="tw-p-2 tw-w-1/5">Tag</th>
+              <th className="tw-p-2 tw-w-1/5">Time Taken</th>
+              <th className="tw-p-2 tw-w-1/5">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {submittedDetails.map((detail, index) => (
-              <tr key={index}>
-                <td className="tw-border tw-p-2 tw-w-1/5">{detail.projectName}</td>
-                <td className="tw-border tw-p-2 tw-w-1/5">{detail.task}</td>
-                <td className="tw-border tw-p-2 tw-w-1/5">
-                  {detail.tags.slice(0, 3).join(", ")}
-                  {detail.tags.length > 3 && <span> ...</span>}
-                </td>
-                <td className="tw-border tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
-                <td className="tw-border tw-p-2 tw-w-1/5">
+              <tr
+                key={index}
+                className="tw-last:border-b-0 tw-transition-colors tw-duration-300 tw-hover:bg-gray-100"
+              >
+                <td className="tw-p-2 tw-w-1/5">{detail.projectName}</td>
+                <td className="tw-p-2 tw-w-1/5">{detail.task}</td>
+                <td className="tw-p-2 tw-w-1/5">
+                {(expandedRows[index] ? detail.tags : detail.tags.slice(0, 3)).map((tag, tagIndex) => (
+                  <span
+                    key={tagIndex}
+                    className=" tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {detail.tags.length > 3 && !expandedRows[index] && (
+                  <span
+                    className=" tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
+                    onClick={() => toggleRowExpansion(index)}
+                  >
+                    ...
+                  </span>
+                )}
+              </td>
+
+                <td className="tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
+                <td className="tw-p-2 tw-w-1/5">
                   {editIndex !== index ? (
                     <button
                       onClick={() => handleRun(index)}
