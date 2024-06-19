@@ -376,14 +376,14 @@ const Stopwatch = () => {
                 {(expandedRows[index] ? detail.tags : detail.tags.slice(0, 3)).map((tag, tagIndex) => (
                   <span
                     key={tagIndex}
-                    className="tw-bg-gray-300 tw-text-white tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
+                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
                   >
                     {tag}
                   </span>
                 ))}
                 {detail.tags.length > 3 && !expandedRows[index] && (
                   <span
-                    className="tw-bg-gray-300 tw-text-white tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
+                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
                     onClick={() => toggleRowExpansion(index)}
                   >
                     ...
