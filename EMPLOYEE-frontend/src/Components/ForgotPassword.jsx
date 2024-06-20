@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/auth/forgot_password", {
+      const response = await axios.post("http://localhost:5000/auth/forgotpassword", {
         email,
       });
       Swal.fire({
