@@ -23,7 +23,6 @@ const Charts = () => {
         const labels = tags.map(tag => tag.tag);
         const data = tags.map(tag => tag.count);
 
-      
         const colors = randomColor({
           count: labels.length,
           luminosity: 'bright',
@@ -49,8 +48,11 @@ const Charts = () => {
   const options = {
     plugins: {
       legend: {
-        position: 'right', 
+        position: 'right',
       },
+    },
+    tooltips: {
+      enabled: false,
     },
   };
 
@@ -59,8 +61,10 @@ const Charts = () => {
       <CCol>
         <CCard className="my-1 tw-h-full">
           <CCardHeader>Doughnut Chart</CCardHeader>
-          <CCardBody className="d-flex justify-content-center">
-            <CChartDoughnut data={chartData} options={options} />
+          <CCardBody className="tw-w-full tw-h-[50vh] d-flex justify-content-center">
+            <div style={{ width: '100%', maxWidth: '300px', minHeight: '300px', maxHeight: '600px' }}>
+              <CChartDoughnut data={chartData} options={options} />
+            </div>
           </CCardBody>
         </CCard>
       </CCol>

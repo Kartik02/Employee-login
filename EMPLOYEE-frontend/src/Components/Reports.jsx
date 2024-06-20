@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import DonutChartComponent from './DonutChartComponent';
-import BarGraphComponent from './BarGraphComponent';
+import DonutChartComponent from '../Components/DonutChartComponent'; // Import your Donut Chart component
+import BarGraphComponent from '../Components/BarGraphComponent'; // Import your Bar Graph component
 
 const Reports = () => {
   const [projects, setProjects] = useState([]);
@@ -41,10 +41,10 @@ const Reports = () => {
     }));
   };
 
-  // Use predefined colors
+  // Use predefined colors (optional)
   const predefinedColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff']; // Example predefined colors
 
-  // Assign predefined colors to projects
+  // Assign predefined colors to projects (optional)
   const assignPredefinedColorsToProjects = () => {
     return projects.map((project, index) => ({
       ...project,
@@ -52,7 +52,7 @@ const Reports = () => {
     }));
   };
 
-  // Assign colors to projects dynamically
+  // Assign colors dynamically (default) or use predefined colors if preferred
   const projectsWithColors = assignColorsToProjects(); // Or assignPredefinedColorsToProjects();
 
   // Extract necessary data for pie chart and bar graph
@@ -61,20 +61,16 @@ const Reports = () => {
 
   return (
     <>
-      <div className='lg:tw-flex tw-w-full tw-items-center tw-gap-1'>
-
-
-        <div className='lg:w-50 w-100'>
+      <div className='lg:tw-flex justify-between'> 
+        <div className='tw-mx-2 tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'> 
           <BarGraphComponent data={barChartData} />
         </div>
-        <div className='lg:w-50 w-100'>
+        <div className='tw-mx-2 tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'>
           <DonutChartComponent data={donutChartData} />
         </div>
       </div>
     </>
   );
-
 };
 
 export default Reports;
-//done

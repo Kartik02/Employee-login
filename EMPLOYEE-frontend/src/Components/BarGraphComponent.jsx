@@ -40,16 +40,33 @@ const Charts = () => {
 
     fetchProjectTime();
   }, []);
+
   const options = {
     responsive: true,
+   
+    // layout: {
+    //   padding: {
+    //     top: 20, // Add padding to ensure space for the legend
+    //   },
+    // },
+    // legend: {
+    //   display: true,
+    //   position: 'top',
+    // },
+    tooltips: {
+      enabled: false,
+    },
   };
+
   return (
     <CRow>
       <CCol>
         <CCard className="my-1 tw-h-full">
           <CCardHeader>Bar Chart</CCardHeader>
-          <CCardBody className="w-100 d-flex justify-content-center" >
-            <CChartBar className="w-100" data={chartData} options={options} />
+          <CCardBody className="tw-w-full tw-h-[50vh]  d-flex justify-content-center">
+            <div style={{ height: '50vh', width: '100%' }}>
+              <CChartBar data={chartData} options={options}/>
+            </div>
           </CCardBody>
         </CCard>
       </CCol>
