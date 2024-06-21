@@ -22,7 +22,7 @@ const AddProject = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Send a POST request to the backend
-                axios.post('https://rmbackend.vercel.app/auth/add_projects', project)
+                axios.post('https://ten-tuuo.onrender.com/auth/add_projects', project)
                     .then((response) => {
                         if (response.status === 201) {
                             Swal.fire(

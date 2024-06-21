@@ -15,7 +15,7 @@ const AdminLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://rmbackend.vercel.app/auth/adminlogin", values)
+      .post("https://ten-tuuo.onrender.com/auth/adminlogin", values)
       .then((result) => {
         if (result.data.loginStatus) {
           Swal.fire({

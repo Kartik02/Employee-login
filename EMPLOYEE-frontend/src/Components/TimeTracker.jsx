@@ -50,7 +50,7 @@ const Stopwatch = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/project_list"
+        "https://ten-tuuo.onrender.com/auth/project_list"
       );
       setProjects(response.data);
     } catch (error) {
@@ -61,7 +61,7 @@ const Stopwatch = () => {
   const fetchTags = async () => {
     try {
       const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/tag_list"
+        "https://ten-tuuo.onrender.com/auth/tag_list"
       );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
@@ -74,7 +74,7 @@ const Stopwatch = () => {
   const fetchEmployeeProjects = async () => {
     try {
       const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/get_employee_projects",
+        "https://ten-tuuo.onrender.com/auth/get_employee_projects",
         { withCredentials: true }
       );
       const employeeProjects = response.data.projects;
@@ -182,7 +182,7 @@ const Stopwatch = () => {
 
     try {
       const response = await axios.post(
-        "https://rmbackend.vercel.app/auth/add_project_data",
+        "https://ten-tuuo.onrender.com/auth/add_project_data",
         {
           task,
           projectName,
@@ -206,7 +206,7 @@ const Stopwatch = () => {
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
       await axios.post(
-        `https://rmbackend.vercel.app/auth/update_project_data/${projectId}`,
+        `https://ten-tuuo.onrender.com/auth/update_project_data/${projectId}`,
         {
           projectid: projectId,
           task: detail.task,
