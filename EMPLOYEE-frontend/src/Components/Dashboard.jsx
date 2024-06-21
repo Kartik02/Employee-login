@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import Navbar from "./Navbar";
@@ -8,8 +8,10 @@ import ReactLoading from 'react-loading';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeLink, setActiveLink] = useState(location.pathname);
 
   axios.defaults.withCredentials = true;
 
@@ -17,7 +19,6 @@ const Dashboard = () => {
     axios.get('https://rmbackend.vercel.app/auth/logout')
       .then(result => {
         if (result.data.Status) {
-      
           navigate('adminlogin');
         }
       });
@@ -43,15 +44,23 @@ const Dashboard = () => {
   }, []) : [];
 
   if (loading) {
-    return (<div className="tw-flex tw-items-center tw-justify-center tw-h-screen tw-bg-black ">
-       <ReactLoading type={"bubbles"} color={"#fff"} height={'10%'} width={'10%'} />    </div>);
+    return (
+      <div className="tw-flex tw-items-center tw-justify-center tw-h-screen tw-bg-black">
+        <ReactLoading type={"bubbles"} color={"#fff"} height={'10%'} width={'10%'} />
+      </div>
+    );
   }
 
+  const handleNavClick = (path) => {
+    setActiveLink(path);
+    navigate(path);
+  };
+
   return (
-    <div className="container-fluid hover tw-bg-base-300 tw-text-base-content tw-h-screen sm:tw-h-full ">
-      <div className="row flex-nowrap  p-0 tw-h-screen">
-        <div className="col-auto col-2 col-md-3 col-xl-2 px-xxl-2 px-0  hover:bg-gray-900 h-screen  overflow-y-auto  sm:h-full">
-          <div className="d-flex bg-dark col-2 col-md-3 col-xl-2 px-sm-2 px-0 flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 tw-fixed sm:tw-h-full ">
+    <div className="container-fluid tw-bg-base-300 tw-text-base-content tw-h-screen sm:tw-h-full">
+      <div className="row flex-nowrap p-0 ">
+        <div className="col-auto col-2 col-md-3 col-xl-2 px-xxl-2 px-0 tw-h-screen overflow-y-auto sm:h-full">
+          <div className="d-flex bg-dark col-2 col-md-3 col-xl-2 px-sm-2 px-0 flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 tw-fixed sm:tw-h-full">
             <Link
               to="/dashboard"
               className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-white text-decoration-none tw-text-xs md:tw-text-xl"
@@ -64,91 +73,80 @@ const Dashboard = () => {
               className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
               id="menu"
             >
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard"
-                  className="nav-link text-white px-0 align-middle hover:text-primary tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard')}
                 >
                   <i className="fs-9 bi-speedometer2 ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Dashboard</span>
                 </Link>
               </li>
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/timesheet" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/timesheet"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/timesheet" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/timesheet')}
                 >
                   <i className="fs-9 bi bi-calendar3 ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> Timesheet</span>
                 </Link>
               </li>
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/timetracker" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/timetracker"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/timetracker" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/timetracker')}
                 >
                   <i className="fs-9 bi bi-clock ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline"> TimeTracker</span>
                 </Link>
               </li>
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/calender" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/calender"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/calender" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/calender')}
                 >
                   <i className="fs-9 bi bi-calendar ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Calendar</span>
                 </Link>
               </li>
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/reports" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/reports"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/reports" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/reports')}
                 >
                   <i className="fs-9 bi bi-bar-chart-fill ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Report</span>
                 </Link>
               </li>
-              <li className="w-100">
-                <Link
-                  to="/dashboard/projectmanagement"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
-                >
-                  <i className="fs-9 bi bi-file-earmark ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline">Project</span>
-                </Link>
-              </li>
-              {/* <li className="w-100">
-                <Link
-                  to="/dashboard/employeesec"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
-                >
-                  <i className="fs-9 bi bi-journal-text ms-2"></i>
-                  <span className="ms-2 d-none d-sm-inline"> Employee sec</span>
-                </Link>
-              </li> */}
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/profile" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/profile"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/profile" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/profile')}
                 >
                   <i className="fs-9 bi-person ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Profile</span>
                 </Link>
               </li>
-              <li className="w-100">
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/dashboard/leave" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/dashboard/leave"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className={`nav-link ${activeLink === "/dashboard/leave" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/dashboard/leave')}
                 >
                   <i className="fs-9 bi bi-house-heart ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Leave</span>
                 </Link>
               </li>
-              <li className="w-100" onClick={handleLogout}>
+              <li className="w-100 hover:tw-bg-gray-300 tw-rounded" onClick={handleLogout}>
                 <Link
                   to="/"
-                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center"
+                  className="nav-link text-white px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black"
                 >
                   <i className="fs-9 bi-power ms-2"></i>
                   <span className="ms-2 d-none d-sm-inline">Logout</span>

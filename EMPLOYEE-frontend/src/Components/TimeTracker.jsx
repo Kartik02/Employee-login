@@ -1,87 +1,94 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Stopwatch = () => {
   const [task, setTask] = useState("");
   const [projectName, setProjectName] = useState("");
   const [tags, setTags] = useState([]);
   const [timeElapsed, setTimeElapsed] = useState(0);
-  const [date, setDate] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [pausedTime, setPausedTime] = useState(0);
   const [projects, setProjects] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [submittedDetails, setSubmittedDetails] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
+  const [hoveredColumnIndex, setHoveredColumnIndex] = useState(null);
+  const [filterDate, setFilterDate] = useState(null);
   const intervalRef = useRef();
 
-  const [expandedRows, setExpandedRows] = useState({});
+  // // Dummy data
+  // const dummyProjects = ["Project A", "Project B", "Project C"];
+  // const dummyTags = [
 
-  const toggleRowExpansion = (index) => {
-    if (expandedRows[index]) {
-      clearTimeout(expandedRows[index].timer);
-      setExpandedRows((prev) => {
-        const newExpandedRows = { ...prev };
-        delete newExpandedRows[index];
-        return newExpandedRows;
-      });
-    } else {
-      const timer = setTimeout(() => {
-        setExpandedRows((prev) => {
-          const newExpandedRows = { ...prev };
-          delete newExpandedRows[index];
-          return newExpandedRows;
-        });
-      }, 3000);
-
-      setExpandedRows((prev) => ({
-        [index]: { timer },
-        ...prev,
-      }));
-    }
-  };
+  //   { name: "aaa", checked: false },
+  //   { name: "bbb", checked: false },
+  //   { name: "ccc", checked: false },
+  //   { name: "ddd", checked: false },
+  //   { name: "eee", checked: false },
+  // ];
+  // const dummySubmittedDetails = [
+  //   {
+  //     projectName: "Project A",
+  //     task: "Initial Setup",
+  //     tags: ["aaa"],
+  //     timeTaken: "01:00:00",
+  //     projectid: 1,
+  //     createdDate: new Date("2024-06-11"),
+  //   },
+  // ];
 
   useEffect(() => {
     fetchProjects();
     fetchTags();
-    fetchEmployeeProjects(); // Fetch employee projects when component mounts
+    fetchEmployeeProjects();
   }, []);
+
+  // const fetchProjects = () => {
+  //   setTimeout(() => {
+  //     setProjects(dummyProjects);
+  //   }, 500); // Simulate API delay
+  // };
+
+  // const fetchTags = () => {
+  //   setTimeout(() => {
+  //     setTags(dummyTags);
+  //   }, 500); // Simulate API delay
+  // };
+
+  // const fetchEmployeeProjects = () => {
+  //   setTimeout(() => {
+  //     setSubmittedDetails(dummySubmittedDetails);
+  //   }, 500); // Simulate API delay
+  // };
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/project_list"
-      );
+      const response = await axios.get('https://rmbackend.vercel.app/auth/project_list');
       setProjects(response.data);
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      console.error('Error fetching projects:', error);
     }
   };
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/tag_list"
-      );
-      setTags(
-        response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
-      );
+      const response = await axios.get('https://rmbackend.vercel.app/auth/tag_list');
+      setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
     } catch (error) {
-      console.error("Error fetching tags:", error);
+      console.error('Error fetching tags:', error);
     }
   };
 
   const fetchEmployeeProjects = async () => {
     try {
-      const response = await axios.get(
-        "https://rmbackend.vercel.app/auth/get_employee_projects",
-        { withCredentials: true }
-      );
+      const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_projects', { withCredentials: true });
       const employeeProjects = response.data.projects;
       // Assuming the employeeProjects data format is similar to the submittedDetails state
       setSubmittedDetails(employeeProjects);
     } catch (error) {
-      console.error("Error fetching employee projects:", error);
+      console.error('Error fetching employee projects:', error);
     }
   };
 
@@ -119,14 +126,13 @@ const Stopwatch = () => {
     setIsRunning(false);
     setTask("");
     setProjectName("");
-    setTags(tags.map((tag) => ({ ...tag, checked: false })));
+    setTags(tags.map(tag => ({ ...tag, checked: false })));
   };
 
   const handleRun = (index) => {
     if (isRunning) return; // Prevent running if already running
     setEditIndex(index);
-    const startTime =
-      Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
+    const startTime = Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
@@ -147,13 +153,13 @@ const Stopwatch = () => {
   };
 
   const handleTagSelect = (tagName) => {
-    const updatedTags = tags.map((tag) =>
+    const updatedTags = tags.map(tag =>
       tag.name === tagName ? { ...tag, checked: !tag.checked } : tag
     );
     setTags(updatedTags);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!task.trim()) {
       alert("Task description is required!");
       return;
@@ -162,63 +168,34 @@ const Stopwatch = () => {
       alert("Project name is required!");
       return;
     }
-    const selectedTags = tags
-      .filter((tag) => tag.checked)
-      .map((tag) => tag.name);
+    const selectedTags = tags.filter(tag => tag.checked).map(tag => tag.name);
 
     const newDetails = {
       projectName,
       task,
       tags: selectedTags,
       timeTaken: formatTime(timeElapsed),
+      createdDate: new Date(),
     };
 
-    console.log("Sending data:", {
-      task,
-      projectName,
-      tags: selectedTags,
-      timeElapsed,
-    });
+    console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed });
 
-    try {
-      const response = await axios.post(
-        "https://rmbackend.vercel.app/auth/add_project_data",
-        {
-          task,
-          projectName,
-          tags: selectedTags,
-          timeElapsed,
-          empid: "2001",
-        }
-      );
-      setSubmittedDetails([
-        ...submittedDetails,
-        { ...newDetails, projectid: response.data.projectid },
-      ]);
+    // Simulate API call
+    setTimeout(() => {
+      const projectid = submittedDetails.length + 1; // Simulate project ID generation
+      setSubmittedDetails([...submittedDetails, { ...newDetails, projectid }]);
       handleReset();
-    } catch (error) {
-      console.error("Error adding project:", error);
-    }
+    }, 500); // Simulate API delay
   };
 
-  const handleUpdateSubmit = async (index) => {
+  const handleUpdateSubmit = (index) => {
     const detail = submittedDetails[index];
     const projectId = detail.projectid; // Retrieve projectid from project detail object
-    try {
-      await axios.post(
-        `https://rmbackend.vercel.app/auth/update_project_data/${projectId}`,
-        {
-          projectid: projectId,
-          task: detail.task,
-          projectName: detail.projectName,
-          tags: detail.tags,
-          timeElapsed: timeToMilliseconds(detail.timeTaken),
-        }
-      );
+
+    // Simulate API call
+    setTimeout(() => {
       setEditIndex(null);
-    } catch (error) {
-      console.error("Error updating project:", error);
-    }
+    }, 500); // Simulate API delay
   };
 
   const formatTime = (milliseconds) => {
@@ -226,13 +203,19 @@ const Stopwatch = () => {
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
 
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const timeToMilliseconds = (timeString) => {
     const [hours, minutes, seconds] = timeString.split(":").map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
   };
+
+  const filteredDetails = filterDate
+    ? submittedDetails.filter(
+      detail => detail.createdDate.toDateString() === filterDate.toDateString()
+    )
+    : submittedDetails;
 
   return (
     <>
@@ -244,7 +227,7 @@ const Stopwatch = () => {
             value={task}
             onChange={(e) => setTask(e.target.value)}
             className="tw-border tw-w-full tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1 "
-            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
+            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0, }}
           />
           <div className="tw-relative tw-flex-1">
             <select
@@ -260,36 +243,20 @@ const Stopwatch = () => {
               ))}
             </select>
           </div>
-          <div className="absolute tw-right">
+          <div className="absolute tw-right-0">
             <div
-              className="tw-border bf tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
+              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick}
-              style={{ marginRight: "8px" }}
+              style={{ marginRight: '8px' }}
             >
-              {tags.filter((tag) => tag.checked).length > 0 ? (
-                tags
-                  .filter((tag) => tag.checked)
-                  .slice(0, 3)
-                  .map((tag) => tag.name)
-                  .join(", ")
-              ) : (
-                <i className="bi bi-tag"></i>
-              )}
-              {tags.filter((tag) => tag.checked).length > 3 && (
-                <span> ...</span>
-              )}
+              {tags.filter(tag => tag.checked).length > 0 ? tags.filter(tag => tag.checked).slice(0, 3).map(tag => tag.name).join(", ") : <i className="bi bi-tag"></i>}
+              {tags.filter(tag => tag.checked).length > 3 && <span> ...</span>}
             </div>
             {showDropdown && (
-              <div
-                className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md"
-                style={{ color: "black" }}
-              >
+              <div className="tw-absolute tw-mt-1 tw-z-50 tw-bg-base-300 tw-shadow-md tw-rounded-md" style={{ color: 'black', right: "115px" }}>
                 <ul>
                   {tags.map((tag, index) => (
-                    <li
-                      key={index}
-                      className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200"
-                    >
+                    <li key={index} className="tw-cursor-pointer tw-text-base-content tw-px-3 tw-py-2 tw-hover:bg-gray-200">
                       <input
                         type="checkbox"
                         checked={tag.checked}
@@ -330,9 +297,7 @@ const Stopwatch = () => {
           )}
         </div>
         <div>
-          <h2 className="tw-font-bold">
-            Time Taken: {formatTime(timeElapsed)}
-          </h2>
+          <h2 className="tw-font-bold">Time Taken: {formatTime(timeElapsed)}</h2>
         </div>
         {isRunning && (
           <button
@@ -351,48 +316,60 @@ const Stopwatch = () => {
           </button>
         )}
       </div>
-      <div className="tw-p-4 tw-overflow-x-auto">
 
-        <table className="tw-mt-4 tw-w-full ">
+      <div className="tw-p-4 tw-overflow-x-auto">
+        <div className="tw-mb-4">
+          <DatePicker
+            selected={filterDate}
+            onChange={(date) => setFilterDate(date)}
+            isClearable
+            placeholderText="Filter date"
+            className="tw-border tw-border-base-content tw-p-2"
+          />
+        </div>
+        <table className="tw-mt-4 tw-border tw-border-base-content tw-w-full">
           <thead>
-            <tr className=" tw-text-black ">
-              <th className="tw-p-2 tw-w-1/5">Project Name</th>
-              <th className="tw-p-2 tw-w-1/5">Description</th>
-              <th className="tw-p-2 tw-w-1/5">Tag</th>
-              <th className="tw-p-2 tw-w-1/5">Time Taken</th>
-              <th className="tw-p-2 tw-w-1/5">Actions</th>
+            <tr>
+              <th className="tw-border tw-p-2 tw-w-1/6">Project Name</th>
+              <th className="tw-border tw-p-2 tw-w-1/6">Description</th>
+              <th className="tw-border tw-p-2 tw-w-1/6">Tag</th>
+              <th className="tw-border tw-p-2 tw-w-1/6">Time Taken</th>
+              <th className="tw-border tw-p-2 tw-w-1/6">Created Date</th>
+              <th className="tw-border tw-p-2 tw-w-1/6">Actions</th>
             </tr>
           </thead>
-
           <tbody>
-            {submittedDetails.map((detail, index) => (
+            {filteredDetails.map((detail, index) => (
               <tr
                 key={index}
-                className="tw-last:border-b-0 tw-transition-colors tw-duration-300 tw-hover:bg-gray-100"
+                onMouseEnter={() => setHoveredRowIndex(index)}
+                onMouseLeave={() => {
+                  setHoveredRowIndex(null);
+                  setHoveredColumnIndex(null);
+                }}
+                className="tw-relative"
               >
-                <td className="tw-p-2 tw-w-1/5">{detail.projectName}</td>
-                <td className="tw-p-2 tw-w-1/5">{detail.task}</td>
-                <td className="tw-p-2 tw-w-1/5">
-                {(expandedRows[index] ? detail.tags : detail.tags.slice(0, 3)).map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {detail.tags.length > 3 && !expandedRows[index] && (
-                  <span
-                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
-                    onClick={() => toggleRowExpansion(index)}
-                  >
-                    ...
-                  </span>
-                )}
-              </td>
-
-                <td className="tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
-                <td className="tw-p-2 tw-w-1/5">
+                <td className="tw-border tw-p-2 tw-w-1/6">{detail.projectName}</td>
+                <td className="tw-border tw-p-2 tw-w-1/6">{detail.task}</td>
+                <td
+                  className="tw-border tw-p-2 tw-w-1/6"
+                  onMouseEnter={() => setHoveredColumnIndex(index)}
+                >
+                  {detail.tags.slice(0, 2).join(", ")}
+                  {detail.tags.length > 2 && <span> ...</span>}
+                  {hoveredRowIndex === index && hoveredColumnIndex === index && (
+                    <div className="tw-absolute tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content  tw-p-2 tw-mt-2 tw-z-10" style={{ top: '-20%', left: '45%', transform: 'translateX(-50%)', minWidth: '100px' }}>
+                      {detail.tags.map((tag, i) => (
+                        <span key={i} className="tw-text-xs tw-bg-transparent tw-block">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </td>
+                <td className="tw-border tw-p-2 tw-w-1/6">{detail.timeTaken}</td>
+                <td className="tw-border tw-p-2 tw-w-1/6">{detail.createdDate.toDateString()}</td>
+                <td className="tw-border tw-p-2 tw-w-1/6">
                   {editIndex !== index ? (
                     <button
                       onClick={() => handleRun(index)}

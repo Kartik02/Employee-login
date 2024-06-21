@@ -125,6 +125,7 @@ function Profile() {
                         className="rounded-circle"
                         width="120"
                         height="120"
+                        style={{ objectFit: "cover" }}
                       />
                       <input
                         type="file"

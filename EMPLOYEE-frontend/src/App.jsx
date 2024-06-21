@@ -55,6 +55,10 @@ function App() {
             path="/admindashboard/add_category"
             element={<AddCategory />}
           ></Route>
+             <Route
+            path="/admindashboard/projectmanagement"
+            element={<ProjectManagement />}
+          ></Route>
           <Route
             path="/admindashboard/addproject"
             element={<AddProject />}
@@ -79,10 +83,7 @@ function App() {
             path="/dashboard/calender"
             element={<CalendarComponent />}
           ></Route>
-          <Route
-            path="/dashboard/projectmanagement"
-            element={<ProjectManagement />}
-          ></Route>
+       
           <Route path="/dashboard/leave" element={<Leave />}></Route>
           <Route path="/dashboard/timesheet" element={<Timesheet />}></Route>
          
