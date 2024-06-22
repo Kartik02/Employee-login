@@ -65,7 +65,13 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get('https://rmbackend.vercel.app/auth/project_list');
+=======
+      const response = await axios.get(
+        "https://ten-tuuo.onrender.com/auth/project_list"
+      );
+>>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -74,8 +80,17 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get('https://rmbackend.vercel.app/auth/tag_list');
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
+=======
+      const response = await axios.get(
+        "https://ten-tuuo.onrender.com/auth/tag_list"
+      );
+      setTags(
+        response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
+      );
+>>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
     } catch (error) {
       console.error('Error fetching tags:', error);
     }
@@ -83,7 +98,14 @@ const Stopwatch = () => {
 
   const fetchEmployeeProjects = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_projects', { withCredentials: true });
+=======
+      const response = await axios.get(
+        "https://ten-tuuo.onrender.com/auth/get_employee_projects",
+        { withCredentials: true }
+      );
+>>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       const employeeProjects = response.data.projects;
       // Assuming the employeeProjects data format is similar to the submittedDetails state
       setSubmittedDetails(employeeProjects);
@@ -180,10 +202,28 @@ const Stopwatch = () => {
 
     console.log('Sending data:', { task, projectName, tags: selectedTags, timeElapsed });
 
+<<<<<<< HEAD
     // Simulate API call
     setTimeout(() => {
       const projectid = submittedDetails.length + 1; // Simulate project ID generation
       setSubmittedDetails([...submittedDetails, { ...newDetails, projectid }]);
+=======
+    try {
+      const response = await axios.post(
+        "https://ten-tuuo.onrender.com/auth/add_project_data",
+        {
+          task,
+          projectName,
+          tags: selectedTags,
+          timeElapsed,
+          empid: "2001",
+        }
+      );
+      setSubmittedDetails([
+        ...submittedDetails,
+        { ...newDetails, projectid: response.data.projectid },
+      ]);
+>>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       handleReset();
     }, 500); // Simulate API delay
   };
@@ -191,9 +231,23 @@ const Stopwatch = () => {
   const handleUpdateSubmit = (index) => {
     const detail = submittedDetails[index];
     const projectId = detail.projectid; // Retrieve projectid from project detail object
+<<<<<<< HEAD
 
     // Simulate API call
     setTimeout(() => {
+=======
+    try {
+      await axios.post(
+        `https://ten-tuuo.onrender.com/auth/update_project_data/${projectId}`,
+        {
+          projectid: projectId,
+          task: detail.task,
+          projectName: detail.projectName,
+          tags: detail.tags,
+          timeElapsed: timeToMilliseconds(detail.timeTaken),
+        }
+      );
+>>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       setEditIndex(null);
     }, 500); // Simulate API delay
   };
