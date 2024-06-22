@@ -391,7 +391,7 @@ const Stopwatch = () => {
                 )}
               </td>
 
-                <td className="tw-p-2 tw-w-1/5">{detail.timeTaken}</td>
+                <td className="tw-p-2 tw-w-1/5">{detail.timeElapsed}</td>
                 <td className="tw-p-2 tw-w-1/5">
                   {editIndex !== index ? (
                     <button
