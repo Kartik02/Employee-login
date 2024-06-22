@@ -1,18 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
 
 const Leave = () => {
   const [formData, setFormData] = useState({
     name: '',
-    employeeId: '',
+    empid: '',
     reason: '',
     numberOfDays: '',
     fromDate: '',
     toDate: '',
   });
   const [submittedData, setSubmittedData] = useState(null);
+
+  // Fetch employee data when component mounts
+  useEffect(() => {
+    const fetchEmployeeData = async () => {
+      try {
+        const response = await axios.get('https://ten-tuuo.onrender.com/auth/get_employee_data', { withCredentials: true });
+        if (response.data) {
+          setFormData(prevData => ({
+            ...prevData,
+            name: response.data.name,
+            empid: response.data.empid
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
+
+    fetchEmployeeData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,15 +63,16 @@ const Leave = () => {
           icon: "success"
         });
       })
-      .catch(err => console.error(err));
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-        footer: '<a href="#">Why do I have this issue?</a>'
+      .catch(err => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<a href="#">Why do I have this issue?</a>'
+        });
       });
   };
-
 
   return (
     <div className="max-w-md mx-auto tw-p-4">
@@ -67,19 +87,18 @@ const Leave = () => {
               value={formData.name}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
+              readOnly // Make it read-only since it's fetched from the server
             />
           </div>
           <div>
             <label htmlFor="employeeId" className="tw-block tw-mb-1 tw-mt-3">Employee ID:</label>
             <input
               type="text"
-              id="employeeId"
+              id="empid"
               name="employeeId"
-              value={formData.employeeId}
+              value={formData.empid}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
             />
           </div>
         </div>
@@ -92,7 +111,6 @@ const Leave = () => {
               value={formData.reason}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
             />
           </div>
           <div>
@@ -104,7 +122,6 @@ const Leave = () => {
               value={formData.numberOfDays}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
             />
           </div>
         </div>
@@ -118,7 +135,6 @@ const Leave = () => {
               value={formData.fromDate}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
             />
           </div>
           <div>
@@ -130,11 +146,10 @@ const Leave = () => {
               value={formData.toDate}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
-
             />
           </div>
         </div>
-        <button type="submit" className="tw-bg-blue-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md  tw-justify-content-center ">Submit</button>
+        <button type="submit" className="tw-bg-blue-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md tw-justify-content-center">Submit</button>
       </form>
       {submittedData && (
         <div className="tw-mt-4">
