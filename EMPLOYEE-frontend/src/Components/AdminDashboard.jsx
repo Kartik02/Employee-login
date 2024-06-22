@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
-    axios.get("https://ten-tuuo.onrender.com/auth/logout").then((result) => {
+    axios.get("https://rmbackend.vercel.app/auth/logout").then((result) => {
       if (result.data.Status) {
         navigate("adminlogin");
       }
@@ -203,7 +203,7 @@ export default AdminDashboard;
 //   const [sidebarOpen, setSidebarOpen] = useState(false);
 
 //   const handleLogout = () => {
-//     axios.get("https://ten-tuuo.onrender.com/auth/logout").then((result) => {
+//     axios.get("https://rmbackend.vercel.app/auth/logout").then((result) => {
 //       if (result.data.Status) {
 //         navigate("adminlogin");
 //       }

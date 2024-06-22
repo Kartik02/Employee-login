@@ -18,11 +18,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-<<<<<<< HEAD
-      .post("https://rmbackend.vercel.app/auth/login", values)
-=======
       .post("https://ten-tuuo.onrender.com/auth/login", values)
->>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {

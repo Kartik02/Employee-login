@@ -69,7 +69,7 @@ const Stopwatch = () => {
       const response = await axios.get('https://rmbackend.vercel.app/auth/project_list');
 =======
       const response = await axios.get(
-        "https://ten-tuuo.onrender.com/auth/project_list"
+        "https://rmbackend.vercel.app/auth/project_list"
       );
 >>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
       setProjects(response.data);
@@ -85,7 +85,7 @@ const Stopwatch = () => {
       setTags(response.data.tags.map(tag => ({ name: tag.tag, checked: false })));
 =======
       const response = await axios.get(
-        "https://ten-tuuo.onrender.com/auth/tag_list"
+        "https://rmbackend.vercel.app/auth/tag_list"
       );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
@@ -102,7 +102,7 @@ const Stopwatch = () => {
       const response = await axios.get('https://rmbackend.vercel.app/auth/get_employee_projects', { withCredentials: true });
 =======
       const response = await axios.get(
-        "https://ten-tuuo.onrender.com/auth/get_employee_projects",
+        "https://rmbackend.vercel.app/auth/get_employee_projects",
         { withCredentials: true }
       );
 >>>>>>> 1cf743038ac42a86793584312849e84d38676e2a
@@ -210,7 +210,7 @@ const Stopwatch = () => {
 =======
     try {
       const response = await axios.post(
-        "https://ten-tuuo.onrender.com/auth/add_project_data",
+        "https://rmbackend.vercel.app/auth/add_project_data",
         {
           task,
           projectName,
@@ -238,7 +238,7 @@ const Stopwatch = () => {
 =======
     try {
       await axios.post(
-        `https://ten-tuuo.onrender.com/auth/update_project_data/${projectId}`,
+        `https://rmbackend.vercel.app/auth/update_project_data/${projectId}`,
         {
           projectid: projectId,
           task: detail.task,

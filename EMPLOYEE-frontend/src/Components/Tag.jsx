@@ -8,7 +8,7 @@ function Tag() {
   
   useEffect(() => {
     // Fetch tags from Flask backend when component mounts
-    axios.get('https://ten-tuuo.onrender.com/auth/tag_list')
+    axios.get('https://rmbackend.vercel.app/auth/tag_list')
       .then(response => {
         setTags(response.data.tags);
       })
@@ -25,7 +25,7 @@ function Tag() {
     e.preventDefault();
     if (inputValue.trim() !== '') {
       // Send the new tag to Flask backend
-      axios.post('https://ten-tuuo.onrender.com/auth/add_tag', { tag: inputValue })
+      axios.post('https://rmbackend.vercel.app/auth/add_tag', { tag: inputValue })
         .then(response => {
           if (response.data.message) {
             // Add the new tag to the local state

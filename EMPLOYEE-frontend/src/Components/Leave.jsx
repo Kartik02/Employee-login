@@ -34,7 +34,7 @@ const Leave = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('https://ten-tuuo.onrender.com/auth/leave', formData)
+    axios.post('https://rmbackend.vercel.app/auth/leave', formData)
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);
