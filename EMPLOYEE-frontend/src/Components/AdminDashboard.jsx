@@ -5,7 +5,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();q
+  const navigate = useNavigate();
   axios.defaults.withCredentials = true;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
