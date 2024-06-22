@@ -352,7 +352,7 @@ const Stopwatch = () => {
         )}
       </div>
       <div className="tw-p-4 tw-overflow-x-auto">
-        
+
         <table className="tw-mt-4 tw-w-full ">
           <thead>
             <tr className=" tw-text-black ">
