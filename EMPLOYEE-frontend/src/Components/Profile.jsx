@@ -115,18 +115,18 @@ function Profile() {
                       Formats: png, jpg, gif. Max size: 1 MB.
                     </small>
                     <div className="d-md-flex flex-md-column d-flex justify-content-around align-items-center mt-4">
-                      <img
-                        src={
-                          empData.profileImage
-                            ? `data:image/png;base64,${empData.profileImage}`
-                            : "https://via.placeholder.com/64"
-                        }
-                        alt="Profile"
-                        className="rounded-circle"
-                        width="120"
-                        height="120"
-                        style={{ objectFit: "cover" }}
-                      />
+                      <div className="rounded-circle overflow-hidden" style={{ width: "120px", height: "120px" }}>
+                        <img
+                          src={
+                            empData.profileImage
+                              ? `data:image/png;base64,${empData.profileImage}`
+                              : "https://via.placeholder.com/64"
+                          }
+                          alt="Profile"
+                          className="w-100 h-100"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
                       <input
                         type="file"
                         id="profile-photo"
@@ -142,9 +142,6 @@ function Profile() {
                         UPLOAD IMAGE
                       </label>
                     </div>
-
-
-
                   </div>
                 </div>
                 <div className="col-md-8">
@@ -245,4 +242,3 @@ function Profile() {
 }
 
 export default Profile;
-
