@@ -17,7 +17,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://rmbackend.vercel.app/auth/category')
+    axios.get('https://ten-tuuo.onrender.com/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -54,7 +54,7 @@ const AddEmployee = () => {
         formData.append('category_id', employee.category_id);
         formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-        axios.post('https://rmbackend.vercel.app/auth/add_employee', formData, {
+        axios.post('https://ten-tuuo.onrender.com/auth/add_employee', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

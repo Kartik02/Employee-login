@@ -21,7 +21,7 @@ const AddCategory = () => {
     }
 
     try {
-      const response = await axios.post("https://rmbackend.vercel.app/auth/add_category", { category });
+      const response = await axios.post("https://ten-tuuo.onrender.com/auth/add_category", { category });
       if (response.data.Status) {
         Swal.fire({
           icon: "success",

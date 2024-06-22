@@ -12,7 +12,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://ten-tuuo.onrender.com/auth/forgot_password", {
+      const response = await axios.post("https://ten-tuuo.onrender.com/auth/forgotpassword", {
         email,
       });
       Swal.fire({

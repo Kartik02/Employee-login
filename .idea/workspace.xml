@@ -6,12 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="073cc012-b6f3-4187-a966-d334edb56dcb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/api/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-backend/api/flask_session/2029240f6d1128be89ddc32729463129" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-backend/api/flask_session/2029240f6d1128be89ddc32729463129" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddCategory.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddCategory.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddEmployee.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddEmployee.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddProject.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AddProject.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/AdminLogin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/BarGraphComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/BarGraphComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/CalenderComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/CalenderComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/DonutChartComponent.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/DonutChartComponent.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/EmployeeList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/EmployeeList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Employeesec.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Employeesec.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/ForgotPassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/ForgotPassword.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/TimeTracker.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/TimeTracker.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/MainChart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/EMPLOYEE-frontend/src/Components/Profile.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
