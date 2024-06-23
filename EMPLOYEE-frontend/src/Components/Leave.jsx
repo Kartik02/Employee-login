@@ -5,12 +5,13 @@ import Swal from 'sweetalert2';
 const Leave = () => {
   const [formData, setFormData] = useState({
     name: '',
-    empid: '',
+    employeeId: '',
     reason: '',
     numberOfDays: '',
     fromDate: '',
     toDate: '',
   });
+
   const [submittedData, setSubmittedData] = useState(null);
 
   // Fetch employee data when component mounts
@@ -22,7 +23,7 @@ const Leave = () => {
           setFormData(prevData => ({
             ...prevData,
             name: response.data.name,
-            empid: response.data.empid
+            employeeId: response.data.empid
           }));
         }
       } catch (error) {
@@ -35,7 +36,6 @@ const Leave = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     // Special handling for fromDate and toDate to ensure they are different
     if (name === 'fromDate') {
       setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -52,6 +52,9 @@ const Leave = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Log formData to check the values before submission
+    console.log('Form Data on Submit:', formData);
 
     axios.post('https://ten-tuuo.onrender.com/auth/leave', formData)
       .then(result => {
@@ -91,14 +94,15 @@ const Leave = () => {
             />
           </div>
           <div>
-            <label htmlFor="employeeId" className="tw-block tw-mb-1 tw-mt-3">Employee ID:</label>
+          <label htmlFor="employeeId" className="tw-block tw-mb-1 tw-mt-3">Employee ID:</label>
             <input
               type="text"
-              id="empid"
+              id="employeeId"
               name="employeeId"
-              value={formData.empid}
+              value={formData.employeeId}
               onChange={handleChange}
               className="tw-w-full tw-border tw-border-base-content tw-rounded-md tw-px-3 tw-py-2"
+              readOnly
             />
           </div>
         </div>
