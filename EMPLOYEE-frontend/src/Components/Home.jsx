@@ -97,7 +97,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    axios.get('https://rmbackend.vercel.app/auth/admin_count')
+    axios.get('https://ten-tuuo.onrender.com/auth/admin_count')
         .then(response => {
             setAdminTotal(response.data.admin_count);
         })
@@ -105,7 +105,7 @@ const Home = () => {
             console.error('Error fetching admin count:', error);
         });
 
-    axios.get('https://rmbackend.vercel.app/auth/employee_count')
+    axios.get('https://ten-tuuo.onrender.com/auth/employee_count')
         .then(response => {
             setemployeeTotal(response.data.employee_count);
         })

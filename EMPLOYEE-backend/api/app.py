@@ -65,7 +65,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ylpq bily fohq nphz'
+app.config['MAIL_PASSWORD'] = 'invz tkuz brhp crkf'
 mail = Mail(app)
 
 class AdminDataForm(FlaskForm):
@@ -862,4 +862,4 @@ def reset_password():
 #     return jsonify({'message': 'Password reset email sent successfully'}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
