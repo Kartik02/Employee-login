@@ -7,8 +7,7 @@ from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask_admin import Admin
 from flask_admin.contrib.pymongo import ModelView
-# from datetime import datetime
-import datetime
+from datetime import datetime, timedelta
 import ssl
 import base64
 from pymongo import MongoClient
@@ -22,7 +21,8 @@ import random
 from flask_pymongo import PyMongo
 from flask_wtf import FlaskForm
 from datetime import timedelta
-
+import datetime
+from datetime import date
 """
 Database Setup
 """
@@ -64,8 +64,8 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'rushideshmukh824@gmail.com'
-app.config['MAIL_PASSWORD'] = 'invz tkuz brhp crkf'
+app.config['MAIL_USERNAME'] = 'namansrivastava1608@gmail.com'
+app.config['MAIL_PASSWORD'] = 'dsgq aoab saut vutu'
 mail = Mail(app)
 
 class AdminDataForm(FlaskForm):
@@ -198,15 +198,24 @@ def initialize_db():
     db.admin_data.create_index('email', unique=True)
     db.emp_data.create_index('email', unique=True)
     db.emp_data.create_index('empid', unique=True)
-    db.leaves.create_index('employeeId', unique=True)
+
+    # Drop the employeeId_1 index if it exists
+    index_info = db.leaves.index_information()
+    if 'employeeId_1' in index_info:
+        db.leaves.drop_index('employeeId_1')
+
+    # Create the employeeId index
+    db.leaves.create_index('employeeId')
+
     db.project_list.create_index('name', unique=True)
     db.events.create_index('title', unique=True)
-
 initialize_db()
+
 
 """
 Start
 """
+
 @app.route('/')
 def home():
     return redirect(url_for('admin.index'))
@@ -510,6 +519,7 @@ def get_employee_data():
         'name': user['name'],
         'email': user['email'],
         'password': user['password'],
+        'empid': user['empid'],
         'profileImage': base64.b64encode(user['profile_image']).decode('utf-8') if user.get('profile_image') else None
     }), 200
 
@@ -588,7 +598,6 @@ def add_leave():
     }
     db.leaves.insert_one(new_leave)
     return jsonify({'message': 'Leave added successfully'}), 200
-
 """
 Calendar Page - Events
 """
@@ -678,6 +687,7 @@ def get_projects():
 """
 TimeTracker - Add Project To Databaase
 """
+
 @app.route('/auth/add_project_data', methods=['POST'])
 def add_project_data():
     data = request.json
@@ -685,32 +695,25 @@ def add_project_data():
     projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    # empid = data.get('empid')
-    # current_date = datetime.now().strftime('%Y-%m-%d')
-    current_date = datetime.date.today()
+    current_date = datetime.datetime.now()
     print(current_date)
-    # To fetch empid of logged in employee
-    if 'logged_in' not in session or not session['logged_in']:
-        return jsonify({'error': 'Not logged in'}), 401
-    empid = session['empid']
-    user = db.emp_data.find_one({'empid': empid})
-    if not user:
-        return jsonify({'error': 'Employee not found'}), 404
+    empid = session.get('empid')
 
-    if not all([task, projectName, tags, timeElapsed, empid]):
-        return jsonify({'error': 'Missing something...'}), 400
+    if not empid:
+        return jsonify({'error': 'Employee not logged in'}), 401
 
-    project_data = {
-        'task': task,
+    new_project_data = {
         'projectName': projectName,
+        'task': task,
         'tags': tags,
         'timeElapsed': timeElapsed,
         'date': current_date,
         'empid': empid
     }
 
-    db.projects.insert_one(project_data)
-    return jsonify({'message': 'Project data added successfully!'}), 201
+    db.projects.insert_one(new_project_data)
+    return jsonify({'message': 'Project data added successfully'}), 201
+
 
 """
 TimeTracker - Display worked project details
@@ -718,7 +721,7 @@ TimeTracker - Display worked project details
 @app.route('/auth/get_employee_projects', methods=['GET'])
 def get_employee_projects():
     projects = db.projects.find()
-    project_list = [{'projectid': project['projectid'], 'projectName': project['projectName'], 'task': project['task'],
+    project_list = [{'projectName': project['projectName'], 'task': project['task'],
                      'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
 
     return jsonify({'projects': project_list}), 200
@@ -805,19 +808,18 @@ def forgot_password():
 
     user = db.emp_data.find_one({'email': email})
     if not user:
-        print(f"Email not fount in database for forgot password: {email}")
+        print(f"Email not found in database for forgot password: {email}")
         return jsonify({'error': 'Employee not found'}), 404
 
     otp = ''.join(random.choices(string.digits, k=6))
     db.emp_data.update_one({'email': email}, {'$set': {'otp': otp}})
 
-    msg = Message('OTP for Password Reset', sender='rushideshmukh824@gmail.com', recipients=[email])
+    msg = Message('OTP for Password Reset', sender='namansrivastava1608@gmail.com', recipients=[email])
     msg.body = f'Your OTP for password reset is: {otp}'
     mail.send(msg)
 
     return jsonify({'message': 'OTP sent successfully'}), 200
 
-# Route for resetting password
 @app.route('/auth/resetpassword', methods=['POST', 'OPTIONS'])
 def reset_password():
     if request.method == 'OPTIONS':
