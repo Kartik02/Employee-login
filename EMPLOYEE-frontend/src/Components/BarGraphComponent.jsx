@@ -18,7 +18,7 @@ const Charts = () => {
   useEffect(() => {
     const fetchProjectTime = async () => {
       try {
-        const response = await axios.get('https://ten-tuuo.onrender.com/auth/project_time');
+        const response = await axios.get('https://employee-management-amiz.onrender.com/auth/project_time');
         const projects = response.data;
         const labels = projects.map(project => project.projectName);
         const data = projects.map(project => project.totalTime);

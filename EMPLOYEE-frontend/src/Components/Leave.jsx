@@ -18,7 +18,7 @@ const Leave = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const response = await axios.get('https://ten-tuuo.onrender.com/auth/get_employee_data', { withCredentials: true });
+        const response = await axios.get('https://employee-management-amiz.onrender.com/auth/get_employee_data', { withCredentials: true });
         if (response.data) {
           setFormData(prevData => ({
             ...prevData,
@@ -56,7 +56,7 @@ const Leave = () => {
     // Log formData to check the values before submission
     console.log('Form Data on Submit:', formData);
 
-    axios.post('https://ten-tuuo.onrender.com/auth/leave', formData)
+    axios.post('https://employee-management-amiz.onrender.com/auth/leave', formData)
       .then(result => {
         console.log(result.data);
         setSubmittedData(formData);

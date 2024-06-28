@@ -3,7 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import tenlogo from "./../assets/tencompany.jpg";
 import Swal from 'sweetalert2';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 axios.defaults.withCredentials = true;
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
     empid: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
@@ -18,7 +20,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://ten-tuuo.onrender.com/auth/login", values)
+      .post("https://employee-management-amiz.onrender.com/auth/login", values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {
@@ -88,14 +90,23 @@ const Login = () => {
           </div>
           <div className="tw-mb-4">
             <label htmlFor="password" className="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Password"
-              required
-              onChange={(e) => setValues({ ...values, password: e.target.value })}
-              className="tw-mt-1 tw-block tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-indigo-500"
-            />
+            <div className="tw-relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  required
+                  onChange={(e) => setValues({ ...values, password: e.target.value })}
+                  className="tw-mt-1 tw-block tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md tw-bg-white focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-indigo-500"
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-pr-3 tw-cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
+
           </div>
           <div className="tw-mb-4">
             <a className="tw-text-sm tw-text-indigo-600 hover:tw-underline" href="/forgotpassword">Forgot Password?</a>
