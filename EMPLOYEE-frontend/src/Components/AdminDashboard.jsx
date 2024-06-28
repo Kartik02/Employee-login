@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   const [activeLink, setActiveLink] = useState(location.pathname);
 
   const handleLogout = () => {
-    axios.get("https://ten-tuuo.onrender.com/auth/logout").then((result) => {
+    axios.get("https://employee-management-amiz.onrender.com/auth/logout").then((result) => {
       if (result.data.Status) {
         navigate("adminlogin");
       }
@@ -207,7 +207,7 @@ export default AdminDashboard;
 //   const navigate = useNavigate();
 //   axios.defaults.withCredentials = true;
 //   const handleLogout = () => {
-//     axios.get("https://ten-tuuo.onrender.com/auth/logout").then((result) => {
+//     axios.get("https://employee-management-amiz.onrender.com/auth/logout").then((result) => {
 //       if (result.data.Status) {
 //         navigate("adminlogin");
 //       }

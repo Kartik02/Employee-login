@@ -10,7 +10,7 @@ const CalendarComponent = () => {
   const [newEvent, setNewEvent] = useState({ id: '', title: '', start: '', end: '', allDay: false });
 
   useEffect(() => {
-    axios.get('https://ten-tuuo.onrender.com/auth/get_events')
+    axios.get('https://employee-management-amiz.onrender.com/auth/get_events')
       .then(response => {
         setCurrentEvents(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
@@ -67,7 +67,7 @@ const CalendarComponent = () => {
         creationDate: new Date().toISOString(),
       };
 
-      axios.post('https://ten-tuuo.onrender.com/auth/add_event', newEventObj)
+      axios.post('https://employee-management-amiz.onrender.com/auth/add_event', newEventObj)
         .then(response => {
           setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
           localStorage.setItem('events', JSON.stringify([...currentEvents, { id: response.data.id, ...newEventObj }]));
@@ -91,7 +91,7 @@ const CalendarComponent = () => {
 
   const handleEditEvent = () => {
     if (newEvent.id && newEvent.title) {
-      axios.post(`https://ten-tuuo.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
+      axios.post(`https://employee-management-amiz.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
         .then(response => {
           setCurrentEvents(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event));
           localStorage.setItem('events', JSON.stringify(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event)));
@@ -123,7 +123,7 @@ const CalendarComponent = () => {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post(`https://ten-tuuo.onrender.com/auth/delete_event`, { id: eventId })
+        axios.post(`https://employee-management-amiz.onrender.com/auth/delete_event`, { id: eventId })
           .then(response => {
             setCurrentEvents(currentEvents.filter(event => event.id !== eventId));
             localStorage.setItem('events', JSON.stringify(currentEvents.filter(event => event.id !== eventId)));

@@ -9,7 +9,7 @@ const ProjectManagement = () => {
   }, []);
 
   const fetchProjects = async () => {
-    const response = await fetch('https://ten-tuuo.onrender.com/auth/projects');
+    const response = await fetch('https://employee-management-amiz.onrender.com/auth/projects');
     const data = await response.json();
     setProjects(data);
   };
