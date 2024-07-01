@@ -6,7 +6,7 @@ const Reports = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch('https://ten-tuuo.onrender.com/auth/projects')
+    fetch('https://employee-management-amiz.onrender.com/auth/projects')
       .then(response => {
         if (response.ok) {
           return response.json();

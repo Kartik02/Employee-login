@@ -1,30 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-import { Link } from 'react-router-dom'
-
 const Employeesec = () => {
     const [category, setCategory] = useState([])
+    const [name, setName] = useState('')
+
     useEffect(() => {
-        axios.get('https://ten-tuuo.onrender.com/auth/category')
+        axios.get('https://employee-management-amiz.onrender.com/auth/category')
             .then(result => {
                 if (result.data.Status) {
                     setCategory(result.data.Result)
-
                 } else {
                     alert(result.data.Error)
                 }
-
-
             }).catch(err => console.log(err))
-
     }, [])
+
+    const handleAddCategory = (e) => {
+        e.preventDefault()
+        axios.post('https://employee-management-amiz.onrender.com/auth/category', { name })
+            .then(result => {
+                if (result.data.Status) {
+                    setCategory([...category, result.data.Result])
+                    setName('') // clear the input field
+                } else {
+                    alert(result.data.Error)
+                }
+            }).catch(err => console.log(err))
+    }
+
     return (
         <div className="px-5 mt-3">
             <div className="d-flex justify-content-center">
                 <h3>Category</h3>
             </div>
-            <Link to='/admindashboard/add_category' className="btn btn-success">Add Category</Link>
+            <form onSubmit={handleAddCategory}>
+                <div className="form-group">
+                    <label htmlFor="name">Category Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        className="form-control"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                </div>
+                <button type="submit" className="btn btn-success mt-3">Add Category</button>
+            </form>
             <div className="mt-3 tw-border tw-border-base-content">
                 <table className="table-auto w-full">
                     <thead>
@@ -43,10 +65,8 @@ const Employeesec = () => {
                     </tbody>
                 </table>
             </div>
-
-
         </div>
     )
 }
 
-export default Employeesec;
+export default Employeesec

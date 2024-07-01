@@ -124,6 +124,7 @@ const CalendarCard = ({ events, onDateClick, onEventClick, onTitleEdit }) => {
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
               }}
+              eventChange={onTitleEdit}
             />
           </div>
         </div>

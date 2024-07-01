@@ -10,7 +10,7 @@ const JoinMeeting = () => {
     // Function to fetch meeting data from the backend
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get('https://ten-tuuo.onrender.com/auth/meetings');
+        const response = await axios.get('https://employee-management-amiz.onrender.com/auth/meetings');
         const formattedMeetings = response.data.map(meeting => {
           const meetingDate = new Date(`${meeting.date}T${meeting.time}`);
           return {

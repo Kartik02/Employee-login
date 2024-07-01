@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
 axios.defaults.withCredentials = true;
 
 function Profile() {
   const [empData, setEmpData] = useState({
-    name: '',
-    email: '',
-    profileImage: ''
+    name: "",
+    email: "",
+    profileImage: "",
   });
-  const [editedEmail, setEditedEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [editedPassword, setEditedPassword] = useState("");
-  const [emailChanged, setEmailChanged] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
 
   useEffect(() => {
@@ -19,46 +21,24 @@ function Profile() {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axios.get('https://ten-tuuo.onrender.com/auth/get_employee_data', { withCredentials: true });
+      const response = await axios.get("https://employee-management-amiz.onrender.com/auth/get_employee_data", { withCredentials: true });
       if (response.data) {
         setEmpData({
           name: response.data.name,
           email: response.data.email,
-          profileImage: response.data.profileImage
+          profileImage: response.data.profileImage,
         });
-        setEditedEmail(response.data.email); // Set the initial email
         setEditedPassword(response.data.password); // Set the initial password
       }
     } catch (error) {
-      console.error('Error fetching employee data:', error);
+      console.error("Error fetching employee data:", error);
     }
-  };
-
-  const handleEmailChange = () => {
-    axios
-      .post(
-        "https://ten-tuuo.onrender.com/auth/update_employee",
-        { email: editedEmail },
-        { withCredentials: true }
-      )
-      .then(() => {
-        setEmpData({ ...empData, email: editedEmail });
-        setEmailChanged(true);
-      })
-      .catch((error) => {
-        console.error("Error updating email:", error);
-      });
   };
 
   const handlePasswordChange = () => {
     axios
-      .post(
-        "https://ten-tuuo.onrender.com/auth/update_employee",
-        { password: editedPassword },
-        { withCredentials: true }
-      )
+      .post("https://employee-management-amiz.onrender.com/auth/update_employee", { password: editedPassword }, { withCredentials: true })
       .then(() => {
-        console.log("Password updated successfully");
         setPasswordChanged(true);
       })
       .catch((error) => {
@@ -72,23 +52,15 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("https://ten-tuuo.onrender.com/auth/upload_profile", formData, {
+      .post("https://employee-management-amiz.onrender.com/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        // Display success message
         alert("Profile image uploaded successfully");
         window.location.reload();
-      })
-      .then((response) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setEmpData({ ...empData, profileImage: e.target.result });
-        };
-        reader.readAsDataURL(file);
       })
       .catch((error) => {
         console.error("Error uploading profile image:", error);
@@ -99,138 +71,101 @@ function Profile() {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-md-8 tw-border tw-border-base-content mt-5 tw-rounded">
-          <div className="">
-            <div className="mb-3">
-              <h1 className=" tw-font-bold tw-text-2xl">Profile Settings</h1>
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="mb-3">
+          <div className="mb-3">
+            <h1 className="tw-font-bold tw-text-2xl">Profile Settings</h1>
+            <div className="row">
+              <div className="col-md-4">
+                <div className="mb-3">
+                  <label htmlFor="profile-photo" className="form-label tw-font-semibold">Profile Photo</label>
+                  <small className="d-block mb-2">Formats: png, jpg, gif. Max size: 1 MB.</small>
+                  <div className="d-md-flex flex-md-column d-flex justify-content-around align-items-center mt-4">
+                    <div className="rounded-circle overflow-hidden" style={{ width: "120px", height: "120px" }}>
+                      <img
+                        src={empData.profileImage ? `data:image/png;base64,${empData.profileImage}` : "https://via.placeholder.com/64"}
+                        alt="Profile"
+                        className="w-100 h-100"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <input
+                      type="file"
+                      id="profile-photo"
+                      className="d-none"
+                      onChange={handleFileChange}
+                      accept="image/*"
+                    />
                     <label
                       htmlFor="profile-photo"
-                      className="form-label tw-font-semibold"
+                      className="mt-4 tw-bg-gradient-to-r tw-from-pink-500 tw-to-red-500 tw-text-white py-2 px-4 rounded tw-cursor-pointer"
+                      style={{ fontSize: "12px", marginTop: "10px" }}
                     >
-                      Profile Photo
+                      UPLOAD IMAGE
                     </label>
-                    <small className=" d-block mb-2">
-                      Formats: png, jpg, gif. Max size: 1 MB.
-                    </small>
-                    <div className="d-md-flex flex-md-column d-flex justify-content-around align-items-center mt-4">
-                      <div className="rounded-circle overflow-hidden" style={{ width: "120px", height: "120px" }}>
-                        <img
-                          src={
-                            empData.profileImage
-                              ? `data:image/png;base64,${empData.profileImage}`
-                              : "https://via.placeholder.com/64"
-                          }
-                          alt="Profile"
-                          className="w-100 h-100"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                      <input
-                        type="file"
-                        id="profile-photo"
-                        className="d-none"
-                        onChange={handleFileChange}
-                        accept="image/*"
-                      />
-                      <label
-                        htmlFor="profile-photo"
-                        className="mt-4 tw-bg-gradient-to-r tw-from-pink-500 tw-to-red-500 tw-text-white py-2 px-4 rounded tw-cursor-pointer "
-                        style={{ fontSize: "12px", marginTop: "10px" }}
-                      >
-                        UPLOAD IMAGE
-                      </label>
-                    </div>
                   </div>
                 </div>
-                <div className="col-md-8">
-                  <div className="tw-border-t tw-border-base-content pt-4">
-                    <h2 className="card-title tw-font-semibold">
-                      Personal Info
-                    </h2>
-                    <p className=" mb-4">
-                      Your log-in credentials and the name that is displayed in
-                      reports.
-                    </p>
-                    <form>
-                      <div className="row g-3">
-                        <div className="col-md-4">
-                          <label
-                            htmlFor="name"
-                            className="form-label tw-font-semibold"
-                          >
-                            Name
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-                            id="name"
-                            value={empData.name || ""}
-                            readOnly
-                          />
-                        </div>
-                        <div className="col-md-8">
-                          <label
-                            htmlFor="email"
-                            className="form-label tw-font-semibold"
-                          >
-                            Email
-                          </label>
-                          <div className="input-group">
-                            <input
-                              type="email"
-                              className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-                              value={editedEmail}
-                              onChange={(e) => setEditedEmail(e.target.value)}
-                            />
-                            <button
-                              className="btn btn-primary"
-                              type="button"
-                              onClick={handleEmailChange}
-                            >
-                              Change
-                            </button>
-                          </div>
-                          {emailChanged && (
-                            <div className="text-success">
-                              Email updated successfully!
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-md-12">
-                          <label
-                            htmlFor="password"
-                            className="form-label tw-font-semibold"
-                          >
-                            Password
-                          </label>
-                          <div className="input-group">
-                            <input
-                              type="password"
-                              className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-                              value={editedPassword}
-                              onChange={(e) =>
-                                setEditedPassword(e.target.value)
-                              }
-                            />
-                            <button
-                              className="btn btn-primary"
-                              type="button"
-                              onClick={handlePasswordChange}
-                            >
-                              Change
-                            </button>
-                          </div>
-                          {passwordChanged && (
-                            <div className="text-success">
-                              Password updated successfully!
-                            </div>
-                          )}
-                        </div>
+              </div>
+              <div className="col-md-8">
+                <div className="tw-border-t tw-border-base-content pt-4">
+                  <h2 className="card-title tw-font-semibold">Personal Info</h2>
+                  <p className="mb-4">Your log-in credentials and the name that is displayed in reports.</p>
+                  <form>
+                    <div className="row g-3">
+                      <div className="col-md-4">
+                        <label htmlFor="name" className="form-label tw-font-semibold">Name</label>
+                        <input
+                          type="text"
+                          className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+                          id="name"
+                          value={empData.name || ""}
+                          readOnly
+                        />
                       </div>
-                    </form>
-                  </div>
+                      <div className="col-md-8">
+                        <label htmlFor="email" className="form-label tw-font-semibold">Email</label>
+                        <input
+                          type="email"
+                          className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+                          value={empData.email || ""}
+                          readOnly
+                        />
+                      </div>
+                      <div className="col-md-12">
+                        <label htmlFor="password" className="form-label tw-font-semibold">Password</label>
+                        <div className="input-group">
+                          <div className="tw-relative tw-flex-1">
+                            <input
+                              type={showPassword ? "text" : "password"}
+                              value={editedPassword}
+                              onChange={(e) => setEditedPassword(e.target.value)}
+                              className="form-control tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+                              style={{
+                                borderTopRightRadius: 0,
+                                borderBottomRightRadius: 0,
+                              }}
+                            />
+                            <span
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-pr-3 tw-cursor-pointer"
+                            >
+                              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            </span>
+                          </div>
+                          <button
+                            className="btn btn-primary"
+                            type="button"
+                            onClick={handlePasswordChange}
+                          >
+                            Change
+                          </button>
+                        </div>
+                        {passwordChanged && (
+                          <div className="text-success">
+                            Password updated successfully!
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>

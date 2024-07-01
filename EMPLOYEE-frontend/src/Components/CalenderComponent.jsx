@@ -4,13 +4,14 @@ import Modal from 'react-modal';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
 const CalendarComponent = () => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({ id: '', title: '', start: '', end: '', allDay: false });
 
-  useEffect(() => {
-    axios.get('https://ten-tuuo.onrender.com/auth/get_events')
+  const getEvents = () => {
+    axios.get('https://employee-management-amiz.onrender.com/auth/get_events')
       .then(response => {
         setCurrentEvents(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
@@ -22,6 +23,10 @@ const CalendarComponent = () => {
           setCurrentEvents(JSON.parse(storedEvents));
         }
       });
+  };
+
+  useEffect(() => {
+    getEvents();
   }, []);
 
   const handleDateClick = (selected) => {
@@ -67,16 +72,15 @@ const CalendarComponent = () => {
         creationDate: new Date().toISOString(),
       };
 
-      axios.post('https://ten-tuuo.onrender.com/auth/add_event', newEventObj)
+      axios.post('https://employee-management-amiz.onrender.com/auth/add_event', newEventObj)
         .then(response => {
-          setCurrentEvents([...currentEvents, { id: response.data.id, ...newEventObj }]);
-          localStorage.setItem('events', JSON.stringify([...currentEvents, { id: response.data.id, ...newEventObj }]));
+          getEvents();
+          handleModalClose();
           Swal.fire({
             title: 'Event Added Successfully!',
             text: `The event "${newEvent.title}" has been added.`,
             icon: 'success'
           });
-          handleModalClose();
         })
         .catch(error => {
           console.error('Error adding event:', error);
@@ -91,27 +95,27 @@ const CalendarComponent = () => {
 
   const handleEditEvent = () => {
     if (newEvent.id && newEvent.title) {
-      axios.post(`https://ten-tuuo.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
+      axios.post(`https://employee-management-amiz.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
         .then(response => {
-          setCurrentEvents(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event));
-          localStorage.setItem('events', JSON.stringify(currentEvents.map(event => event.id === newEvent.id ? { ...event, title: newEvent.title } : event)));
+          getEvents();
+          handleModalClose();
           Swal.fire({
             title: 'Event Updated Successfully!',
             text: `The event "${newEvent.title}" has been updated.`,
             icon: 'success'
           });
-          handleModalClose();
         })
         .catch(error => {
           console.error('Error updating event:', error);
           Swal.fire({
             title: 'Error!',
-            text: 'An error occurred while deleting the event. Please try again.',
+            text: 'An error occurred while editing the event. Please try again.',
             icon: 'error'
           });
         });
     }
   };
+
   const handleDeleteEvent = (eventId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -123,10 +127,9 @@ const CalendarComponent = () => {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post(`https://ten-tuuo.onrender.com/auth/delete_event`, { id: eventId })
+        axios.post(`https://employee-management-amiz.onrender.com/auth/delete_event`, { id: eventId })
           .then(response => {
-            setCurrentEvents(currentEvents.filter(event => event.id !== eventId));
-            localStorage.setItem('events', JSON.stringify(currentEvents.filter(event => event.id !== eventId)));
+            getEvents();
             handleModalClose();
             Swal.fire({
               title: "Deleted!",

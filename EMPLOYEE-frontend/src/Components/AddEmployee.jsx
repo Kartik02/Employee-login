@@ -17,7 +17,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://ten-tuuo.onrender.com/auth/category')
+    axios.get('https://employee-management-amiz.onrender.com/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -54,7 +54,7 @@ const AddEmployee = () => {
         formData.append('category_id', employee.category_id);
         formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-        axios.post('https://ten-tuuo.onrender.com/auth/add_employee', formData, {
+        axios.post('https://employee-management-amiz.onrender.com/auth/add_employee', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -175,8 +175,6 @@ const AddEmployee = () => {
               {category.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
-              <option value="HR">HR-Section</option>
-              <option value="Tech">Tech-Section</option>
             </select>
           </div>
           <div className="col-md-6 mb-3">

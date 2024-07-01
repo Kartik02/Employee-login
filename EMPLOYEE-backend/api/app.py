@@ -23,6 +23,7 @@ from flask_wtf import FlaskForm
 from datetime import timedelta
 import datetime
 from datetime import date
+from datetime import datetime
 """
 Database Setup
 """
@@ -36,7 +37,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
 Session(app)
 
 CORS(app, resources={r"/auth/*": {
-    "origins": ["http://localhost:5173", "https://employeelogin.vercel.app"],
+    "origins": ["http://localhost:5173", "https://employee-management-login.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True
@@ -45,19 +46,13 @@ CORS(app, resources={r"/auth/*": {
 
 # MongoDB configuration
 client = MongoClient(
-    'mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+    'mongodb+srv://srikrupa:srikrupa123@cluster0.qniveam.mongodb.net/employee_management?retryWrites=true&w=majority&appName=Cluster0',
     tls=True,
     tlsCAFile='certs/ca-certificates.crt',
     socketTimeoutMS=30000,
     connectTimeoutMS=30000
 )
 db = client.employeee
-
-# Update this with your MongoDB URI
-# client = MongoClient('mongodb+srv://admin:priya@cluster0.l6dotpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-# db = client['employeee']
-# client = MongoClient('mongodb://risabh:risabh@localhost:27017/')
-# db = client['ems']
 
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -238,13 +233,20 @@ def adminlogin():
         return jsonify({'loginStatus': False, 'Error': 'Invalid credentials'}), 401
 
 
+categories = [
+    {'id': '1', 'name': 'HR'},
+    {'id': '2', 'name': 'Tech'}
+]
+
 @app.route('/auth/category', methods=['GET'])
 def get_categories():
-    categories = [
-        {'id': '1', 'name': 'HR'},
-        {'id': '2', 'name': 'Tech'}
-    ]
     return jsonify({'Status': True, 'Result': categories}), 200
+
+@app.route('/auth/category', methods=['POST'])
+def add_category():
+    new_category = request.json
+    categories.append(new_category)
+    return jsonify({'Status': True, 'Result': new_category}), 201
 
 
 @app.route('/auth/add_employee', methods=['POST'])
@@ -695,7 +697,7 @@ def add_project_data():
     projectName = data.get('projectName')
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
-    current_date = datetime.datetime.now()
+    current_date = datetime.now()
     print(current_date)
     empid = session.get('empid')
 

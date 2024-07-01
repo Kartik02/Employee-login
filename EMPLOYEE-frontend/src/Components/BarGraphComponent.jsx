@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react';
-import { CChartBar } from '@coreui/react-chartjs';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Charts = () => {
   const [chartData, setChartData] = useState({
@@ -18,7 +21,7 @@ const Charts = () => {
   useEffect(() => {
     const fetchProjectTime = async () => {
       try {
-        const response = await axios.get('https://ten-tuuo.onrender.com/auth/project_time');
+        const response = await axios.get('https://employee-management-amiz.onrender.com/auth/project_time');
         const projects = response.data;
         const labels = projects.map(project => project.projectName);
         const data = projects.map(project => project.totalTime);
@@ -41,21 +44,39 @@ const Charts = () => {
     fetchProjectTime();
   }, []);
 
-  const options = {
-    responsive: true,
-   
-    // layout: {
-    //   padding: {
-    //     top: 20, // Add padding to ensure space for the legend
-    //   },
-    // },
-    // legend: {
-    //   display: true,
-    //   position: 'top',
-    // },
-    tooltips: {
-      enabled: false,
-    },
+  const getChartOptions = () => {
+    const isSmallScreen = window.innerWidth <= 576;
+    const isMediumScreen = window.innerWidth <= 768;
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: isSmallScreen ? 10 : isMediumScreen ? 12 : 14,
+            },
+          },
+        },
+        y: {
+          ticks: {
+            font: {
+              size: isSmallScreen ? 10 : isMediumScreen ? 12 : 14,
+            },
+          },
+        },
+      },
+    };
+  };
+
+  const containerStyle = {
+    height: window.innerWidth <= 576 ? '40vh' : window.innerWidth <= 768 ? '45vh' : '45vh',
+    width: '100%',
   };
 
   return (
@@ -63,9 +84,9 @@ const Charts = () => {
       <CCol>
         <CCard className="my-1 tw-h-full">
           <CCardHeader>Bar Chart</CCardHeader>
-          <CCardBody className="tw-w-full tw-h-[50vh]  d-flex justify-content-center">
-            <div style={{ height: '50vh', width: '100%' }}>
-              <CChartBar data={chartData} options={options}/>
+          <CCardBody className="tw-w-full d-flex justify-content-center" style={{ height: '100%', width: '100%' }}>
+            <div style={containerStyle}>
+              <Bar data={chartData} options={getChartOptions()} />
             </div>
           </CCardBody>
         </CCard>
