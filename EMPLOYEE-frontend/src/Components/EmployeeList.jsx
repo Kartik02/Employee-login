@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -19,8 +20,12 @@ const EmployeeList = () => {
   return (
     <div className="mt-3 overflow-auto">
     <h2 className="text-center mb-3">Employee List</h2>
+    <div className="d-flex justify-content-center mb-5">
+     
+    <Link to='/admindashboard/add_employee' className="btn btn-success">Add Employee</Link>
+    </div>
     <div className="overflow-x-auto">
-    <table className="min-w-full border border-gray-300">
+    <table className="min-w-full tw-border tw-border-base-content">
         <thead>
           <tr className="bg-gray-100">
             <th className="py-2 px-4 border-b">Name</th>
