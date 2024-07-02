@@ -260,45 +260,46 @@ const Stopwatch = () => {
               ))}
             </select>
           </div>
-          <div className="absolute tw-right">
+          <div className="tw-relative tw-right">
             <div
               className="tw-border bf tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
               onClick={handleTagClick}
               style={{ marginRight: "8px" }}
             >
-              {tags.filter((tag) => tag.checked).length > 0 ? (
-                tags
-                  .filter((tag) => tag.checked)
-                  .slice(0, 3)
-                  .map((tag) => tag.name)
-                  .join(", ")
+                     {tags.filter((tag) => tag.checked).length > 0 ? (
+                <>
+                  {tags
+                    .filter((tag) => tag.checked)
+                    .slice(0, 2)
+                    .map((tag, index) => (
+                      <span key={index}>
+                        {tag.name}
+                        {index < 1 && tags.filter((tag) => tag.checked).length > 2 ? ", " : ""}
+                      </span>
+                    ))}
+                  {tags.filter((tag) => tag.checked).length > 3 && (
+                    <span> ...</span>
+                  )}
+                </>
               ) : (
                 <i className="bi bi-tag"></i>
-              )}
-              {tags.filter((tag) => tag.checked).length > 3 && (
-                <span> ...</span>
               )}
             </div>
             {showDropdown && (
               <div
-                className="tw-absolute tw-mt-1 tw-bg-white tw-shadow-md tw-rounded-md"
-                style={{ color: "black" }}
+                className="tw-absolute tw-bg-white tw-border tw-border-gray-500 tw-mt-1 tw-p-2 tw-right-0 tw-z-10 tw-max-h-48 tw-overflow-y-auto"
+                style={{ minWidth: "200px" }}
               >
-                <ul>
-                  {tags.map((tag, index) => (
-                    <li
-                      key={index}
-                      className="tw-cursor-pointer tw-px-3 tw-py-2 tw-hover:bg-gray-200"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={tag.checked}
-                        onChange={() => handleTagSelect(tag.name)}
-                      />
-                      {tag.name}
-                    </li>
-                  ))}
-                </ul>
+                {tags.map((tag, index) => (
+                  <div key={index} className="tw-flex tw-items-center">
+                    <input
+                      type="checkbox"
+                      checked={tag.checked}
+                      onChange={() => handleTagSelect(tag.name)}
+                    />
+                    <span className="tw-ml-2">{tag.name}</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -352,7 +353,6 @@ const Stopwatch = () => {
         )}
       </div>
       <div className="tw-p-4 tw-overflow-x-auto">
-
         <table className="tw-mt-4 tw-w-full ">
           <thead>
             <tr className=" tw-text-black ">
@@ -373,23 +373,26 @@ const Stopwatch = () => {
                 <td className="tw-p-2 tw-w-1/5">{detail.projectName}</td>
                 <td className="tw-p-2 tw-w-1/5">{detail.task}</td>
                 <td className="tw-p-2 tw-w-1/5">
-                {(expandedRows[index] ? detail.tags : detail.tags.slice(0, 3)).map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {detail.tags.length > 3 && !expandedRows[index] && (
-                  <span
-                    className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
-                    onClick={() => toggleRowExpansion(index)}
-                  >
-                    ...
-                  </span>
-                )}
-              </td>
+                  {(expandedRows[index]
+                    ? detail.tags
+                    : detail.tags.slice(0, 3)
+                  ).map((tag, tagIndex) => (
+                    <span
+                      key={tagIndex}
+                      className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {detail.tags.length > 3 && !expandedRows[index] && (
+                    <span
+                      className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
+                      onClick={() => toggleRowExpansion(index)}
+                    >
+                      ...
+                    </span>
+                  )}
+                </td>
 
                 <td className="tw-p-2 tw-w-1/5">{detail.timeElapsed}</td>
                 <td className="tw-p-2 tw-w-1/5">
