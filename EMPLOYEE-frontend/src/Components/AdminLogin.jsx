@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const AdminLogin = () => {
   const [values, setValues] = useState({
@@ -9,6 +11,7 @@ const AdminLogin = () => {
     password: "",
   });
   // const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -76,14 +79,22 @@ const AdminLogin = () => {
               <label htmlFor="password">
                 <strong>Password:</strong>
               </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                onChange={(e) => setValues({ ...values, password: e.target.value })}
-                className="form-control rounded 0"
-                required
-              />
+              <div className="tw-relative">
+                <input
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  required
+                  onChange={(e) => setValues({ ...values, password: e.target.value })}
+                  className="form-control rounded 0"
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-items-center tw-pr-3 tw-cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </span>
+              </div>
             </div>
             <button className="btn btn-success w-100 rounded 0">Log In</button>
             {/* <div className="mb-3">
