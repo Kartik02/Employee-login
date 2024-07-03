@@ -64,6 +64,7 @@ app.config['MAIL_PASSWORD'] = 'dsgq aoab saut vutu'
 mail = Mail(app)
 
 class AdminDataForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
 
@@ -130,7 +131,7 @@ class MeetingView(ModelView):
             form.time.data = datetime.strptime(meeting['time'], '%H:%M:%S').time()
 
 class AdminDataView(ModelView):
-    column_list = ('email', 'password')
+    column_list = ('name', 'email', 'password')
     form = AdminDataForm
 
 class EmployeeDataView(ModelView):
@@ -204,6 +205,7 @@ def initialize_db():
 
     db.project_list.create_index('name', unique=True)
     db.events.create_index('title', unique=True)
+    
 initialize_db()
 
 
