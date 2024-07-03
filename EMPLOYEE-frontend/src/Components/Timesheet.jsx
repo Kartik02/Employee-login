@@ -36,7 +36,7 @@ const Timesheet = () => {
   // Fetch projects from backend
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://employee-management-amiz.onrender.com/auth/project_list');
+      const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/project_list');
       setProjects(response.data);
     } catch (error) {
       console.error('Error fetching projects:', error);

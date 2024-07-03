@@ -6,7 +6,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    axios.get('https://employee-management-amiz.onrender.com/auth/employees')
+    axios.get('https://employee-management-2-srno.onrender.com/auth/employees')
       .then(result => {
         if (result.data.Status) {
           setEmployees(result.data.Result);

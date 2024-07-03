@@ -6,7 +6,7 @@ const Employeesec = () => {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        axios.get('https://employee-management-amiz.onrender.com/auth/category')
+        axios.get('https://employee-management-2-srno.onrender.com/auth/category')
             .then(result => {
                 if (result.data.Status) {
                     setCategory(result.data.Result)
@@ -18,7 +18,7 @@ const Employeesec = () => {
 
     const handleAddCategory = (e) => {
         e.preventDefault()
-        axios.post('https://employee-management-amiz.onrender.com/auth/category', { name })
+        axios.post('https://employee-management-2-srno.onrender.com/auth/category', { name })
             .then(result => {
                 if (result.data.Status) {
                     setCategory([...category, result.data.Result])

@@ -16,7 +16,7 @@ const Dashboard = () => {
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
-    axios.get('https://employee-management-amiz.onrender.com/auth/logout')
+    axios.get('https://employee-management-2-srno.onrender.com/auth/logout')
       .then(result => {
         if (result.data.Status) {
           navigate('adminlogin');
@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Example data fetching, replace with your actual data fetching logic
-    axios.get('https://employee-management-amiz.onrender.com/some-endpoint')
+    axios.get('https://employee-management-2-srno.onrender.com/some-endpoint')
       .then(response => {
         setData(response.data);
         setLoading(false);

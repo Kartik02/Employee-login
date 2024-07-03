@@ -11,7 +11,7 @@ const CalendarComponent = () => {
   const [newEvent, setNewEvent] = useState({ id: '', title: '', start: '', end: '', allDay: false });
 
   const getEvents = () => {
-    axios.get('https://employee-management-amiz.onrender.com/auth/get_events')
+    axios.get('https://employee-management-2-srno.onrender.com/auth/get_events')
       .then(response => {
         setCurrentEvents(response.data);
         localStorage.setItem('events', JSON.stringify(response.data));
@@ -72,7 +72,7 @@ const CalendarComponent = () => {
         creationDate: new Date().toISOString(),
       };
 
-      axios.post('https://employee-management-amiz.onrender.com/auth/add_event', newEventObj)
+      axios.post('https://employee-management-2-srno.onrender.com/auth/add_event', newEventObj)
         .then(response => {
           getEvents();
           handleModalClose();
@@ -95,7 +95,7 @@ const CalendarComponent = () => {
 
   const handleEditEvent = () => {
     if (newEvent.id && newEvent.title) {
-      axios.post(`https://employee-management-amiz.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
+      axios.post(`https://employee-management-2-srno.onrender.com/auth/update_event/${newEvent.id}`, { title: newEvent.title })
         .then(response => {
           getEvents();
           handleModalClose();
@@ -127,7 +127,7 @@ const CalendarComponent = () => {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.post(`https://employee-management-amiz.onrender.com/auth/delete_event`, { id: eventId })
+        axios.post(`https://employee-management-2-srno.onrender.com/auth/delete_event`, { id: eventId })
           .then(response => {
             getEvents();
             handleModalClose();

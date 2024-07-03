@@ -21,7 +21,7 @@ function Profile() {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axios.get("https://employee-management-amiz.onrender.com/auth/get_employee_data", { withCredentials: true });
+      const response = await axios.get("https://employee-management-2-srno.onrender.com/auth/get_employee_data", { withCredentials: true });
       if (response.data) {
         setEmpData({
           name: response.data.name,
@@ -37,7 +37,7 @@ function Profile() {
 
   const handlePasswordChange = () => {
     axios
-      .post("https://employee-management-amiz.onrender.com/auth/update_employee", { password: editedPassword }, { withCredentials: true })
+      .post("https://employee-management-2-srno.onrender.com/auth/update_employee", { password: editedPassword }, { withCredentials: true })
       .then(() => {
         setPasswordChanged(true);
       })
@@ -52,7 +52,7 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("https://employee-management-amiz.onrender.com/auth/upload_profile", formData, {
+      .post("https://employee-management-2-srno.onrender.com/auth/upload_profile", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

@@ -17,7 +17,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://employee-management-amiz.onrender.com/auth/category')
+    axios.get('https://employee-management-2-srno.onrender.com/auth/category')
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -54,7 +54,7 @@ const AddEmployee = () => {
         formData.append('category_id', employee.category_id);
         formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
 
-        axios.post('https://employee-management-amiz.onrender.com/auth/add_employee', formData, {
+        axios.post('https://employee-management-2-srno.onrender.com/auth/add_employee', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

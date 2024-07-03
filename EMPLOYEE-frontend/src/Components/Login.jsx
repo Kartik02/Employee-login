@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("http://127.0.0.1:5000/auth/login", values)
+      .post("https://employee-management-2-srno.onrender.com/auth/login", values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {

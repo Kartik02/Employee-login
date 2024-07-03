@@ -10,7 +10,7 @@ const AdminDashboard = () => {
   const [activeLink, setActiveLink] = useState(window.location.pathname);
 
   const handleLogout = () => {
-    axios.get("https://employee-management-amiz.onrender.com/auth/logout").then((result) => {
+    axios.get("https://employee-management-2-srno.onrender.com/auth/logout").then((result) => {
       if (result.data.Status) {
         navigate("adminlogin");
       }

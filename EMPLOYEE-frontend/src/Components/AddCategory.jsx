@@ -21,7 +21,7 @@ const AddCategory = () => {
     }
 
     try {
-      const response = await axios.post("https://employee-management-amiz.onrender.com/auth/add_category", { category });
+      const response = await axios.post("https://employee-management-2-srno.onrender.com/auth/add_category", { category });
       if (response.data.Status) {
         Swal.fire({
           icon: "success",

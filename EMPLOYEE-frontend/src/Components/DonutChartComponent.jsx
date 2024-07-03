@@ -18,7 +18,7 @@ const Charts = () => {
   useEffect(() => {
     const fetchTagCount = async () => {
       try {
-        const response = await axios.get('https://employee-management-amiz.onrender.com/auth/tag_count');
+        const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/tag_count');
         const tags = response.data;
         const labels = tags.map(tag => tag.tag);
         const data = tags.map(tag => tag.count);

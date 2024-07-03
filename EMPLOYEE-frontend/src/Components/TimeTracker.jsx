@@ -51,7 +51,7 @@ const Stopwatch = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:5000/auth/project_list"
+        "https://employee-management-2-srno.onrender.com/auth/project_list"
       );
       setProjects(response.data);
     } catch (error) {
@@ -62,7 +62,7 @@ const Stopwatch = () => {
   const fetchTags = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:5000/auth/tag_list"
+        "https://employee-management-2-srno.onrender.com/auth/tag_list"
       );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
@@ -75,7 +75,7 @@ const Stopwatch = () => {
   const fetchEmployeeProjects = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:5000/auth/get_employee_projects",
+        "https://employee-management-2-srno.onrender.com/auth/get_employee_projects",
         { withCredentials: true }
       );
       const employeeProjects = response.data.projects;
@@ -196,7 +196,7 @@ const Stopwatch = () => {
   
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/auth/add_project_data",
+        "https://employee-management-2-srno.onrender.com/auth/add_project_data",
         {
           task,
           projectid,  // Include projectid in the request payload
@@ -221,7 +221,7 @@ const Stopwatch = () => {
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
       await axios.post(
-        `http://127.0.0.1:5000/auth/update_project_data/${projectId}`,
+        `https://employee-management-2-srno.onrender.com/auth/update_project_data/${projectId}`,
         {
           projectid: projectId,
           task: detail.task,
