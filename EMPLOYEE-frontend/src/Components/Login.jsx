@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://employee-management-amiz.onrender.com/auth/login", values)
+      .post("http://127.0.0.1:5000/auth/login", values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {
@@ -31,7 +31,7 @@ const Login = () => {
         });
           console.log("Redirecting...");
           navigate("/dashboard");
-       
+        
         } else {
           setError(result.data.Error);
           Swal.fire({

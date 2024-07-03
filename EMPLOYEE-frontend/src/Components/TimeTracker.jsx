@@ -13,6 +13,7 @@ const Stopwatch = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [submittedDetails, setSubmittedDetails] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+  const [projectid, setProjectid] = useState("");
   const intervalRef = useRef();
 
   const [expandedRows, setExpandedRows] = useState({});
@@ -50,7 +51,7 @@ const Stopwatch = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-amiz.onrender.com/auth/project_list"
+        "http://127.0.0.1:5000/auth/project_list"
       );
       setProjects(response.data);
     } catch (error) {
@@ -61,7 +62,7 @@ const Stopwatch = () => {
   const fetchTags = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-amiz.onrender.com/auth/tag_list"
+        "http://127.0.0.1:5000/auth/tag_list"
       );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
@@ -74,12 +75,19 @@ const Stopwatch = () => {
   const fetchEmployeeProjects = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-amiz.onrender.com/auth/get_employee_projects",
+        "http://127.0.0.1:5000/auth/get_employee_projects",
         { withCredentials: true }
       );
       const employeeProjects = response.data.projects;
       // Assuming the employeeProjects data format is similar to the submittedDetails state
-      setSubmittedDetails(employeeProjects);
+      setSubmittedDetails(employeeProjects.map(project => ({
+        projectid: project.projectid,
+        projectName: project.projectName,
+        task: project.task,
+        tags: project.tags,
+        timeTaken: formatTime(project.timeElapsed),
+        timeElapsed: project.timeElapsed // Add timeElapsed to state
+      })));
     } catch (error) {
       console.error("Error fetching employee projects:", error);
     }
@@ -125,17 +133,17 @@ const Stopwatch = () => {
   const handleRun = (index) => {
     if (isRunning) return; // Prevent running if already running
     setEditIndex(index);
-    const startTime =
-      Date.now() - timeToMilliseconds(submittedDetails[index].timeTaken);
+    const startTime = Date.now() - submittedDetails[index].timeElapsed; // Initialize timer with stored timeElapsed
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
       const newDetails = [...submittedDetails];
       newDetails[index].timeTaken = formatTime(elapsedTime);
+      newDetails[index].timeElapsed = elapsedTime; // Update timeElapsed in state
       setSubmittedDetails(newDetails);
     }, 1000);
   };
-
+  
   const handleStop = () => {
     if (!isRunning) return; // Prevent stopping if already stopped
     setIsRunning(false);
@@ -162,29 +170,36 @@ const Stopwatch = () => {
       alert("Project name is required!");
       return;
     }
+    if (!projectid.trim()) {
+      alert("Project ID is required!");
+      return;
+    }
     const selectedTags = tags
       .filter((tag) => tag.checked)
       .map((tag) => tag.name);
-
+  
     const newDetails = {
+      projectid,
       projectName,
       task,
       tags: selectedTags,
       timeTaken: formatTime(timeElapsed),
     };
-
+  
     console.log("Sending data:", {
       task,
+      projectid,  // Include projectid in the console log for verification
       projectName,
       tags: selectedTags,
       timeElapsed,
     });
-
+  
     try {
       const response = await axios.post(
-        "https://employee-management-amiz.onrender.com/auth/add_project_data",
+        "http://127.0.0.1:5000/auth/add_project_data",
         {
           task,
+          projectid,  // Include projectid in the request payload
           projectName,
           tags: selectedTags,
           timeElapsed,
@@ -206,7 +221,7 @@ const Stopwatch = () => {
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
       await axios.post(
-        `https://employee-management-amiz.onrender.com/auth/update_project_data/${projectId}`,
+        `http://127.0.0.1:5000/auth/update_project_data/${projectId}`,
         {
           projectid: projectId,
           task: detail.task,
@@ -226,10 +241,15 @@ const Stopwatch = () => {
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
 
-    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const timeToMilliseconds = (timeString) => {
+    if (!timeString) {
+      return 0;
+    }
     const [hours, minutes, seconds] = timeString.split(":").map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
   };
@@ -237,196 +257,173 @@ const Stopwatch = () => {
   return (
     <>
       <div className="tw-flex tw-flex-col tw-items-center tw-p-4">
-        <div className="tw-mb-4 tw-border-2 tw-border-base-content tw-rounded tw-p-2 md:tw-flex tw-w-full">
-          <input
-            type="text"
-            placeholder="What are you working on?"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            className="tw-border tw-w-full tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1 "
-            style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
-          />
-          <div className="tw-relative tw-flex-1">
-            <select
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-              className="tw-border tw-border-gray-500 tw-px-2 tw-py-1 tw-mr-2 tw-flex-1"
-            >
-              <option value="">Select Project</option>
+    <div className="tw-mb-4 tw-border-2 tw-border-base-content tw-rounded tw-p-2 md:tw-flex tw-w-full">
+      <input
+        type="text"
+        placeholder="Project ID"
+        value={projectid}
+        onChange={(e) => setProjectid(e.target.value)}
+        className="tw-mr-2 tw-input tw-input-bordered tw-flex-grow"
+      />
+      <input
+        type="text"
+        placeholder="What are you working on?"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        className="tw-mr-2 tw-input tw-input-bordered tw-flex-grow"
+      />
+      <div className="tw-relative">
+        <input
+          type="text"
+          placeholder="Project Name"
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
+          onClick={handleTagClick}
+          className="tw-mr-2 tw-input tw-input-bordered tw-flex-grow"
+        />
+        <div className="tw-absolute tw-top-full tw-left-0 tw-right-0 tw-bg-white tw-shadow-md tw-z-10">
+          {showDropdown && (
+            <ul className="tw-list-none tw-p-2">
               {projects.map((project, index) => (
-                <option key={index} value={project}>
+                <li
+                  key={index}
+                  className="tw-py-2 tw-cursor-pointer hover:tw-bg-gray-200"
+                  onClick={() => {
+                    setProjectName(project);
+                    setShowDropdown(false);
+                  }}
+                >
                   {project}
-                </option>
+                </li>
               ))}
-            </select>
-          </div>
-          <div className="tw-relative tw-right">
-            <div
-              className="tw-border bf tw-border-gray-500 tw-px-2 tw-py-1 tw-cursor-pointer"
-              onClick={handleTagClick}
-              style={{ marginRight: "8px" }}
-            >
-                     {tags.filter((tag) => tag.checked).length > 0 ? (
-                <>
-                  {tags
-                    .filter((tag) => tag.checked)
-                    .slice(0, 2)
-                    .map((tag, index) => (
-                      <span key={index}>
-                        {tag.name}
-                        {index < 1 && tags.filter((tag) => tag.checked).length > 2 ? ", " : ""}
-                      </span>
-                    ))}
-                  {tags.filter((tag) => tag.checked).length > 3 && (
-                    <span> ...</span>
-                  )}
-                </>
-              ) : (
-                <i className="bi bi-tag"></i>
-              )}
-            </div>
-            {showDropdown && (
-              <div
-                className="tw-absolute tw-bg-white tw-border tw-border-gray-500 tw-mt-1 tw-p-2 tw-right-0 tw-z-10 tw-max-h-48 tw-overflow-y-auto"
-                style={{ minWidth: "200px" }}
-              >
-                {tags.map((tag, index) => (
-                  <div key={index} className="tw-flex tw-items-center">
-                    <input
-                      type="checkbox"
-                      checked={tag.checked}
-                      onChange={() => handleTagSelect(tag.name)}
-                    />
-                    <span className="tw-ml-2">{tag.name}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {!isRunning ? (
-            <button
-              onClick={handleStart}
-              disabled={!projectName.trim()}
-              className={`tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded ${!projectName.trim() && "tw-opacity-50 tw-cursor-not-allowed"}`}
-              style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-            >
-              Start
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={handlePause}
-                className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded tw-mr-2"
-              >
-                Pause
-              </button>
-              <button
-                onClick={handleReset}
-                className="tw-bg-gray-500 tw-hover:bg-gray-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-              >
-                Reset
-              </button>
-            </>
+            </ul>
           )}
         </div>
-        <div>
-          <h2 className="tw-font-bold">
-            Time Taken: {formatTime(timeElapsed)}
-          </h2>
-        </div>
-        {isRunning && (
-          <button
-            onClick={handleSubmit}
-            className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-          >
-            Submit
-          </button>
-        )}
-        {!isRunning && pausedTime > 0 && (
-          <button
-            onClick={handleResume}
-            className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-          >
-            Resume
-          </button>
-        )}
       </div>
-      <div className="tw-p-4 tw-overflow-x-auto">
-        <table className="tw-mt-4 tw-w-full ">
-          <thead>
-            <tr className=" tw-text-black ">
-              <th className="tw-p-2 tw-w-1/5">Project Name</th>
-              <th className="tw-p-2 tw-w-1/5">Description</th>
-              <th className="tw-p-2 tw-w-1/5">Tag</th>
-              <th className="tw-p-2 tw-w-1/5">Time Taken</th>
-              <th className="tw-p-2 tw-w-1/5">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {submittedDetails.map((detail, index) => (
-              <tr
-                key={index}
-                className="tw-last:border-b-0 tw-transition-colors tw-duration-300 tw-hover:bg-gray-100"
-              >
-                <td className="tw-p-2 tw-w-1/5">{detail.projectName}</td>
-                <td className="tw-p-2 tw-w-1/5">{detail.task}</td>
-                <td className="tw-p-2 tw-w-1/5">
-                  {(expandedRows[index]
-                    ? detail.tags
-                    : detail.tags.slice(0, 3)
-                  ).map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {detail.tags.length > 3 && !expandedRows[index] && (
-                    <span
-                      className="tw-bg-gray-300 tw-text-black tw-font-medium tw-py-1 tw-px-2 tw-mr-1 tw-mb-1 tw-rounded-xl cursor-pointer"
-                      onClick={() => toggleRowExpansion(index)}
-                    >
-                      ...
-                    </span>
-                  )}
-                </td>
-
-                <td className="tw-p-2 tw-w-1/5">{detail.timeElapsed}</td>
-                <td className="tw-p-2 tw-w-1/5">
-                  {editIndex !== index ? (
-                    <button
-                      onClick={() => handleRun(index)}
-                      className="tw-bg-green-500 tw-hover:bg-green-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-                    >
-                      Run
-                    </button>
-                  ) : (
-                    <>
-                      <button
-                        onClick={handleStop}
-                        className="tw-bg-red-500 tw-hover:bg-red-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded tw-mr-2"
-                      >
-                        Stop
-                      </button>
-                      <button
-                        onClick={() => handleUpdateSubmit(index)}
-                        className="tw-bg-blue-500 tw-hover:bg-blue-700 tw-text-white tw-font-bold tw-py-1 tw-px-4 tw-rounded"
-                      >
-                        Submit
-                      </button>
-                    </>
-                  )}
+      <button
+        className="tw-mr-2 tw-btn tw-btn-primary"
+        onClick={isRunning ? handlePause : handleStart}
+        disabled={!projectName}
+      >
+        {isRunning ? "Pause" : "Start"}
+      </button>
+      <button
+        className="tw-mr-2 tw-btn tw-btn-secondary"
+        onClick={handleResume}
+        disabled={isRunning || !pausedTime}
+      >
+        Resume
+      </button>
+      <button
+        className="tw-mr-2 tw-btn tw-btn-accent"
+        onClick={handleReset}
+      >
+        Reset
+      </button>
+      <button className="tw-btn tw-btn-success" onClick={handleSubmit}>
+        Submit
+      </button>
+    </div>
+    <div className="tw-mb-4">
+      <button
+        className="tw-btn tw-btn-outline"
+        onClick={handleTagClick}
+      >
+        Select Tags
+      </button>
+      {showDropdown && (
+        <div className="tw-relative">
+          <ul className="tw-list-none tw-p-2 tw-bg-white tw-shadow-md tw-absolute tw-z-10">
+            {tags.map((tag, index) => (
+              <li key={index} className="tw-flex tw-items-center tw-py-2">
+                <input
+                  type="checkbox"
+                  checked={tag.checked}
+                  onChange={() => handleTagSelect(tag.name)}
+                  className="tw-mr-2"
+                />
+                {tag.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+    <div className="tw-overflow-x-auto">
+      <table className="tw-table tw-w-full">
+        <thead>
+          <tr>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Task</th>
+            <th>Tags</th>
+            <th>Time Taken</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {submittedDetails.map((detail, index) => (
+            <React.Fragment key={index}>
+              <tr>
+                <td>{detail.projectid}</td>
+                <td>{detail.projectName}</td>
+                <td>{detail.task}</td>
+                <td>{detail.tags.join(", ")}</td>
+                <td>{detail.timeTaken}</td> {/* Display formatted timeElapsed */}
+                <td>
+                  <button
+                    className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
+                    onClick={() => handleRun(index)}
+                    disabled={isRunning}
+                  >
+                    Run
+                  </button>
+                  <button
+                    className="tw-btn tw-btn-xs tw-btn-secondary tw-mr-2"
+                    onClick={handleStop}
+                  >
+                    Stop
+                  </button>
+                  <button
+                    className="tw-btn tw-btn-xs tw-btn-accent tw-mr-2"
+                    onClick={() => toggleRowExpansion(index)}
+                  >
+                    {expandedRows[index] ? "Hide" : "Show"} Details
+                  </button>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              {expandedRows[index] && (
+                <tr>
+                  <td colSpan="6">
+                    <div className="tw-p-4 tw-bg-gray-100 tw-rounded tw-mb-2">
+                      <div className="tw-mb-2">
+                        <strong>Task:</strong> {detail.task}
+                      </div>
+                      <div className="tw-mb-2">
+                        <strong>Tags:</strong> {detail.tags.join(", ")}
+                      </div>
+                      <div className="tw-mb-2">
+                        <strong>Time Taken:</strong> {detail.timeTaken}
+                      </div>
+                      <button
+                        className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
+                        onClick={() => handleUpdateSubmit(index)}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
     </>
   );
+
 };
 
 export default Stopwatch;

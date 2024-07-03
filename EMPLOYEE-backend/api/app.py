@@ -700,13 +700,14 @@ def add_project_data():
     tags = data.get('tags')
     timeElapsed = data.get('timeElapsed')
     current_date = datetime.now()
-    print(current_date)
     empid = session.get('empid')
+    projectid = data.get('projectid')  # Add this line to get the projectid
 
     if not empid:
         return jsonify({'error': 'Employee not logged in'}), 401
 
     new_project_data = {
+        'projectid': projectid,  # Include the projectid in the new project data
         'projectName': projectName,
         'task': task,
         'tags': tags,
@@ -719,16 +720,17 @@ def add_project_data():
     return jsonify({'message': 'Project data added successfully'}), 201
 
 
-"""
-TimeTracker - Display worked project details
-"""
 @app.route('/auth/get_employee_projects', methods=['GET'])
 def get_employee_projects():
     projects = db.projects.find()
-    project_list = [{'projectName': project['projectName'], 'task': project['task'],
-                     'tags': project['tags'], 'timeElapsed': project['timeElapsed']} for project in projects]
+    project_list = [{'projectid': project.get('projectid'),  # Include projectid in the response
+                     'projectName': project['projectName'], 
+                     'task': project['task'],
+                     'tags': project['tags'], 
+                     'timeElapsed': project['timeElapsed']} for project in projects]
 
     return jsonify({'projects': project_list}), 200
+
 
 """
 TimeTracker Page - To Update Project - Start / Resume and update in database 
