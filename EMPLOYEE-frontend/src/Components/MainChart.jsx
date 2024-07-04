@@ -65,9 +65,12 @@ const MainChart = () => {
         const labels = data.map(item => `${item.month}/${item.year}`);
         const dataset = {
           label: 'Total Work Done',
-          backgroundColor: `rgba(${getStyle('--cui-info-rgb')}, .1)`,
-          borderColor: getStyle('--cui-info'),
-          pointHoverBackgroundColor: getStyle('--cui-info'),
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 2,
           data: data.map(item => item.total_work_done),
           fill: true,
