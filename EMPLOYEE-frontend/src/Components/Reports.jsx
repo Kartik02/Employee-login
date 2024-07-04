@@ -4,7 +4,7 @@ import BarGraphComponent from '../Components/BarGraphComponent'; // Import your 
 
 const Reports = () => {
   const [projects, setProjects] = useState([]);
-
+  
   useEffect(() => {
     fetch('https://employee-management-2-srno.onrender.com/auth/projects')
       .then(response => {
@@ -17,11 +17,14 @@ const Reports = () => {
       .then(data => {
         setProjects(data);
       })
+      
       .catch(error => {
         console.error('Error fetching projects:', error);
-      });
+      }
+      
+      );
   }, []);
-
+  
   // Generate a color palette dynamically
   const generateColorPalette = (numColors) => {
     // You can use any color generation library or algorithm here

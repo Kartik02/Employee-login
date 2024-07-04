@@ -250,7 +250,32 @@ def add_category():
     categories.append(new_category)
     return jsonify({'Status': True, 'Result': new_category}), 201
 
+@app.route('/auth/admins', methods=['GET'])
+def get_admins():
+    admins = db.admin_data.find()
+    admin_list = []
+    for admin in admins:
+        admin_dict = {
+            'name': admin['name'],
+            'email': admin['email'],
+            'password': admin['password'],
+        }
+        admin_list.append(admin_dict)
+    return jsonify({'Status': True, 'Result': admin_list}), 200
+@app.route('/auth/add_admin', methods=['POST'])
+def addAdmin():
+    data = request.form
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
 
+    new_admin = {
+        'name': name,
+        'email': email,
+        'password': password,
+    }
+    db.admin_data.insert_one(new_admin)
+    return jsonify({'message': 'Admin added successfully'}), 200
 @app.route('/auth/add_employee', methods=['POST'])
 def addEmp():
     data = request.form

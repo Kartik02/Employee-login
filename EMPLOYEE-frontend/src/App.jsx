@@ -15,11 +15,13 @@ import Leave from "./Components/Leave";
 import Employeesec from "./Components/Employeesec";
 import Timesheet from "./Components/Timesheet";
 import AddCategory from "./Components/AddCategory";
+import AddAdmin from "./Components/AddAdmin";
 import AddEmployee from "./Components/AddEmployee";
 import AdminDashboard from "./Components/AdminDashboard";
 import AdminLogin from "./Components/AdminLogin";
 import Reports from "./Components/Reports";
 import EmployeeList from "./Components/EmployeeList";
+import AdminList from "./Components/AdminList";
 import ProjectManagement from "./Components/ProjectManagement";
 import AddProject from "./Components/AddProject";
 import Tag from "./Components/Tag";
@@ -37,8 +39,16 @@ function App() {
         <Route path="" element={<Home />}></Route>
           
           <Route
+            path="/admindashboard/adminlist"
+            element={<AdminList />}
+          ></Route>
+          <Route
             path="/admindashboard/employeelist"
             element={<EmployeeList />}
+          ></Route>
+          <Route
+            path="/admindashboard/add_admin"
+            element={<AddAdmin />}
           ></Route>
           <Route
             path="/admindashboard/add_employee"

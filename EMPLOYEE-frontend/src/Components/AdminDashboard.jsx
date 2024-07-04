@@ -45,6 +45,17 @@ const AdminDashboard = () => {
                 </Link>
               </li>
               
+              <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/admindashboard/adminlist" ? "tw-bg-gray-300" : ""}`}>
+                <Link
+                  to="/admindashboard/adminlist"
+                  className={`nav-link ${activeLink === "/admindashboard/adminlist" ? "tw-text-black" : "text-white"} px-0 align-middle tw-text-xs md:tw-text-xl flex items-center justify-center hover:tw-text-black`}
+                  onClick={() => handleNavClick('/admindashboard/adminlist')}
+                >
+                 <i class="bi bi-person-check ms-2"></i>
+                  <span className="ms-2 d-none d-sm-inline">Admin Details</span>
+                </Link>
+              </li>
+
               <li className={`w-100 hover:tw-bg-gray-300 tw-rounded ${activeLink === "/admindashboard/employeelist" ? "tw-bg-gray-300" : ""}`}>
                 <Link
                   to="/admindashboard/employeelist"

@@ -54,9 +54,12 @@ const Stopwatch = () => {
         "https://employee-management-2-srno.onrender.com/auth/project_list"
       );
       setProjects(response.data);
-    } catch (error) {
+    }
+    
+    catch (error) {
       console.error("Error fetching projects:", error);
     }
+    
   };
 
   const fetchTags = async () => {

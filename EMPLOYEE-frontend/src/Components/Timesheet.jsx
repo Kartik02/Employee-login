@@ -38,11 +38,13 @@ const Timesheet = () => {
     try {
       const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/project_list');
       setProjects(response.data);
-    } catch (error) {
+    }
+    
+    catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
-
+  
   const handleChange = (rowIndex, columnName, value) => {
     const updatedRows = [...rows];
     if (columnName === 'projectName') {
