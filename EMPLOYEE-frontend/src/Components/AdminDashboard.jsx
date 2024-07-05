@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
-import Navbar from "./Navbar";
+import Navbar from "./NavbarForAdmin";
 import { universalurl } from "../helper";
 
 const AdminDashboard = () => {
