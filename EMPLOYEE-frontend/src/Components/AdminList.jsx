@@ -17,6 +17,10 @@ const AdminList = () => {
       .catch(err => console.log(err));
   }, []);
 
+  const maskPassword = (password) => {
+    return '*'.repeat(password.length);
+  };
+
   return (
     <div className="mt-3 overflow-auto">
     <h2 className="text-center mb-3">Admin List</h2>
@@ -38,7 +42,7 @@ const AdminList = () => {
             <tr key={index} className="bg-white even:bg-gray-50">
               <td className="py-2 px-4 border-b">{admin.name}</td>
               <td className="py-2 px-4 border-b">{admin.email}</td>
-              <td className="py-2 px-4 border-b">{admin.password}</td>
+              <td className="py-2 px-4 border-b">{maskPassword(admin.password)}</td>
             </tr>
           ))}
         </tbody>
