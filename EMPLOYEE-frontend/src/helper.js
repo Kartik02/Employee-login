@@ -1,1 +1,1 @@
-export const universalurl="http://127.0.0.1:5001";
+export const universalurl="https://employee-management-1-8mpl.onrender.com";
