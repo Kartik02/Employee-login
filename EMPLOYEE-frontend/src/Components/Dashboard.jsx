@@ -5,6 +5,7 @@ import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import ReactLoading from 'react-loading';
+import { universalurl } from "../helper";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Dashboard = () => {
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
-    axios.get('https://employee-management-2-srno.onrender.com/auth/logout')
+    axios.get(`${universalurl}/auth/logout`)
       .then(result => {
         if (result.data.Status) {
           navigate('adminlogin');
@@ -26,7 +27,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Example data fetching, replace with your actual data fetching logic
-    axios.get('https://employee-management-2-srno.onrender.com/some-endpoint')
+    axios.get(`${universalurl}/some-endpoint`)
       .then(response => {
         setData(response.data);
         setLoading(false);

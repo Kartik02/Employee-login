@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
 import Navbar from "./Navbar";
+import { universalurl } from "../helper";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const AdminDashboard = () => {
   const [activeLink, setActiveLink] = useState(window.location.pathname);
 
   const handleLogout = () => {
-    axios.get("https://employee-management-2-srno.onrender.com/auth/logout").then((result) => {
+    axios.get(`${universalurl}/auth/logout`).then((result) => {
       if (result.data.Status) {
         navigate("adminlogin");
       }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { universalurl } from '../helper';
 
 const AddAdmin = () => {
   const [admin, setAdmin] = useState({
@@ -28,7 +29,7 @@ const AddAdmin = () => {
         formData.append('email', admin.email);
         formData.append('password', admin.password);
 
-        axios.post('https://employee-management-2-srno.onrender.com/auth/add_admin', formData, {
+        axios.post(`${universalurl}/auth/add_admin`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

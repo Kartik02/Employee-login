@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-
+import { universalurl } from "../helper";
 const Stopwatch = () => {
   const [task, setTask] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -51,7 +51,7 @@ const Stopwatch = () => {
   const fetchProjects = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-2-srno.onrender.com/auth/project_list"
+        `${universalurl}/auth/project_list`
       );
       setProjects(response.data);
     }
@@ -65,7 +65,7 @@ const Stopwatch = () => {
   const fetchTags = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-2-srno.onrender.com/auth/tag_list"
+        `${universalurl}/auth/tag_list`
       );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
@@ -78,7 +78,7 @@ const Stopwatch = () => {
   const fetchEmployeeProjects = async () => {
     try {
       const response = await axios.get(
-        "https://employee-management-2-srno.onrender.com/auth/get_employee_projects",
+        `${universalurl}/auth/get_employee_projects`,
         { withCredentials: true }
       );
       const employeeProjects = response.data.projects;
@@ -199,7 +199,7 @@ const Stopwatch = () => {
   
     try {
       const response = await axios.post(
-        "https://employee-management-2-srno.onrender.com/auth/add_project_data",
+        `${universalurl}/auth/add_project_data`,
         {
           task,
           projectid,  // Include projectid in the request payload
@@ -224,7 +224,7 @@ const Stopwatch = () => {
     const projectId = detail.projectid; // Retrieve projectid from project detail object
     try {
       await axios.post(
-        `https://employee-management-2-srno.onrender.com/auth/update_project_data/${projectId}`,
+        `${universalurl}/auth/update_project_data/${projectId}`,
         {
           projectid: projectId,
           task: detail.task,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { universalurl } from '../helper';
 
 const Timesheet = () => {
   const [rows, setRows] = useState([]);
@@ -36,7 +37,7 @@ const Timesheet = () => {
   // Fetch projects from backend
   const fetchProjects = async () => {
     try {
-      const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/project_list');
+      const response = await axios.get(`${universalurl}/auth/project_list`);
       setProjects(response.data);
     }
     

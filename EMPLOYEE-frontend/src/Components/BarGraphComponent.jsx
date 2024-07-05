@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { universalurl } from '../helper';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -21,7 +22,7 @@ const Charts = () => {
   useEffect(() => {
     const fetchProjectTime = async () => {
       try {
-        const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/project_time');
+        const response = await axios.get(`${universalurl}/auth/project_time`);
         const projects = response.data;
         const labels = projects.map(project => project.projectName);
         const data = projects.map(project => project.totalTime);

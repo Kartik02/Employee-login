@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { universalurl } from "../helper";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const ForgotPassword = () => {
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://employee-management-2-srno.onrender.com/auth/forgotpassword", {
+      const response = await axios.post(`${universalurl}/auth/forgotpassword`, {
         email,
       });
       Swal.fire({
@@ -35,7 +36,7 @@ const ForgotPassword = () => {
   const handleResetPassword = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("https://employee-management-2-srno.onrender.com/auth/resetpassword", {
+      const response = await axios.post(`${universalurl}/auth/resetpassword`, {
         email,
         otp,
         password: newPassword,

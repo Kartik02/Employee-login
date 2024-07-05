@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { universalurl } from '../helper';
 
 const AdminList = () => {
   const [admins, setAdmins] = useState([]);
 
   useEffect(() => {
-    axios.get('https://employee-management-2-srno.onrender.com/auth/admins')
+    axios.get(`${universalurl}/auth/admins`)
       .then(result => {
         if (result.data.Status) {
           setAdmins(result.data.Result);

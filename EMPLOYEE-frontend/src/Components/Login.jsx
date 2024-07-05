@@ -5,6 +5,7 @@ import tenlogo from "./../assets/tencompany.jpg";
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { universalurl } from "../helper";
 
 axios.defaults.withCredentials = true;
 const Login = () => {
@@ -20,7 +21,7 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://employee-management-2-srno.onrender.com/auth/login", values)
+      .post(`${universalurl}/auth/login`, values)
       .then((result) => {
         console.log("Response data:", result.data);
         if (result.data.loginStatus) {

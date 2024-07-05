@@ -24,6 +24,7 @@ import {
 // import CIcon from '@coreui/icons-react'
 // import { cilCloudDownload} from '@coreui/icons'
 import MainChart from './MainChart'
+import { universalurl } from '../helper'
 
 const Home = () => {
   const [adminTotal, setAdminTotal] = useState(0)
@@ -97,7 +98,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    axios.get('https://employee-management-2-srno.onrender.com/auth/admin_count')
+    axios.get(`${universalurl}/auth/admin_count`)
         .then(response => {
             setAdminTotal(response.data.admin_count);
         })
@@ -105,7 +106,7 @@ const Home = () => {
             console.error('Error fetching admin count:', error);
         });
 
-    axios.get('https://employee-management-2-srno.onrender.com/auth/employee_count')
+    axios.get(`${universalurl}/auth/employee_count`)
         .then(response => {
             setemployeeTotal(response.data.employee_count);
         })
@@ -115,7 +116,7 @@ const Home = () => {
   }, []);
 
   const salaryCount = () => {
-    axios.get('http://localhost:3000/auth/salary_count')
+    axios.get(`${universalurl}/auth/salary_count`)
       .then(result => {
         if (result.data.Status) {
           setSalaryTotal(result.data.Result[0].salaryOFEmp)

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import DonutChartComponent from '../Components/DonutChartComponent'; // Import your Donut Chart component
 import BarGraphComponent from '../Components/BarGraphComponent'; // Import your Bar Graph component
-
+import { universalurl } from '../helper';
 const Reports = () => {
   const [projects, setProjects] = useState([]);
   
   useEffect(() => {
-    fetch('https://employee-management-2-srno.onrender.com/auth/projects')
+    fetch(`${universalurl}/auth/projects`)
       .then(response => {
         if (response.ok) {
           return response.json();

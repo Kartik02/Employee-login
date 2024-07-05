@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CCard, CCardBody, CCol, CCardHeader, CRow } from '@coreui/react';
 import { CChartDoughnut } from '@coreui/react-chartjs';
 import randomColor from 'randomcolor';
+import { universalurl } from '../helper';
 
 const Charts = () => {
   const [chartData, setChartData] = useState({
@@ -18,7 +19,7 @@ const Charts = () => {
   useEffect(() => {
     const fetchTagCount = async () => {
       try {
-        const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/tag_count');
+        const response = await axios.get(`${universalurl}/auth/tag_count`);
         const tags = response.data;
         const labels = tags.map(tag => tag.tag);
         const data = tags.map(tag => tag.count);

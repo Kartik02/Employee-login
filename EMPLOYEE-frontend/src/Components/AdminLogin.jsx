@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { universalurl } from "../helper";
 
 const AdminLogin = () => {
   const [values, setValues] = useState({
@@ -18,7 +19,7 @@ const AdminLogin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
-      .post("https://employee-management-2-srno.onrender.com/auth/adminlogin", values)
+      .post(`${universalurl}/auth/adminlogin`, values)
       .then((result) => {
         if (result.data.loginStatus) {
           Swal.fire({

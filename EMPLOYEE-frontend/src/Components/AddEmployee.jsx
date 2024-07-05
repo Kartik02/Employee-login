@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import defaultImage from '../assets/tencompany.jpg';
+import { universalurl } from '../helper';
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -17,7 +18,7 @@ const AddEmployee = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios.get('https://employee-management-2-srno.onrender.com/auth/category')
+    axios.get(`${universalurl}/auth/category`)
       .then(result => {
         if (result.data.Status) {
           setCategory(result.data.Result);
@@ -71,7 +72,7 @@ const AddEmployee = () => {
   };
 
   const submitFormData = (formData) => {
-    axios.post('https://employee-management-2-srno.onrender.com/auth/add_employee', formData, {
+    axios.post(`${universalurl}/auth/add_employee`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

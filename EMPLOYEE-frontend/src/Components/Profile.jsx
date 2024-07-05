@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { universalurl } from "../helper";
 
 axios.defaults.withCredentials = true;
 
@@ -21,7 +22,7 @@ function Profile() {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axios.get("https://employee-management-2-srno.onrender.com/auth/get_employee_data", { withCredentials: true });
+      const response = await axios.get(`${universalurl}/auth/get_employee_data`, { withCredentials: true });
       if (response.data) {
         setEmpData({
           name: response.data.name,
@@ -37,7 +38,7 @@ function Profile() {
 
   const handlePasswordChange = () => {
     axios
-      .post("https://employee-management-2-srno.onrender.com/auth/update_employee", { password: editedPassword }, { withCredentials: true })
+      .post(`${universalurl}/auth/update_employee`, { password: editedPassword }, { withCredentials: true })
       .then(() => {
         setPasswordChanged(true);
       })
@@ -52,7 +53,7 @@ function Profile() {
     formData.append("file", file);
 
     axios
-      .post("https://employee-management-2-srno.onrender.com/auth/upload_profile", formData, {
+      .post(`${universalurl}/auth/upload_profile`, formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

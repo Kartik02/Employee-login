@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { universalurl } from '../helper'
 
 const Employeesec = () => {
     const [category, setCategory] = useState([])
     const [name, setName] = useState('')
 
     useEffect(() => {
-        axios.get('https://employee-management-2-srno.onrender.com/auth/category')
+        axios.get(`${universalurl}/auth/category`)
             .then(result => {
                 if (result.data.Status) {
                     setCategory(result.data.Result)
@@ -18,7 +19,7 @@ const Employeesec = () => {
 
     const handleAddCategory = (e) => {
         e.preventDefault()
-        axios.post('https://employee-management-2-srno.onrender.com/auth/category', { name })
+        axios.post(`${universalurl}/auth/category`, { name })
             .then(result => {
                 if (result.data.Status) {
                     setCategory([...category, result.data.Result])

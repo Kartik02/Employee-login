@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { universalurl } from "../helper";
 
 const AddCategory = () => {
   const [category, setCategory] = useState("");
@@ -21,7 +22,7 @@ const AddCategory = () => {
     }
 
     try {
-      const response = await axios.post("https://employee-management-2-srno.onrender.com/auth/add_category", { category });
+      const response = await axios.post(`${universalurl}/auth/add_category`, { category });
       if (response.data.Status) {
         Swal.fire({
           icon: "success",

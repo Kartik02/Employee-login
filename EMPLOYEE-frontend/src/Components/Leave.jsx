@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { universalurl } from "../helper";
 
 const Leave = () => {
 	const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const Leave = () => {
 		const fetchEmployeeData = async () => {
 			try {
 				const response = await axios.get(
-					"https://employee-management-2-srno.onrender.com/auth/get_employee_data",
+					`${universalurl}/auth/get_employee_data`,
 					{ withCredentials: true }
 				);
 				if (response.data) {
@@ -61,7 +62,7 @@ const Leave = () => {
 
 		axios
 			.post(
-				"https://employee-management-2-srno.onrender.com/auth/leave",
+				`${universalurl}/auth/leave`,
 				formData
 			)
 			.then((result) => {

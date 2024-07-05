@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CChartLine } from '@coreui/react-chartjs'
 import { getStyle } from '@coreui/utils'
 import axios from 'axios' 
+import { universalurl } from '../helper'
 
 const MainChart = () => {
   const chartRef = useRef(null)
@@ -59,7 +60,7 @@ const MainChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/wavelength_graph') // Ensure this URL matches your Flask server URL
+        const response = await axios.get(`${universalurl}/auth/wavelength_graph`) // Ensure this URL matches your Flask server URL
         const data = response.data
 
         const labels = data.map(item => `${item.month}/${item.year}`);

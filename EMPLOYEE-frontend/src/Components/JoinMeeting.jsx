@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { universalurl } from '../helper';
 
 const JoinMeeting = () => {
   const [meetings, setMeetings] = useState([]);
@@ -10,7 +11,7 @@ const JoinMeeting = () => {
     // Function to fetch meeting data from the backend
     const fetchMeetings = async () => {
       try {
-        const response = await axios.get('https://employee-management-2-srno.onrender.com/auth/meetings');
+        const response = await axios.get(`${universalurl}/auth/meetings`);
         const formattedMeetings = response.data.map(meeting => {
           const meetingDate = new Date(`${meeting.date}T${meeting.time}`);
           return {
