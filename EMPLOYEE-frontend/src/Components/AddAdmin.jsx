@@ -46,7 +46,14 @@ const AddAdmin = () => {
               password: '',
             });
           })
-          .catch(err => console.log(err));
+          .catch(err => {
+            Swal.fire(
+              'Error!',
+              'Duplicate data or Server issue, Try again.',
+              'error'
+            );
+          console.log(err);
+        });
       }
     });
   };
