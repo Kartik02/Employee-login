@@ -64,67 +64,67 @@ const AddAdmin = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center mt-3 ">
-      <div className="p-3 rounded w-100 tw-border tw-border-base-content">
-        <h2 className="text-center">Add Admin</h2>
-        <br />
-        {successMessage && (
-          <div className="alert alert-success d-flex align-items-center justify-content-between">
-            <span>{successMessage}</span>
-            <button className="btn-close" onClick={handleRemoveMessage}></button>
-          </div>
-        )}
-        <form className="row g-1" onSubmit={handleSubmit}>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="inputName" className="form-label">
-              Name <span className="text-danger">*</span>
-            </label>
-            <input
-              type="text"
-              className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-              placeholder="Enter Name"
-              value={admin.name}
-              onChange={(e) => setAdmin({ ...admin, name: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="inputEmail4" className="form-label">
-              Email <span className="text-danger">*</span>
-            </label>
-            <input
-              type="email"
-              className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-              id="inputEmail4"
-              placeholder="Enter Email"
-              autoComplete="off"
-              value={admin.email}
-              onChange={(e) => setAdmin({ ...admin, email: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="inputPassword4" className="form-label">
-              Password <span className="text-danger">*</span>
-            </label>
-            <input
-              type="password"
-              className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
-              id="inputPassword4"
-              placeholder="Enter password"
-              value={admin.password}
-              onChange={(e) => setAdmin({ ...admin, password: e.target.value })}
-              required
-            />
-          </div>
-          <div className="col-12">
-            <button type="submit" className="btn btn-success w-100">
-              Add Admin
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className="d-flex justify-content-center align-items-center ">
+    <div className="p-3 rounded w-100 tw-border tw-border-base-content">
+     
+      <br />
+      {successMessage && (
+        <div className="alert alert-success d-flex align-items-center justify-content-between">
+          <span>{successMessage}</span>
+          <button className="btn-close" onClick={handleRemoveMessage}></button>
+        </div>
+      )}
+      <form className="row g-1" onSubmit={handleSubmit}>
+        <div className="col-md-6 mb-3">
+          <label htmlFor="inputName" className="form-label">
+            Name <span className="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+            placeholder="Enter Name"
+            value={admin.name}
+            onChange={(e) => setAdmin({ ...admin, name: e.target.value })}
+            required
+          />
+        </div>
+        <div className="col-md-6 mb-3">
+          <label htmlFor="inputEmail4" className="form-label">
+            Email <span className="text-danger">*</span>
+          </label>
+          <input
+            type="email"
+            className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+            id="inputEmail4"
+            placeholder="Enter Email"
+            autoComplete="off"
+            value={admin.email}
+            onChange={(e) => setAdmin({ ...admin, email: e.target.value })}
+            required
+          />
+        </div>
+        <div className="col-md-6 mb-3">
+          <label htmlFor="inputPassword4" className="form-label">
+            Password <span className="text-danger">*</span>
+          </label>
+          <input
+            type="password"
+            className="form-control tw-placeholder-base-content rounded-0 tw-border tw-border-base-content tw-bg-base-300 tw-text-base-content"
+            id="inputPassword4"
+            placeholder="Enter password"
+            value={admin.password}
+            onChange={(e) => setAdmin({ ...admin, password: e.target.value })}
+            required
+          />
+        </div>
+        <div className="col-12">
+          <button type="submit" className="btn btn-success w-100">
+            Add Admin
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
   );
 };
 
