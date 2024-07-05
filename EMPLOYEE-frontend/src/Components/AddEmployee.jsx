@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, Outlet, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import defaultImage from '../assets/tencompany.jpg';
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
@@ -52,33 +52,55 @@ const AddEmployee = () => {
         formData.append('password', employee.password);
         formData.append('salary', employee.salary);
         formData.append('category_id', employee.category_id);
-        formData.append('image', employee.image || defaultImage); // Use default image if no image is selected
-
-        axios.post('https://employee-management-2-srno.onrender.com/auth/add_employee', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-          .then(result => {
-            console.log(result.data);
-            Swal.fire(
-              'Added!',
-              'Employee has been added successfully.',
-              'success'
-            );
-            setEmployee({
-              name: '',
-              email: '',
-              employee_id: '',
-              password: '',
-              salary: '',
-              category_id: '',
-              image: null
-            });
-          })
-          .catch(err => console.log(err));
+        
+        if (employee.image) {
+          formData.append('image', employee.image);
+        } else {
+          const blob = fetch(defaultImage)
+            .then(res => res.blob())
+            .then(blob => {
+              formData.append('image', blob, 'default.png');
+              submitFormData(formData);
+            })
+            .catch(err => console.log(err));
+          return;
+        }
+        submitFormData(formData);
       }
     });
+  };
+
+  const submitFormData = (formData) => {
+    axios.post('https://employee-management-2-srno.onrender.com/auth/add_employee', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(result => {
+        console.log(result.data);
+        Swal.fire(
+          'Added!',
+          'Employee has been added successfully.',
+          'success'
+        );
+        setEmployee({
+          name: '',
+          email: '',
+          employee_id: '',
+          password: '',
+          salary: '',
+          category_id: '',
+          image: null
+        });
+      })
+      .catch(err => {
+          Swal.fire(
+            'Error!',
+            'Duplicate data or Server issue, Try again.',
+            'error'
+          );
+        console.log(err);
+      });
   };
 
   const handleRemoveMessage = () => {
@@ -173,7 +195,7 @@ const AddEmployee = () => {
             <select name="category" id="category" className="form-select" onChange={(e) => setEmployee({ ...employee, category_id: e.target.value })} value={employee.category_id} required>
               <option value="">Select Category</option>
               {category.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+                <option key={c.id} value={c.name}>{c.name}</option>
               ))}
             </select>
           </div>
