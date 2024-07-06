@@ -64,11 +64,11 @@ const Reports = () => {
 
   return (
     <>
-      <div className='lg:tw-flex justify-between'> 
-        <div className='tw-mx-2 tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'> 
+      <div className='w-full lg:tw-flex justify-between m-2 tw-gap-2'> 
+        <div className=' tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'> 
           <BarGraphComponent data={barChartData} />
         </div>
-        <div className='tw-mx-2 tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'>
+        <div className=' tw-mt-1 lg:tw-w-1/2 md:tw-w-full tw-flex-shrink-0'>
           <DonutChartComponent data={donutChartData} />
         </div>
       </div>

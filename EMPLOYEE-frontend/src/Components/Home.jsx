@@ -27,6 +27,11 @@ import MainChart from './MainChart'
 import { universalurl } from '../helper'
 
 const Home = () => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+
+
   const [adminTotal, setAdminTotal] = useState(0)
   const [employeeTotal, setemployeeTotal] = useState(0)
   const [salaryTotal, setSalaryTotal] = useState(0)
@@ -161,16 +166,14 @@ const Home = () => {
           <CCardBody>
             <CRow>
               <CCol sm={5}>
-                <h4 id="traffic" className="card-title mb-0">
-                  Traffic
+                <h4 id="" className="card-title mb-0 tw-font-bold tw-text-gray-500">
+                  Wavelength
                 </h4>
-                <div className="small text-body-secondary">January - July 2023</div>
+                <div className="small text-body-secondary">{`January - ${currentMonth} ${currentYear}`}</div>
               </CCol>
               <CCol sm={7} className="d-none d-md-block">
-                <CButton color="primary" className="float-end">
-                  {/* <CIcon icon={cilCloudDownload} /> */}
-                </CButton>
-                <CButtonGroup className="float-end me-3">
+               
+                {/* <CButtonGroup className="float-end me-3">
                   {['Day', 'Month', 'Year'].map((value) => (
                     <CButton
                       color="outline-secondary"
@@ -181,12 +184,12 @@ const Home = () => {
                       {value}
                     </CButton>
                   ))}
-                </CButtonGroup>
+                </CButtonGroup> */}
               </CCol>
             </CRow>
             <MainChart />
           </CCardBody>
-          <CCardFooter>
+          {/* <CCardFooter>
             <CRow
               xs={{ cols: 1, gutter: 4 }}
               sm={{ cols: 2 }}
@@ -209,7 +212,7 @@ const Home = () => {
                 </CCol>
               ))}
             </CRow>
-          </CCardFooter>
+          </CCardFooter> */}
         </CCard>
 
 
@@ -278,8 +281,8 @@ const Home = () => {
           </div>
         </div>  */}
 
-        <CRow className="tw-w-100 tw-mt-5 tw-mb-10" xs={{ gutter: 4 }}>
-          <CCol sm={6} xl={4} xxl={3}>
+        <CRow className="tw-w-100 tw-mt-5 tw-mb-16" xs={{ gutter: 4 }}>
+          <CCol sm={6} xl={6} xxl={3}>
             <CWidgetStatsA
               color="primary"
               value={
@@ -295,16 +298,18 @@ const Home = () => {
               chart={
                 <CChartLine
                   ref={widgetChartRef1}
-                  className="mt-3 mx-3"
+                  className="mt-3 mx-3 tw-text-base-content "
                   style={{ height: '70px' }}
+                 
                   data={{
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
                     datasets: [
                       {
                         label: 'My First dataset',
+                        color:'gray',
                         backgroundColor: 'transparent',
-                        borderColor: 'rgba(255,255,255,.55)',
-                        pointBackgroundColor: getStyle('--cui-primary'),
+                        borderColor: 'rgba(130, 141, 133, 1)',
+                        pointBackgroundColor: 'rgba(130, 141, 133, 1)',
                         data: [65, 59, 84, 84, 51, 55, 40],
                       },
                     ],
@@ -357,7 +362,7 @@ const Home = () => {
               }
             />
           </CCol>
-          <CCol sm={6} xl={4} xxl={3}>
+          <CCol sm={6} xl={6} xxl={3}>
             <CWidgetStatsA
               color="info"
               value={
@@ -373,7 +378,7 @@ const Home = () => {
               chart={
                 <CChartLine
                   ref={widgetChartRef2}
-                  className="mt-3 mx-3"
+                  className="mt-3 mx-3 tw-text-base-content"
                   style={{ height: '70px' }}
                   data={{
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -381,8 +386,8 @@ const Home = () => {
                       {
                         label: 'My First dataset',
                         backgroundColor: 'transparent',
-                        borderColor: 'rgba(255,255,255,.55)',
-                        pointBackgroundColor: getStyle('--cui-info'),
+                        borderColor: 'rgba(130, 141, 133, 1)',
+                        pointBackgroundColor: 'rgba(130, 141, 133, 1)',
                         data: [1, 18, 9, 17, 34, 22, 11],
                       },
                     ],
@@ -434,7 +439,8 @@ const Home = () => {
               }
             />
           </CCol>
-          <CCol sm={6} xl={4} xxl={3}>
+          
+          {/* <CCol sm={6} xl={4} xxl={3}>
             <CWidgetStatsA
               color="warning"
               value={
@@ -493,67 +499,7 @@ const Home = () => {
                 />
               }
             />
-          </CCol>
-          <CCol sm={6} xl={4} xxl={3}>
-            <CWidgetStatsA
-              color="warning"
-              value={
-                <>
-                  2.49%{' '}
-                  <span className="fs-6 fw-normal">
-                    (84.7% )
-                  </span>
-                </>
-              }
-              title="Salary"
-
-              chart={
-                <CChartLine
-                  className="mt-3"
-                  style={{ height: '70px' }}
-                  data={{
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                    datasets: [
-                      {
-                        label: 'My First dataset',
-                        backgroundColor: 'rgba(255,255,255,.2)',
-                        borderColor: 'rgba(255,255,255,.55)',
-                        data: [78, 81, 80, 45, 34, 12, 40],
-                        fill: true,
-                      },
-                    ],
-                  }}
-                  options={{
-                    plugins: {
-                      legend: {
-                        display: false,
-                      },
-                    },
-                    maintainAspectRatio: false,
-                    scales: {
-                      x: {
-                        display: false,
-                      },
-                      y: {
-                        display: false,
-                      },
-                    },
-                    elements: {
-                      line: {
-                        borderWidth: 2,
-                        tension: 0.4,
-                      },
-                      point: {
-                        radius: 0,
-                        hitRadius: 10,
-                        hoverRadius: 4,
-                      },
-                    },
-                  }}
-                />
-              }
-            />
-          </CCol>
+          </CCol> */}
         </CRow>
 
         {/* <div className='mt-4 px-5 pt-3 pb-2 rounded-2  bg-body-secondary'>
@@ -587,10 +533,10 @@ const Home = () => {
           </table>
         </div> */}
 
-        <Reports />
+
 
         <div className='tw-mt-5'>
-          {/* <TeamActivities /> */}
+        <Reports />
         </div>
 
       </div>
