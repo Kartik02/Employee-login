@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "randomcolor": "^0.6.2",
+    "react-modal": "^3.16.1"
+  }
+}

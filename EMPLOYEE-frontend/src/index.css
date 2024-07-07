@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* In your main CSS file or a separate theme CSS file */
+
+/* Light Theme */
+/* [data-theme="light"] {
+  --bg-color: white;
+  --text-color: rgb(0, 0, 0); */
+  /* Add other light theme variables */
+/* } */
+
+/* Dark Theme */
+/* [data-theme="dark"] {
+  --bg-color: #060606f1;
+  --text-color: white; */
+  /* Add other dark theme variables */
+/* } */
+
+/* Apply the theme variables */
+/* body {
+  background-color: var(--bg-color);
+  color: var(--text-color); */
+  /* Apply other variables */
+/* } */
+
