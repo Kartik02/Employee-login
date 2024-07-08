@@ -37,7 +37,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
 Session(app)
 
 CORS(app, resources={r"/auth/*": {
-    # "origins": ["http://localhost:5173", "https://employee-management-login.vercel.app"],
+    "origins": ["http://localhost:5173", "https://employee-management-login.vercel.app"],
     "methods": ["POST", "OPTIONS", "GET"],
     "allow_headers": ["Content-Type", "Authorization"],
     "supports_credentials": True

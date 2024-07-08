@@ -52,7 +52,9 @@ const Stopwatch = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get(`${universalurl}/auth/project_list`);
+      const response = await axios.get(
+        `${universalurl}/auth/project_list`
+      );
       setProjects(response.data);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -61,7 +63,9 @@ const Stopwatch = () => {
 
   const fetchTags = async () => {
     try {
-      const response = await axios.get(`${universalurl}/auth/tag_list`);
+      const response = await axios.get(
+        `${universalurl}/auth/tag_list`
+      );
       setTags(
         response.data.tags.map((tag) => ({ name: tag.tag, checked: false }))
       );
@@ -133,7 +137,8 @@ const Stopwatch = () => {
   const handleRun = (index) => {
     if (isRunning) return; // Prevent running if already running
     setEditIndex(index);
-    const startTime = Date.now() - submittedDetails[index].timeElapsed; // Initialize timer with stored timeElapsed
+    const startTime =
+      Date.now() - submittedDetails[index].timeElapsed; // Initialize timer with stored timeElapsed
     setIsRunning(true);
     intervalRef.current = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
@@ -241,7 +246,9 @@ const Stopwatch = () => {
 
   const formatTime = (milliseconds) => {
     const hours = Math.floor(milliseconds / (1000 * 60 * 60));
-    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    const minutes = Math.floor(
+      (milliseconds % (1000 * 60 * 60)) / (1000 * 60)
+    );
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
 
     return `${hours.toString().padStart(2, "0")}:${minutes
@@ -253,7 +260,9 @@ const Stopwatch = () => {
     if (!timeString) {
       return 0;
     }
-    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+    const [hours, minutes, seconds] = timeString
+      .split(":")
+      .map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
   };
 
@@ -284,7 +293,7 @@ const Stopwatch = () => {
               onClick={handleTagClick}
               className="tw-mb-2 tw-min-w-36 md:tw-mb-0 tw-mr-0 md:tw-mr-2 tw-input tw-input-bordered tw-w-full md:tw-flex-grow"
             />
-            <div className="tw-absolute tw-top-full tw-left-0 tw-right-0 tw-bg-base-content tw-shadow-md tw-z-10">
+            <div className="tw-absolute tw-top-full tw-left-0 tw-right-0 tw-bg-base-300 tw-text-base-content tw-shadow-md tw-z-10">
               {showDropdown && (
                 <ul className="tw-list-none tw-p-2">
                   {projects.map((project, index) => (
@@ -304,15 +313,12 @@ const Stopwatch = () => {
             </div>
           </div>
           <div className=" ">
-            <button
-              className="tw-mb-2 tw-btn-outline md:tw-ml-2 tw-text-xs md:tw-mb-0 md:tw-mr-2 tw-input tw-input-bordered tw-w-full md:tw-flex-grow"
-              onClick={handleTagClick1}
-            >
+            <button className="tw-mb-2 tw-btn-outline md:tw-ml-2 tw-text-xs md:tw-mb-0 md:tw-mr-2 tw-input tw-input-bordered tw-w-full md:tw-flex-grow" onClick={handleTagClick1}>
               Select Tags
             </button>
             {showDropdown1 && (
               <div className="tw-relative">
-                <ul className="tw-list-none tw-p-2 tw-bg-base-content tw-shadow-md tw-absolute tw-z-10">
+                <ul className="tw-list-none tw-p-2 tw-bg-base-300 tw-text-base-content tw-shadow-md tw-absolute tw-z-10">
                   {tags.map((tag, index) => (
                     <li key={index} className="tw-flex tw-items-center tw-py-2">
                       <input
@@ -342,101 +348,93 @@ const Stopwatch = () => {
           >
             Resume
           </button>
-          <button
-            className="tw-mr-2 tw-btn tw-btn-accent tw-py-1 tw-px-2 sm:tw-py-2 sm:tw-px-4"
-            onClick={handleReset}
-          >
+          <button className="tw-mr-2 tw-btn tw-btn-accent tw-py-1 tw-px-2 sm:tw-py-2 sm:tw-px-4" onClick={handleReset}>
             Reset
           </button>
           <button
-            className="tw-btn tw-btn-success tw-py-1 tw-px-2 sm:tw-py-2 sm:tw-px-4"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </div>
+  className="tw-btn tw-btn-success tw-py-1 tw-px-2 sm:tw-py-2 sm:tw-px-4"
+  onClick={handleSubmit}
+>
+  Submit
+</button>
 
+        </div>
+      
         <div className="tw-mb-4">
           <div className="tw-text-4xl tw-font-bold">
             {formatTime(timeElapsed)}
           </div>
         </div>
         <div className="tw-overflow-x-auto">
-          <table className="tw-table tw-w-full">
-            <thead>
-              <tr>
-                <th className="tw-hidden md:tw-table-cell">Project ID</th>
-                <th>Project Name</th>
-                <th className="tw-hidden md:tw-table-cell">Task</th>
-                <th className="tw-hidden lg:tw-table-cell">Tags</th>
-                <th>Time Taken</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {submittedDetails.map((detail, index) => (
-                <React.Fragment key={index}>
-                  <tr>
-                    <td className="tw-hidden md:tw-table-cell">
-                      {detail.projectid}
-                    </td>
-                    <td>{detail.projectName}</td>
-                    <td className="tw-hidden md:tw-table-cell">
-                      {detail.task}
-                    </td>
-                    <td className="tw-hidden lg:tw-table-cell">
-                      {detail.tags.join(", ")}
-                    </td>
-                    <td>{detail.timeTaken}</td>
-                    <td>
-                      <button
-                        className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
-                        onClick={() => handleRun(index)}
-                        disabled={isRunning}
-                      >
-                        Run
-                      </button>
-                      <button
-                        className="tw-btn tw-btn-xs tw-btn-secondary tw-mr-2"
-                        onClick={handleStop}
-                      >
-                        Stop
-                      </button>
-                      <button
-                        className="tw-btn tw-btn-xs tw-btn-accent tw-mr-2"
-                        onClick={() => toggleRowExpansion(index)}
-                      >
-                        {expandedRows[index] ? "Hide" : "Show"} Details
-                      </button>
-                    </td>
-                  </tr>
-                  {expandedRows[index] && (
-                    <tr>
-                      <td colSpan="6">
-                        <div className="tw-p-4 tw-bg-gray-100 tw-rounded tw-mb-2">
-                          <div className="tw-mb-2">
-                            <strong>Task:</strong> {detail.task}
-                          </div>
-                          <div className="tw-mb-2">
-                            <strong>Tags:</strong> {detail.tags.join(", ")}
-                          </div>
-                          <div className="tw-mb-2">
-                            <strong>Time Taken:</strong> {detail.timeTaken}
-                          </div>
-                          <button
-                            className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
-                            onClick={() => handleUpdateSubmit(index)}
-                          >
-                            Update
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+        <table className="tw-table tw-w-full">
+    <thead>
+      <tr>
+        <th className="tw-hidden md:tw-table-cell">Project ID</th>
+        <th>Project Name</th>
+        <th className="tw-hidden md:tw-table-cell">Task</th>
+        <th className="tw-hidden lg:tw-table-cell">Tags</th>
+        <th>Time Taken</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {submittedDetails.map((detail, index) => (
+        <React.Fragment key={index}>
+          <tr>
+            <td className="tw-hidden md:tw-table-cell">{detail.projectid}</td>
+            <td>{detail.projectName}</td>
+            <td className="tw-hidden md:tw-table-cell">{detail.task}</td>
+            <td className="tw-hidden lg:tw-table-cell">{detail.tags.join(", ")}</td>
+            <td>{detail.timeTaken}</td>
+            <td>
+              <button
+                className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
+                onClick={() => handleRun(index)}
+                disabled={isRunning}
+              >
+                Run
+              </button>
+              <button
+                className="tw-btn tw-btn-xs tw-btn-secondary tw-mr-2"
+                onClick={handleStop}
+              >
+                Stop
+              </button>
+              <button
+                className="tw-btn tw-btn-xs tw-btn-accent tw-mr-2"
+                onClick={() => toggleRowExpansion(index)}
+              >
+                {expandedRows[index] ? "Hide" : "Show"} Details
+              </button>
+            </td>
+          </tr>
+          {expandedRows[index] && (
+            <tr>
+              <td colSpan="6">
+                <div className="tw-p-4 tw-bg-gray-100 tw-rounded tw-mb-2">
+                  <div className="tw-mb-2">
+                    <strong>Task:</strong> {detail.task}
+                  </div>
+                  <div className="tw-mb-2">
+                    <strong>Tags:</strong> {detail.tags.join(", ")}
+                  </div>
+                  <div className="tw-mb-2">
+                    <strong>Time Taken:</strong> {detail.timeTaken}
+                  </div>
+                  <button
+                    className="tw-btn tw-btn-xs tw-btn-primary tw-mr-2"
+                    onClick={() => handleUpdateSubmit(index)}
+                  >
+                    Update
+                  </button>
+                </div>
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
+      ))}
+    </tbody>
+  </table>
         </div>
       </div>
     </>
